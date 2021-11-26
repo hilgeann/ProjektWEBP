@@ -1,62 +1,75 @@
-const F01 = {F01A:T05, F01B:F02, F01C:F03}
-const F02 = {F02A:F03, F02B:F05}
-const F03 = {F03A:F05, F03B:F07, F03C:F04, FO3D:F06}
-const F04 = {F04A:F08, F04B:F07}
-const F05 = {F05A:F07, F05B:F09}
-const F06 = {F06A:F08, F06B:F07}
-const F07 = {F07A:T03, F07B:F13}
-const F08 = {F08A:F07, F08B:F10}
-const F09 = {F09A:T06, F09B:T07, F09C:F12}
-const F10 = {F10A:T02, F10B:F11}
-const F11 = {F11A:T02, F11B:T01}
-const F12 = {F12A:T01, F12B:F13}
-const F13 = {F13A:T04, F13B:T06}
+const knots = ["Platzhalter", 
+    "Corona-Pandemie ist...",
+    "Corna = Grippe",
+    "Hattest du Corona?",
+    "Bist du dennoch geimpft?",
+    "Bist du geimpft?",
+    "Bist du geimpft?",
+    "Ach, wen kümmert die Pandemie will einfach nach Mallorca",
+    "Trägst du Maske?",
+    "Impfungen sind...",
+    "Distance Learning ist...",
+    "dieses Wochenende...",
+    "Weisst du um welche Impfungen es überhaupt geht?",
+    "Mein Immunsystem ist sowieso besser als jede Impfung"
+]
 
-const quizstrings = {
-    FO1:"ABC",
-    F02:"ABC",
-    F03:"ABC",
-    F04:"ABC",
-    F05:"ABC",
-    F06:"ABC",
-    F07:"ABC",
-    F08:"ABC",
-    F09:"ABC",
-    F10:"ABC",
-    F11:"ABC",
-    F12:"ABC",
-    F13:"ABC",
-    F01A:"ABC", 
-    F01B:"ABC", 
-    F01C:"ABC",
-    F02A:"ABC", 
-    F02B:"ABC", 
-    F03A:"ABC", 
-    F03B:"ABC", 
-    F03C:"ABC", 
-    FO3D:"ABC", 
-    F04A:"ABC", 
-    F04B:"ABC",
-    F05A:"ABC", 
-    F05B:"ABC",
-    F06A:"ABC", 
-    F06B:"ABC",
-    F07A:"ABC", 
-    F07B:"ABC",
-    F08A:"ABC", 
-    F08B:"ABC",
-    F09A:"ABC", 
-    F09B:"ABC", 
-    F09C:"ABC",
-    F10A:"ABC", 
-    F10B:"ABC",
-    F11A:"ABC", 
-    F11B:"ABC",
-    F12A:"ABC", 
-    F12B:"ABC",
-    F13A:"ABC", 
-    F13B:"ABC"
+const options = [{a:"Platzhalter"},
+    {a:"Coro-was?", b:"Reine Panikmache!", c:"eine Viruspandemie"},
+    {a:"Nein", b:"Ja"},
+    {a:"Die Tests sind manipuliert!", b:"Ja, was solls?", c:"Ja, leider...", d:"Nein."},
+    {a:"Ja", b:"Nein"},
+    {a:"Ja", b:"Nein"},
+    {a:"Ja", b:"Nein"},
+    {a:"Ferien sind egal, will Pandemie-Ende!", b:"Genau!"},
+    {a:"Wozu?", b:"Ja, klar!"},
+    {a:"Von Reptioloiden eingeführt um Menschen zu unterwerfen", b:"Gift", c:"hä? worum gehts?"},
+    {a:"Ein riesen Quatsch!", b:"Eine Super Sache!"},
+    {a:"muss ich an eien Party", b:"bleibe ich daheim (wie immer)"},
+    {a:"Nein", b:"Ja, aber...."},
+    {a:"Ja", b:"Weiss auch nicht"},
+]
+
+const redirections = [{a:"Platzhalter"},
+    {a:25, b:2, c:3},
+    {a:3, b:5},
+    {a:5, b:7, c:4, d:6},
+    {a:8, b:7},
+    {a:7, b:9},
+    {a:8, b:7},
+    {a:0, b:13},
+    {a:7, b:10},
+    {a:25, b:27, c:12},
+    {a:22, b:11},
+    {a:22, b:21},
+    {a:25, b:13},
+    {a:24, b:25},
+]
+
+const results = {
+    21: "Vorsichtige",
+    22: "Wellensurfer",
+    23: "Wiederwillige",
+    24: "Superspreader",
+    25: "Uninformierte",
+    26: "Kritikerin",
+    27: "Naturheilpraktikerin"
 }
 
-var a = console.log(01.F01A)
-document.write(string(a))
+function check(i) {
+    if (i < 20) {loadquestion(i)}
+    else {loadresult(i)}   
+    }  
+
+function loadquestion(i) {
+    br = "</br>" 
+    document.write(knots[i] + br)
+    document.write(options[i].a + " (" + redirections[i].a + ")" + br)
+    document.write(options[i].b + " (" + redirections[i].b + ")" + br)
+    document.write(options[i].c + " (" + redirections[i].c + ")" + br)
+    document.write(options[i].d + " (" + redirections[i].d + ")" + br) 
+    }
+
+function loadresult(i) {
+    document.write(results.i)
+}
