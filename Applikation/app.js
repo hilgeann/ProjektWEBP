@@ -58,5 +58,5 @@ const quizstrings = {
     F13B:"ABC"
 }
 
-let test1 = console.log(F01.F01A)
-document.getElementById(test).innerHTML = test1
+
+document.write(F01.F01A)
