@@ -1,0 +1,23 @@
+
+body {padding-top: 20px;
+    padding-right: 100px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+}
+
+p {color: black;
+    text-align: left;
+    padding-top: 10px;
+    padding-right: 100px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+}
+
+h1 {color: red;
+    text-align: left;
+    font-size: 2.5em;
+    padding-top: 20px;
+    padding-right: 100px;
+    padding-bottom: 10px;
+    padding-left: 0px;
+}
