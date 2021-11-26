@@ -56,4 +56,6 @@ const quizstrings = {
     F12B:"ABC",
     F13A:"ABC", 
     F13B:"ABC"
-    }
+}
+
+document.write(F01.F01A)
