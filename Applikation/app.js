@@ -58,5 +58,5 @@ const quizstrings = {
     F13B:"ABC"
 }
 
-
-document.write(F01.F01A)
+var a = console.log(01.F01A)
+document.write(string(a))
