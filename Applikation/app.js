@@ -30,6 +30,8 @@ const options = [{a:"Platzhalter"},
     {a:"Ja", b:"Weiss auch nicht"},
 ]
 
+const optnum = [0,3,2,4,2,2,2,2,2,3,2,2,2,2]
+
 const redirections = [{a:"Platzhalter"},
     {a:25, b:2, c:3},
     {a:3, b:5},
@@ -59,16 +61,27 @@ const results = {
 function check(i) {
     if (i < 20) {loadquestion(i)}
     else {loadresult(i)}   
-    }  
+}  
 
 function loadquestion(i) {
-    br = "</br>" 
-    document.write(knots[i] + br)
-    document.write(options[i].a + " (" + redirections[i].a + ")" + br)
-    document.write(options[i].b + " (" + redirections[i].b + ")" + br)
-    document.write(options[i].c + " (" + redirections[i].c + ")" + br)
-    document.write(options[i].d + " (" + redirections[i].d + ")" + br) 
-    }
+    let j = optnum[i]
+    document.getElementById("question").innerHTML = knots[i]
+    if (j == 2) {
+        document.getElementById("opta").innerHTML = options[i].a;
+        document.getElementById("optb").innerHTML = options[i].b
+        document.getElementById("linec").innerHTML = "";
+        document.getElementById("lined").innerHTML = ""}
+    else if (j == 3) {
+        document.getElementById("opta").innerHTML = options[i].a;
+        document.getElementById("optb").innerHTML = options[i].b;
+        document.getElementById("optc").innerHTML = options[i].c;
+        document.getElementById("lined").innerHTML = ""}
+    else if (j == 4) {
+        document.getElementById("opta").innerHTML = options[i].a;
+        document.getElementById("optb").innerHTML = options[i].b;
+        document.getElementById("optc").innerHTML = options[i].c;
+        document.getElementById("optd").innerHTML = options[i].d}
+}
 
 function loadresult(i) {
     document.write(results.i)
