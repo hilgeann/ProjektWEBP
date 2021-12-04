@@ -88,29 +88,33 @@ function loadquestion(i) {
     let k = optnum[i]
     document.getElementById("question").innerHTML = knots[i]
     if (k == 2) {
-        document.getElementById("opta").innerHTML = options[i].a;
+        document.getElementById("test").innerHTML = k;
+	document.getElementById("opta").innerHTML = options[i].a;
         document.getElementById("opta").addEventListener("click", function() {choicea(i)});
         document.getElementById("optb").innerHTML = options[i].b;
         document.getElementById("optb").addEventListener("click", function() {choiceb(i)});
         document.getElementById("linec").innerHTML = "";
         document.getElementById("lined").innerHTML = ""}
     else if (k == 3) {
+	document.getElementById("test").innerHTML = k;
         document.getElementById("opta").innerHTML = options[i].a;
         document.getElementById("opta").addEventListener("click", function() {choicea(i)});
         document.getElementById("optb").innerHTML = options[i].b;
         document.getElementById("optb").addEventListener("click", function() {choiceb(i)});
+        document.getElementById("linec").innerHTML = "<button> <opt id=optc> </opt> </button>";
         document.getElementById("optc").innerHTML = options[i].c;
         document.getElementById("optc").addEventListener("click", function() {choicec(i)});
         document.getElementById("lined").innerHTML = ""}
     else if (k == 4) {
+	document.getElementById("test").innerHTML = k;
         document.getElementById("opta").innerHTML = options[i].a;
         document.getElementById("opta").addEventListener("click", function() {choicea(i)});
         document.getElementById("optb").innerHTML = options[i].b;
         document.getElementById("optb").addEventListener("click", function() {choiceb(i)});
+        document.getElementById("linec").innerHTML = "<button> <opt id=optc> </opt> </button>";
         document.getElementById("optc").innerHTML = options[i].c;
         document.getElementById("optc").addEventListener("click", function() {choicec(i)});
+	    document.getElementById("lined").innerHTML = "<button> <opt id=optd> </opt> </button>";
         document.getElementById("optd").innerHTML = options[i].d;
         document.getElementById("optd").addEventListener("click", function() {choiced(i)});}
 }
-
-start()
