@@ -49,6 +49,35 @@ const redirection = [{a:"Platzhalter"},
 {a:24, b:25},
 ]
 
+const coordinates = [{a:"Platzhalter"},
+{a:4, b:1},
+{a:5, b:2},
+{a:3, b:2},
+{a:4, b:3},
+{a:6, b:3},
+{a:2, b:3},
+{a:4, b:4},
+{a:2, b:4},
+{a:6, b:4},
+{a:2, b:5},
+{a:2, b:6},
+{a:6, b:5},
+{a:6, b:6},
+{a:"Platzhalter"},
+{a:"Platzhalter"},
+{a:"Platzhalter"},
+{a:"Platzhalter"},
+{a:"Platzhalter"},
+{a:"Platzhalter"},
+{a:"Platzhalter"},
+{a:2, b:7},
+{a:1, b:6},
+{a:3, b:6},
+{a:6, b:7},
+{a:7, b:6},
+{a:5, b:6},
+{a:4, b:6}]
+
 const results = {
 21: "Vorsichtige",
 22: "Wellensurfer",
@@ -62,23 +91,30 @@ const results = {
 
 function choicea(i) {
     let j = redirection[i].a;
-    loadquestion(j)
+    nextquest(i,j)
 };
 
 function choiceb(i) {
     let j = redirection[i].b;
-    loadquestion(j)
+    nextquest(i,j)
 };
 
 function choicec(i) {
     let j = redirection[i].c;
-    loadquestion(j)
+    nextquest(i,j)
 };
 
 function choiced(i) {
     let j = redirection[i].d;
-    loadquestion(j)
+    nextquest(i,j)
 };
+
+
+function nextquest(i,j){
+	jump(i,j)
+	loadquestion(j)
+}
+    
     
 function start(){
     loadquestion(1)
@@ -119,5 +155,53 @@ function loadquestion(i) {
         document.getElementById("optd").addEventListener("click", function() {choiced(i)});}
 }
 
+function draw() {
+    let size = 50    
+    const canvas = document.querySelector('#canvas'); 
+    const ctx = canvas.getContext('2d');
+    for (let i = 1; i < 14; i++) {
+        let a = (coordinates[i].a)*size    
+        let b = (coordinates[i].b)*size  
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 5; 
+        ctx.beginPath();
+        ctx.moveTo(000, 000);
+        ctx.strokeRect(a,b,5,5);
+    }
+    for (let i = 21; i < 28; i++) {
+        let a = (coordinates[i].a)*size    
+        let b = (coordinates[i].b)*size  
+        ctx.strokeStyle = 'blue';
+        ctx.lineWidth = 5; 
+        ctx.beginPath();
+        ctx.moveTo(000, 000);
+        ctx.strokeRect(a,b,5,5);
+    }
+}
+
+function jump(i,j) {
+    let size = 50
+    let a = (coordinates[i].a)*size 
+    let b = (coordinates[i].b)*size 
+    let c = (coordinates[j].a)*size 
+    let d = (coordinates[j].b)*size
+    
+    const canvas = document.querySelector('#canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(a, b);
+    ctx.lineTo(c, d);
+    ctx.stroke();
+} 
+
+draw()
 
 start()
+
+
+
+
+
+  
