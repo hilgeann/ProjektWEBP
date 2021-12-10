@@ -1,11 +1,14 @@
 
-body {padding-top: 20px;
+body {
+    font: Arial, sans-serif;
+    padding-top: 20px;
     padding-right: 100px;
     padding-bottom: 10px;
     padding-left: 20px;
 }
 
 p {color: black;
+    font: Arial, sans-serif;
     text-align: left;
     padding-top: 10px;
     padding-right: 100px;
@@ -14,6 +17,7 @@ p {color: black;
 }
 
 h1 {color: red;
+    font: Arial, sans-serif;
     text-align: left;
     font-size: 2.5em;
     padding-top: 20px;

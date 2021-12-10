@@ -89,35 +89,23 @@ const results = {
 }
 
 
-function choicea(i) {
-    let j = redirection[i].a;
-    nextquest(i,j)
+function choice(i,x) {
+    if (x == 1) {
+        var j = redirection[i].a}
+    else if (x == 2) {
+        var j = redirection[i].b}
+    else if (x == 3) {
+        var j = redirection[i].c;}
+    else if (x == 4) {
+        var j = redirection[i].d;}
+    jump(i,j)
+    loadquestion(j)
 };
-
-function choiceb(i) {
-    let j = redirection[i].b;
-    nextquest(i,j)
-};
-
-function choicec(i) {
-    let j = redirection[i].c;
-    nextquest(i,j)
-};
-
-function choiced(i) {
-    let j = redirection[i].d;
-    nextquest(i,j)
-};
-
-
-function nextquest(i,j){
-	jump(i,j)
-	loadquestion(j)
-}
     
     
 function start(){
     loadquestion(1)
+    dots()
 };
 
 function loadquestion(i) {
@@ -126,36 +114,36 @@ function loadquestion(i) {
     if (k == 2) {
         document.getElementById("test").innerHTML = k;
 	document.getElementById("opta").innerHTML = options[i].a;
-        document.getElementById("opta").addEventListener("click", function() {choicea(i)});
+        document.getElementById("opta").addEventListener("click", function() {choice(i,1)});
         document.getElementById("optb").innerHTML = options[i].b;
-        document.getElementById("optb").addEventListener("click", function() {choiceb(i)});
+        document.getElementById("optb").addEventListener("click", function() {choice(i,2)});
         document.getElementById("linec").innerHTML = "";
         document.getElementById("lined").innerHTML = ""}
     else if (k == 3) {
         document.getElementById("test").innerHTML = k;
         document.getElementById("opta").innerHTML = options[i].a;
-        document.getElementById("opta").addEventListener("click", function() {choicea(i)});
+        document.getElementById("opta").addEventListener("click", function() {choice(i,1)});
         document.getElementById("optb").innerHTML = options[i].b;
-        document.getElementById("optb").addEventListener("click", function() {choiceb(i)});
+        document.getElementById("optb").addEventListener("click", function() {choice(i,2)});
         document.getElementById("linec").innerHTML = "<button> <opt id=optc> </opt> </button>";
         document.getElementById("optc").innerHTML = options[i].c;
-        document.getElementById("optc").addEventListener("click", function() {choicec(i)});
+        document.getElementById("optc").addEventListener("click", function() {choice(i,3)});
         document.getElementById("lined").innerHTML = ""}
     else if (k == 4) {
 	    document.getElementById("test").innerHTML = k;
         document.getElementById("opta").innerHTML = options[i].a;
-        document.getElementById("opta").addEventListener("click", function() {choicea(i)});
+        document.getElementById("opta").addEventListener("click", function() {choice(i,1)});
         document.getElementById("optb").innerHTML = options[i].b;
-        document.getElementById("optb").addEventListener("click", function() {choiceb(i)});
+        document.getElementById("optb").addEventListener("click", function() {choice(i,2)});
         document.getElementById("linec").innerHTML = "<button> <opt id=optc> </opt> </button>";
         document.getElementById("optc").innerHTML = options[i].c;
-        document.getElementById("optc").addEventListener("click", function() {choicec(i)});
+        document.getElementById("optc").addEventListener("click", function() {choice(i,3)});
 	    document.getElementById("lined").innerHTML = "<button> <opt id=optd> </opt> </button>";
         document.getElementById("optd").innerHTML = options[i].d;
-        document.getElementById("optd").addEventListener("click", function() {choiced(i)});}
+        document.getElementById("optd").addEventListener("click", function() {choice(i,4)});}
 }
 
-function draw() {
+function dots() {
     let size = 50    
     const canvas = document.querySelector('#canvas'); 
     const ctx = canvas.getContext('2d');
@@ -186,17 +174,17 @@ function jump(i,j) {
     let c = (coordinates[j].a)*size 
     let d = (coordinates[j].b)*size
     
-    const canvas = document.querySelector('#canvas');
-    const ctx = canvas.getContext('2d');
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 5;
-    ctx.beginPath();
-    ctx.moveTo(a, b);
-    ctx.lineTo(c, d);
-    ctx.stroke();
+    var canvas = document.querySelector('#canvas');
+    if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(a, b);
+        ctx.lineTo(c, d);
+        ctx.stroke();
+    }
 } 
-
-draw()
 
 start()
 
@@ -204,4 +192,4 @@ start()
 
 
 
-  
+
