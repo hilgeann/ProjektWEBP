@@ -1,7 +1,7 @@
 // Array aller Fragen des Entscheidungsbaums
 const knots = ["Platzhalter", 
 "Corona-Pandemie ist...",
-"Corna = Grippe",
+"Corona = Grippe",
 "Hattest du Corona?",
 "Bist du dennoch geimpft?",
 "Bist du geimpft?",
