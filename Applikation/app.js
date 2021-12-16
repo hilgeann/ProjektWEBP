@@ -125,36 +125,50 @@ Durch Klicken der Antwort-Buttons, werden die entsprechenden Parameter an die Ch
 function loadquestion(i) {
     let k = optnum[i]
     document.getElementById("question").innerHTML = knots[i]
+    var elema = document.getElementById("opta");
+    var elemb = document.getElementById("optb");
+    var elemc = document.getElementById("optc");
+    var elemd = document.getElementById("optd");
+    //elem.replaceWith(elem.cloneNode(true));
     if (k == 2) {
         document.getElementById("test").innerHTML = k;
-	document.getElementById("opta").innerHTML = options[i].a;
-        document.getElementById("opta").addEventListener("click", function() {choice(i,1)});
+	    document.getElementById("opta").innerHTML = options[i].a;
+        elema.replaceWith(elema.cloneNode(true));
+        document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
         document.getElementById("optb").innerHTML = options[i].b;
-        document.getElementById("optb").addEventListener("click", function() {choice(i,2)});
+        elemb.replaceWith(elemb.cloneNode(true));
+        document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
         document.getElementById("linec").innerHTML = "";
         document.getElementById("lined").innerHTML = ""}
     else if (k == 3) {
         document.getElementById("test").innerHTML = k;
         document.getElementById("opta").innerHTML = options[i].a;
-        document.getElementById("opta").addEventListener("click", function() {choice(i,1)});
+        elema.replaceWith(elema.cloneNode(true));
+        document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
         document.getElementById("optb").innerHTML = options[i].b;
-        document.getElementById("optb").addEventListener("click", function() {choice(i,2)});
+        elemb.replaceWith(elemb.cloneNode(true));
+        document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
         document.getElementById("linec").innerHTML = "<button> <opt id=optc> </opt> </button>";
         document.getElementById("optc").innerHTML = options[i].c;
-        document.getElementById("optc").addEventListener("click", function() {choice(i,3)});
+        elemc.replaceWith(elemc.cloneNode(true));
+        document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
         document.getElementById("lined").innerHTML = ""}
     else if (k == 4) {
 	    document.getElementById("test").innerHTML = k;
         document.getElementById("opta").innerHTML = options[i].a;
-        document.getElementById("opta").addEventListener("click", function() {choice(i,1)});
+        elema.replaceWith(elema.cloneNode(true));
+        document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
         document.getElementById("optb").innerHTML = options[i].b;
-        document.getElementById("optb").addEventListener("click", function() {choice(i,2)});
+        elemb.replaceWith(elemb.cloneNode(true));
+        document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
         document.getElementById("linec").innerHTML = "<button> <opt id=optc> </opt> </button>";
         document.getElementById("optc").innerHTML = options[i].c;
-        document.getElementById("optc").addEventListener("click", function() {choice(i,3)});
+        elemc.replaceWith(elemc.cloneNode(true));
+        document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
 	    document.getElementById("lined").innerHTML = "<button> <opt id=optd> </opt> </button>";
         document.getElementById("optd").innerHTML = options[i].d;
-        document.getElementById("optd").addEventListener("click", function() {choice(i,4)});}
+        elemd.replaceWith(elemd.cloneNode(true));
+        document.getElementById("optd").addEventListener("click", function() {choice(i,4)},);}
 }
 
 // Zeichnet die Knoten, also Fragen (rot) und Antworten (blau) des Entscheidungsbaums.
