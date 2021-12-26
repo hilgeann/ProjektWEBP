@@ -84,13 +84,23 @@ const coordinates = [{a:"Platzhalter"},
 
 // Array mit den Ergebnissen bzw. Pandemietypen
 const results = {
-21: "Vorsichtige",
-22: "Wellensurfer",
-23: "Wiederwillige",
-24: "Superspreader",
-25: "Uninformierte",
-26: "Kritikerin",
-27: "Naturheilpraktikerin"
+a: "Vorsichtige",
+b: "Wellensurfer",
+c: "Wiederwillige",
+d: "Superspreader",
+e: "Uninformierte",
+f: "Kritikerin",
+g: "Naturheilpraktikerin"
+}
+
+const resultstring = {
+    a: "Wow! Du nimmst es genau. Du bist der Typ, der immer Vorsicht walten lässt und das Wohl anderer über das Eigene stellt. Super!",
+    b: "Hut ab. Obwohl du dir ein wenig Freiheiten gönnst und dein Leben möglichst normal weiter lebst, bist du vorsichtig, wenn es darauf ankommt. Gut!",
+    c: "Du trägst die Massnahmen zwar mehrheitlich mit, obwohl du keine Lust mehr hast. Motivier dich noch ein wenig, denn wir sind im Endspurt.",
+    d: "Vorsichtig ist anders, du kooperierst leider nicht. Bitte halte dich an die geltenden Massnahmen, es zu deinem Wohl und zum Schutz deiner Mitmenschen!",
+    e: "Du hast wohl nicht viel mitbekommen. Informiere dich doch unter www.bag.admin.ch über die aktuelle Situation.",
+    f: "Ups! Leider lebst du in einer anderen Realität, als die Mehrheit der Bevölkerung. Wir empfehlen dir eine Social-Media-Diät.",
+    g: "Wir stellen fest, dass du die Massnahmen missachtest und eine Grundabneigung gegen Wissenschaft sowie Schulmedizin hast. Bitte informiere dich künftig nur bei offiziellen Stellen und überdenke deine Überzeugungen."
 }
 
 /* 
@@ -107,8 +117,8 @@ function choice(i,x) {
         var j = redirection[i].c;}
     else if (x == 4) {
         var j = redirection[i].d;}
-    jump(i,j)
-    loadquestion(j)
+    if (j < 20) {jump(i,j); loadquestion(j)}
+    else if (j > 21) {jump(i,j); loadresult(j)}
 };
     
 // Startet das Quiz, indem die Knoten des Entscheidungsbaums gezeichnet werden und die erste Frage geladen wird.    
@@ -168,7 +178,36 @@ function loadquestion(i) {
 	    document.getElementById("lined").innerHTML = "<button> <opt id=optd> </opt> </button>";
         document.getElementById("optd").innerHTML = options[i].d;
         elemd.replaceWith(elemd.cloneNode(true));
-        document.getElementById("optd").addEventListener("click", function() {choice(i,4)},);}
+        document.getElementById("optd").addEventListener("click", function() {choice(i,4)},);
+    }
+}
+
+function loadresult(i) {
+    if (i == 21) {var type = results.a; var text = resultstring.a}
+    else if (i == 22) {var type = results.b; var text = resultstring.b}
+    else if (i == 23) {var type = results.c; var text = resultstring.c}
+    else if (i == 24) {var type = results.d; var text = resultstring.d}
+    else if (i == 25) {var type = results.e; var text = resultstring.e}
+    else if (i == 26) {var type = results.f; var text = resultstring.f}
+    else if (i == 27) {var type = results.g; var text = resultstring.g}
+    document.getElementById("question").innerHTML = "";
+    document.getElementById("linea").innerHTML = "<r1>" + "Dein Typ ist:" + "</r1>";
+    document.getElementById("lineb").innerHTML = "<r2>" + type + "</r2>" ;
+    document.getElementById("linec").innerHTML = "<r3>" + text + "</r3>" ;
+    document.getElementById("lined").innerHTML = "<button id=restart> Nochmal spielen! </button>" ;
+    document.getElementById("restart").addEventListener("click", function() {restart()},);
+}
+
+function restart() {
+    document.getElementById("question").innerHTML = "";
+    document.getElementById("linea").innerHTML = "<button> <opt id=opta> </opt> </button>";
+    document.getElementById("lineb").innerHTML = "<button> <opt id=optb> </opt> </button>" ;
+    document.getElementById("linec").innerHTML = "<button> <opt id=optc> </opt> </button>" ;
+    document.getElementById("lined").innerHTML = "<button> <opt id=optd> </opt> </button>" ;
+    const canvas = document.querySelector('#canvas'); 
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    start()
 }
 
 // Zeichnet die Knoten, also Fragen (rot) und Antworten (blau) des Entscheidungsbaums.
@@ -202,6 +241,8 @@ Parameter werden aus der Choice-Funktion übernommen.
 Anhand der Koordinaten wird mit a,b der aktuelle Knoten und mit c,d der neue Zielknoten ermittelt.
 Beim nächsten Durchlauf wird dann der Punkt c,d zum Neuen a,b usw.
 */
+
+
 function jump(i,j) {
     let size = 50
     let a = (coordinates[i].a)*size 
@@ -222,9 +263,3 @@ function jump(i,j) {
 } 
 
 start()
-
-
-
-
-
-
