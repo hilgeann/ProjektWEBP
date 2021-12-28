@@ -52,7 +52,7 @@ const redirection = [{a:"Platzhalter"},
 {a:24, b:25},
 ]
 
-// Array mit den Koordinaten aller Antworten und Ergebnisse, also 2knots" und "results" des Entscheidungsbaums
+// Array mit den Koordinaten aller Antworten und Ergebnisse, also "knots" und "results" des Entscheidungsbaums
 const coordinates = [{a:"Platzhalter"},
 {a:4, b:1},
 {a:5, b:2},
@@ -93,6 +93,7 @@ f: "Kritikerin",
 g: "Naturheilpraktikerin"
 }
 
+// Array mit den Beschreibungen der Pandemietypen
 const resultstring = {
     a: "Wow! Du nimmst es genau. Du bist der Typ, der immer Vorsicht walten lässt und das Wohl anderer über das Eigene stellt. Super!",
     b: "Hut ab. Obwohl du dir ein wenig Freiheiten gönnst und dein Leben möglichst normal weiter lebst, bist du vorsichtig, wenn es darauf ankommt. Gut!",
@@ -104,9 +105,14 @@ const resultstring = {
 }
 
 /* 
-Übernimmt und verarbeitet die gewählte Antwort (Klick auf Button) aus der Funktion loadquestion
-und ermittelt daraus die Variable j, welche als Parameter an die Funktion loadquestion übergeben wird und
-gemeinsam mit dem Parameter i an die Funktion jump übergeben wird.
+Übernimmt und verarbeitet die gewählte Antwort (Klick auf Button) aus der Funktion loadquestion. Je nach gewählter
+Antwort, also je nach x, wird anhand der If-Schleife, die Variable j daraus ermittelt, welche als Parameter 
+an die folgende Funktion übergeben wird.
+Ist das daraus resultierende j kleiner als 20 wird die Funktion loadquestion und somit eine neue Frage 
+aus dem knots und dem options Array zusammengestellt.
+Ist j grösser als 21 wird der Pandemietyp aus dem results und dem resultstring Array zusammengestellt.
+Die Parameter i und j werden zusammen an die Funktion jump übergeben, damit die Verbindung zum nächsten Knoten
+im Entscheidungsbaum hergestellt wird. 
 */
 function choice(i,x) {
     if (x == 1) {
@@ -128,13 +134,14 @@ function start(){
 };
 
 /* 
-Funktion, mit der die Frage geladen wird und anhand der Variablen k die (Anzal) möglichen Antworten.
-"Test" zum Anzeigen, ob korrektes k ermittelt wird.
+Funktion, mit der die Frage geladen wird und anhand der Variablen k die (Anzahl) möglichen Antworten.
+
 Durch Klicken der Antwort-Buttons, werden die entsprechenden Parameter an die Choice-Funktion weitergegeben.
 */
 function loadquestion(i) {
     let k = optnum[i]
-    document.getElementById("question").innerHTML = knots[i]
+    //let k = options[i].length
+    document.getElementById("question").innerHTML = knots[i] //TODO Beschreibung hier weiter
     var elema = document.getElementById("opta");
     var elemb = document.getElementById("optb");
     var elemc = document.getElementById("optc");
