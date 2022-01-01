@@ -269,7 +269,6 @@ Anhand der Koordinaten wird mit a,b der aktuelle Knoten und mit c,d der neue Zie
 Beim nächsten Durchlauf wird dann der Punkt c,d zum Neuen a,b usw.
 */
 
-
 function jump(i,j) {
     let size = 50
     let a = (coordinates[i].a)*size 
