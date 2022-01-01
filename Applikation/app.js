@@ -1,4 +1,7 @@
 // Array aller Fragen des Entscheidungsbaums
+/* Wie in den folgenden Arrays ist an Indexposition 0 ein "Platzhalter" eingefügt, 
+damit das "Ansprechen" der Elemente mit 1 beginnen kann.
+*/
 const knots = ["Platzhalter", 
 "Corona-Pandemie ist...",
 "Corona = Grippe",
@@ -32,7 +35,7 @@ const options = [{a:"Platzhalter"},
 {a:"Ja", b:"Weiss auch nicht"},
 ]
 
-// Array gibt an, wie viele Antwortmöglichkeiten pro Frage zur Auswahl stehen
+// Array gibt an, wie viele Antwortmöglichkeiten pro Frage zur Auswahl stehen.
 const optnum = [0,3,2,4,2,2,2,2,2,3,2,2,2,2]
 
 // Array gibt an, welche Antwort aus "options" zu welcher Frage "knots" bzw. am Ende zu welchem Ergebnis "result" führt.
@@ -52,7 +55,7 @@ const redirection = [{a:"Platzhalter"},
 {a:24, b:25},
 ]
 
-// Array mit den Koordinaten aller Antworten und Ergebnisse, also "knots" und "results" des Entscheidungsbaums
+// Array mit den Koordinaten aller Antworten und Ergebnisse, also "knots" und "results" des Entscheidungsbaums.
 const coordinates = [{a:"Platzhalter"},
 {a:4, b:1},
 {a:5, b:2},
@@ -82,7 +85,7 @@ const coordinates = [{a:"Platzhalter"},
 {a:5, b:6},
 {a:4, b:6}]
 
-// Array mit den Ergebnissen bzw. Pandemietypen
+// Array mit den Ergebnissen bzw. Pandemietypen.
 const results = {
 a: "Vorsichtige",
 b: "Wellensurfer",
@@ -93,7 +96,7 @@ f: "Kritikerin",
 g: "Naturheilpraktikerin"
 }
 
-// Array mit den Beschreibungen der Pandemietypen
+// Array mit den Beschreibungen der Pandemietypen.
 const resultstring = {
     a: "Wow! Du nimmst es genau. Du bist der Typ, der immer Vorsicht walten lässt und das Wohl anderer über das Eigene stellt. Super!",
     b: "Hut ab. Obwohl du dir ein wenig Freiheiten gönnst und dein Leben möglichst normal weiter lebst, bist du vorsichtig, wenn es darauf ankommt. Gut!",
@@ -105,9 +108,9 @@ const resultstring = {
 }
 
 /* 
-Übernimmt und verarbeitet die gewählte Antwort (Klick auf Button) aus der Funktion loadquestion. Je nach gewählter
-Antwort, also je nach x, wird anhand der If-Schleife, die Variable j daraus ermittelt, welche als Parameter 
-an die folgende Funktion übergeben wird.
+Choice übernimmt und verarbeitet die gewählte Antwort (Klick auf Button) aus der Funktion loadquestion. Je nach gewählter
+Antwort, also je nach x, wird anhand der If-Schleife, die Variable j ermittelt, welche dann als Parameter 
+an die Funktionen jump und loadquestion bzw. loadresult übergeben wird.
 Ist das daraus resultierende j kleiner als 20 wird die Funktion loadquestion und somit eine neue Frage 
 aus dem knots und dem options Array zusammengestellt.
 Ist j grösser als 21 wird der Pandemietyp aus dem results und dem resultstring Array zusammengestellt.
@@ -127,26 +130,28 @@ function choice(i,x) {
     else if (j > 21) {jump(i,j); loadresult(j)}
 };
     
-// Startet das Quiz, indem die Knoten des Entscheidungsbaums gezeichnet werden und die erste Frage geladen wird.    
+// Startet das Quiz, indem die Knoten des Entscheidungsbaums gezeichnet werden und die erste Frage geladen wird.
+// Die beiden Funktionen loadquestion und dots werden weiter bei ihrer Definition genauer beschrieben.  
 function start(){
     loadquestion(1)
     dots()
 };
 
 /* 
-Funktion, mit der die Frage geladen wird und anhand der Variablen k die (Anzahl) möglichen Antworten.
-
+Funktion, mit der die Frage über das Array knots geladen wird und anhand der Variablen k 
+über die If-Abfrage die (Anzahl) möglichen Antworten.
+Es werden vier Variablen definiert, welche dann in der If-Abfrage dafür eingesetzt werden, die im 
+vorherigen Durchlauf geklickten Antworten zurückzusetzen ("replacewith").
 Durch Klicken der Antwort-Buttons, werden die entsprechenden Parameter an die Choice-Funktion weitergegeben.
 */
 function loadquestion(i) {
     let k = optnum[i]
     //let k = options[i].length
-    document.getElementById("question").innerHTML = knots[i] //TODO Beschreibung hier weiter
+    document.getElementById("question").innerHTML = knots[i] 
     var elema = document.getElementById("opta");
     var elemb = document.getElementById("optb");
     var elemc = document.getElementById("optc");
     var elemd = document.getElementById("optd");
-    //elem.replaceWith(elem.cloneNode(true));
     if (k == 2) {
         document.getElementById("test").innerHTML = k;
 	    document.getElementById("opta").innerHTML = options[i].a;
@@ -189,6 +194,13 @@ function loadquestion(i) {
     }
 }
 
+/* Der Parameter wird von der choice Funktion übergeben.
+Über die If-Abfrage wird dann der entsprechende Typ, also das Ergebnis des Entscheidungsbaumes,
+und der zum Typ gehörige Text ermittelt, welche beide über den entsprechenden Index innerhalb der Arrays 
+results und resultstring abgerufen werden können.
+Der gesamte Text wird dann wiederum über die Eigenschafft innerHTML gelesen und gespeichert.
+Ausserdem wird ein neuer Button für den Neustart des Spiels eingebaut.
+*/
 function loadresult(i) {
     if (i == 21) {var type = results.a; var text = resultstring.a}
     else if (i == 22) {var type = results.b; var text = resultstring.b}
@@ -205,6 +217,10 @@ function loadresult(i) {
     document.getElementById("restart").addEventListener("click", function() {restart()},);
 }
 
+/* Diese Funktion setzt die Frage, sowie die Antwortbuttons wieder zurück, so dass sie keinen Text enthalten.
+Ausserdem wird das Canvas, in welchem der Entscheidungsbaum angezeigt wird, ebenfalls zurückgesetzt.
+Am Ende wird das Spiel über die Start Funktion neu geladen.
+*/
 function restart() {
     document.getElementById("question").innerHTML = "";
     document.getElementById("linea").innerHTML = "<button> <opt id=opta> </opt> </button>";
@@ -218,6 +234,10 @@ function restart() {
 }
 
 // Zeichnet die Knoten, also Fragen (rot) und Antworten (blau) des Entscheidungsbaums.
+/* Hierzu wird eine 2D-Zeichenfläche, canvas, eingefügt, welcher ein Koordinatensystem hinterlegt ist.
+Über zwei For-Schleifen werden die Punkte anhand ihrer Indizes im Array coordinates aufgerufen und als 
+Rechtecke gezeichnet.
+*/
 function dots() {
     let size = 50    
     const canvas = document.querySelector('#canvas'); 
