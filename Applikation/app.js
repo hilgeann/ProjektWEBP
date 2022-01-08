@@ -2,6 +2,7 @@
 /* Wie in den folgenden Arrays ist an Indexposition 0 ein "Platzhalter" eingefügt, 
 damit das "Ansprechen" der Elemente mit 1 beginnen kann.
 */
+
 const knots = ["Platzhalter", 
 "Corona-Pandemie ist...",
 "Corona = Grippe",
@@ -56,14 +57,14 @@ const redirection = [{a:"Platzhalter"},
 ]
 
 // Array mit den Koordinaten aller Antworten und Ergebnisse, also "knots" und "results" des Entscheidungsbaums.
-const coordinates = [{a:"Platzhalter"},
+const coordinates = [{a:2, b:1},
 {a:4, b:1},
 {a:5, b:2},
 {a:3, b:2},
 {a:4, b:3},
-{a:6, b:3},
-{a:2, b:3},
-{a:4, b:4},
+{a:5, b:3},
+{a:3, b:3},
+{a:4, b:5},
 {a:2, b:4},
 {a:6, b:4},
 {a:2, b:5},
@@ -83,7 +84,8 @@ const coordinates = [{a:"Platzhalter"},
 {a:6, b:7},
 {a:7, b:6},
 {a:5, b:6},
-{a:4, b:6}]
+{a:4, b:6}
+]
 
 // Array mit den Ergebnissen bzw. Pandemietypen.
 const results = {
@@ -107,6 +109,7 @@ const resultstring = {
     g: "Wir stellen fest, dass du die Massnahmen missachtest und eine Grundabneigung gegen Wissenschaft sowie Schulmedizin hast. Bitte informiere dich künftig nur bei offiziellen Stellen und überdenke deine Überzeugungen."
 }
 
+
 /* 
 Choice übernimmt und verarbeitet die gewählte Antwort (Klick auf Button) aus der Funktion loadquestion. Je nach gewählter
 Antwort, also je nach x, wird anhand der If-Schleife, die Variable j ermittelt, welche dann als Parameter 
@@ -117,6 +120,7 @@ Ist j grösser als 21 wird der Pandemietyp aus dem results und dem resultstring 
 Die Parameter i und j werden zusammen an die Funktion jump übergeben, damit die Verbindung zum nächsten Knoten
 im Entscheidungsbaum hergestellt wird. 
 */
+
 function choice(i,x) {
     if (x == 1) {
         var j = redirection[i].a}
@@ -126,15 +130,19 @@ function choice(i,x) {
         var j = redirection[i].c;}
     else if (x == 4) {
         var j = redirection[i].d;}
-    if (j < 20) {jump(i,j); loadquestion(j)}
-    else if (j > 21) {jump(i,j); loadresult(j)}
+    if (j < 20) {mover(i,j),loadquestion(j)}
+    else if (j > 21) {mover(i,j); loadresult(j)}
 };
     
 // Startet das Quiz, indem die Knoten des Entscheidungsbaums gezeichnet werden und die erste Frage geladen wird.
 // Die beiden Funktionen loadquestion und dots werden weiter bei ihrer Definition genauer beschrieben.  
+
 function start(){
+    const waiter = setInterval(function() {drawonspot()}, 100)
+    mover(0,1)
     loadquestion(1)
     dots()
+    canvascolor("#fff0b4")
 };
 
 /* 
@@ -202,6 +210,7 @@ Der gesamte Text wird dann wiederum über die Eigenschafft innerHTML gelesen und
 Ausserdem wird ein neuer Button für den Neustart des Spiels eingebaut.
 */
 function loadresult(i) {
+    canvascolor("red")
     if (i == 21) {var type = results.a; var text = resultstring.a}
     else if (i == 22) {var type = results.b; var text = resultstring.b}
     else if (i == 23) {var type = results.c; var text = resultstring.c}
@@ -227,65 +236,297 @@ function restart() {
     document.getElementById("lineb").innerHTML = "<button> <opt id=optb> </opt> </button>" ;
     document.getElementById("linec").innerHTML = "<button> <opt id=optc> </opt> </button>" ;
     document.getElementById("lined").innerHTML = "<button> <opt id=optd> </opt> </button>" ;
-    const canvas = document.querySelector('#canvas'); 
-    const context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    clearcanvas()
+    clearbackground()
     start()
 }
+
+
+/* die nachfolgenden CONST definieren gewisse repetitive Grössenverhältnisse in der Animation */
+/* CONST size defineirt gleichmässige Abstände zwischen allen Punkten, Linien, Animationen*/
+/* CONST corra und corrb werden genutzt um mover(), vac() und mask() besser auszurichten*/
+const size = 50
+const corra = 40; 
+const corrb = 10;
+
 
 // Zeichnet die Knoten, also Fragen (rot) und Antworten (blau) des Entscheidungsbaums.
 /* Hierzu wird eine 2D-Zeichenfläche, canvas, eingefügt, welcher ein Koordinatensystem hinterlegt ist.
 Über zwei For-Schleifen werden die Punkte anhand ihrer Indizes im Array coordinates aufgerufen und als 
 Rechtecke gezeichnet.
 */
-function dots() {
-    let size = 50    
+
+function dots() {  
+    dotsize = 20;
     const canvas = document.querySelector('#canvas'); 
     const ctx = canvas.getContext('2d');
+    let a = (coordinates[0].a)*size    
+    let b = (coordinates[0].b)*size
+
+    ctx.beginPath();
+    ctx.arc(a, b, dotsize, 0, Math.PI*2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+    ctx.closePath();
+    ctx.beginPath();
+    ctx.arc(a, b, dotsize/2, 0, Math.PI*2);
+    ctx.fillStyle = "black";
+    ctx.fill();
+    ctx.closePath();
+
     for (let i = 1; i < 14; i++) {
         let a = (coordinates[i].a)*size    
         let b = (coordinates[i].b)*size  
-        ctx.strokeStyle = 'red';
-        ctx.lineWidth = 5; 
         ctx.beginPath();
-        ctx.moveTo(000, 000);
-        ctx.strokeRect(a,b,5,5);
+        ctx.arc(a, b, dotsize, 0, Math.PI*2);
+        ctx.fillStyle = "#d7966d";
+        ctx.fill();
+        ctx.closePath();
+        ctx.beginPath();
+        ctx.arc(a, b, dotsize/2, 0, Math.PI*2);
+        ctx.fillStyle = "#598ebb";
+        ctx.fill();
+        ctx.closePath();
+        ctx.fillStyle = "white";
+        ctx.font = "30px Arial";
+        ctx.fillText("?", a-(dotsize/2), b+(dotsize/2));
     }
     for (let i = 21; i < 28; i++) {
         let a = (coordinates[i].a)*size    
         let b = (coordinates[i].b)*size  
-        ctx.strokeStyle = 'blue';
-        ctx.lineWidth = 5; 
         ctx.beginPath();
-        ctx.moveTo(000, 000);
-        ctx.strokeRect(a,b,5,5);
+        ctx.arc(a, b, dotsize, 0, Math.PI*2);
+        ctx.fillStyle = "#598ebb";
+        ctx.fill();
+        ctx.closePath();
+        ctx.beginPath();
+        ctx.arc(a, b, dotsize/2, 0, Math.PI*2);
+        ctx.fillStyle = "#d7966d";
+        ctx.fill();
+        ctx.closePath();
+        ctx.fillStyle = "white";
+        ctx.font = "30px Arial";
+        ctx.fillText("!", a-(dotsize/4), b+(dotsize/2));
     }
 }
 
-/*
-Funktion, welche die Verbindungen/Pfade zwischen den Knoten zeichnet.
-Parameter werden aus der Choice-Funktion übernommen.
-Anhand der Koordinaten wird mit a,b der aktuelle Knoten und mit c,d der neue Zielknoten ermittelt.
-Beim nächsten Durchlauf wird dann der Punkt c,d zum Neuen a,b usw.
-*/
+// Nachfolgend kommen einige Funktionen die für die Animation relevant sind.
+// animate() läuft in der eingestellten rate (z.b. 50 frames pro Sekunde), zeichnet die spielfigur und linie
 
-function jump(i,j) {
-    let size = 50
-    let a = (coordinates[i].a)*size 
-    let b = (coordinates[i].b)*size 
-    let c = (coordinates[j].a)*size 
-    let d = (coordinates[j].b)*size
-    
+
+function animate() {   
+    clearcanvas();
+    var checkBox = document.getElementById('toggleswitch');
+    if(checkBox.checked == true) {mask()} 
+    else {vac()}
+    line();
+}
+
+// drawright(), drawleft(), drawdown(), drawonspot() beinhalten zu zeichnende richtungen und geschwindgkeit pro frame
+
+
+function drawright() {
+    animate()
+    a += speed;
+}
+
+function drawleft() {
+    animate()
+    a -= speed;
+}
+
+function drawdown() {
+    animate()
+    b += speed;
+}
+
+/*drawonspot verschiebt das objekt pro aktualisierung um ein winzig kleines bisschen
+    von klarem auge wäre das erst in monaten oder jahren ersichtlich. dadurch wird jedoch
+    der intervall const waiter innerhalb mover() "am laufen" gehalten*/
+
+function drawonspot() {
+    animate()
+    b += 0.000000000000000000001; 
+}
+
+// clearcanvas() löscht inhalte vorheriger frames und clearbackground() löscht den hintergrund (2 funktionen für verschiedene "layers")
+
+
+function clearcanvas() {
     var canvas = document.querySelector('#canvas');
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
-        ctx.strokeStyle = 'red';
-        ctx.lineWidth = 5;
+        ctx.clearRect(0,0,400,400);}
+}
+
+function clearbackground() {
+    var canvas = document.querySelector('#layer');
+    if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,400,400);}
+}
+
+// mover() berechnet den weg vom aktuellen punkt im koordinatensystem zum nächsten punkt im koordinatensystem und startet die animation als intervall
+//wäre der wert von distdown/distright NULL würde der intervall abgebrochen durch die kleine manipulation (0.00001) stellen wir sicher, dass eine
+//strecke zurückzulegen ist, auch wennn diese vom blossen auge nicht zu sehen ist, so kommt die funktion mover() mit nur zwei bedingungen aus: links oder rechts
+
+
+function mover(i,j) {
+    a = (coordinates[i].a)*size-corra;
+    b = (coordinates[i].b)*size-corrb;
+    c = (coordinates[j].a)*size-corra;
+    d = (coordinates[j].b)*size-corrb;
+    distdown = (d - b)+0.0001; 
+    distright = (c - a)+0.0001; 
+    distleft = (a - c);
+    rate = 100;
+    speed = 2;
+    if (a > c) {
+        const repeater1 = setInterval(function() {drawdown()}, rate);
+        setTimeout(function(){clearInterval(repeater1)},distdown*size);
+        setTimeout(function(){
+        const repeater2 = setInterval(function() {drawleft()}, rate);
+        setTimeout(function(){clearInterval(repeater2)},distleft*size);
+        }, distdown*size)
+        setTimeout(function(){
+        const waiter = setInterval(function() {drawonspot()}, rate);
+        }, (distdown+distleft)*size)   
+    }
+    else {
+        const repeater1 = setInterval(function() {drawdown()}, rate);
+        setTimeout(function(){clearInterval(repeater1)},distdown*size);
+        setTimeout(function(){
+        const repeater2 = setInterval(function() {drawright()}, rate);
+        setTimeout(function(){clearInterval(repeater2)},distright*size);
+        }, distdown*size)
+        setTimeout(function(){
+        const waiter = setInterval(function() {drawonspot()}, rate);
+        }, (distdown+distright)*size)  
+    }
+}
+
+
+//vac() und maask() visualisieren die spielfiguren
+
+function vac() {  
+    dots()
+    x = 12;
+    var canvas = document.querySelector('#canvas');
+    if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+        
         ctx.beginPath();
-        ctx.moveTo(a, b);
-        ctx.lineTo(c, d);
+        ctx.fillStyle = "white";
+        ctx.fillRect(a+1*x, b+0, 4*x, 1.5*x);
+        ctx.fillRect(a+0, b+0.6*x, 1*x, 0.25*x);
+        
+        ax = a+2*x;
+        bx = b+0;
+        for (let i = 0; i < 7; i++) {
+            ctx.beginPath();
+            ctx.lineWidth = x/20;
+            ctx.strokeStyle = "black";
+
+            ctx.moveTo(ax, bx);
+            ctx.lineTo(ax, bx+0.8*x);
+            ctx.stroke();
+            ax = ax + 0.4*x;
+        }
+        
+        ctx.beginPath();
+        ctx.fillStyle = "#87CEEB";
+        ctx.fillRect(a+1*x, b+0, 1*x, 1.5*x)
+
+        ctx.beginPath();
+        ctx.lineWidth = x/8;
+        ctx.strokeStyle = "black";
+        ctx.rect(a+1*x, b+0, 4*x, 1.5*x);
+        ctx.stroke();
+        ctx.rect(a+0, b+0.6*x, 1*x, 0.25*x);
+        ctx.stroke();
+        ctx.rect(a+0, b+0.47*x, 0.05*x, 0.5*x);
+        ctx.stroke();
+        ctx.rect(a+5*x, b+0.7*x, 1.2*x, 0.01*x);
         ctx.stroke();
     }
 } 
+
+function mask() { 
+    dots()
+    x = 15;
+    var canvas = document.querySelector('#canvas');
+    if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+        
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.fillRect(a+1.5*x,b+0.1*x, 2.5*x, 1.4*x);
+        
+        ctx.beginPath();
+        ctx.lineWidth = 0.1*x;
+        ctx.strokeStyle = "black";
+        ctx.moveTo(a+1.5*x,b+0.1*x)
+        ctx.quadraticCurveTo(a+0.2*x, b+0.3*x, a+1.5*x,b+1.5*x);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.lineWidth = 0.1*x;
+        ctx.strokeStyle = "black";
+        ctx.moveTo(a+4*x,b+0.1*x)
+        ctx.quadraticCurveTo(a+5.3*x, b+0.3*x, a+4*x,b+1.5*x);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.lineWidth = 0.1*x;
+        ctx.strokeStyle = "black";
+        ctx.rect(a+1.5*x,b+0.1*x, 2.5*x, 1.4*x);
+        ctx.stroke();
+
+        ax = a+1.7*x;
+        bx = b+0.35*x;
+        for (let i = 0; i < 3; i++) {
+            shadow = 0.1*x
+            ctx.beginPath();
+            ctx.lineWidth = shadow;
+            ctx.strokeStyle = "#DCdCdC";
+            ctx.moveTo(ax, bx+shadow);
+            ctx.lineTo(ax+2*x, bx+shadow);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.lineWidth = 0.1*x;
+            ctx.strokeStyle = "black";
+            ctx.moveTo(ax, bx);
+            ctx.lineTo(ax+2*x, bx);
+            ctx.stroke();
+            bx = bx + 0.4*x;
+        }
+    }
+} 
+
+//canvascolour() bestimmt die hintergrundfarbe des canvas (zeichnet auf "layer")
+
+function canvascolor(colour) {   
+    const background = document.querySelector('#layer'); 
+    const ctx = background.getContext('2d');
+    ctx.beginPath();
+    ctx.fillStyle = colour;
+    ctx.fillRect(0,0,400,400);
+}
+
+//line() zeichnet zurückgelegte linie auf die ebene "layer", damit dies nicht zurückgesetzt wird
+//durch die "clearcanvas()" funktion in animate(), welche die ebene "canvas" pro frame zurücksetzt
+
+function line() { 
+    const background = document.querySelector('#layer'); 
+    if (background.getContext) {
+        var ctx = background.getContext('2d');
+        ctx.beginPath();
+        ctx.arc(a+corra, b+corrb, 3, 0, Math.PI*2);
+        ctx.fillStyle = "grey";
+        ctx.fill();
+        ctx.closePath();
+    }
+}
 
 start()
