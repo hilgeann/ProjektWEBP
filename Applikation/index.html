@@ -8,15 +8,29 @@
     <link rel="stylesheet" href="styles.css"> 
 </head>
 
+
 <body>
-    
-<canvas width="400" height="400" id="canvas"></canvas>
+<anim>
+    <canvas width="400" height="400" id="layer" style="position: absolute; border:1px solid #000000"></canvas>
+    <canvas width="400" height="400" id="canvas" style="position: absolute; border:1px solid #000000"></canvas>
+</anim>
+
 
 <!-- Einblenden der Frage -->
+
+<label class="toggle">
+    <input id="toggleswitch" type="checkbox">
+    <span class="roundbutton"></span>
+</label>
+
+<toggletext>Wähle deine Spielfigur!</toggletext>
+
+
 <h1 id="question"> </h1>
 
 <!-- Test, ob richtiges k bei der Funktion loadquestion ermittelt wird. -->
 <p id="test"> </p>
+<p id="test2"> </p>
 
 <!-- Einblenden der möglichen Antwort-Buttons je nach Anzahl -->
 <div id="options">
@@ -29,6 +43,7 @@
     
 <!-- Einbinden JavaScript -->
 <script src="app.js"></script>
+
 
 </body>
 
