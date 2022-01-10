@@ -130,7 +130,7 @@ function choice(i,x) {
         var j = redirection[i].c;}
     else if (x == 4) {
         var j = redirection[i].d;}
-    if (j < 20) {mover(i,j),loadquestion(j)}
+    if (j < 20) {loading();dot(i);mover(i,j)}
     else if (j > 21) {mover(i,j); loadresult(j)}
 };
     
@@ -138,11 +138,11 @@ function choice(i,x) {
 // Die beiden Funktionen loadquestion und dots werden weiter bei ihrer Definition genauer beschrieben.  
 
 function start(){
-    const waiter = setInterval(function() {drawonspot()}, 100)
-    mover(0,1)
-    loadquestion(1)
-    dots()
     canvascolor("#fff0b4")
+    dots();
+    const waiter = setInterval(function() {drawonspot()}, 100)
+    mover(0,1);
+    loading();
 };
 
 /* 
@@ -153,6 +153,7 @@ vorherigen Durchlauf geklickten Antworten zurückzusetzen ("replacewith").
 Durch Klicken der Antwort-Buttons, werden die entsprechenden Parameter an die Choice-Funktion weitergegeben.
 */
 function loadquestion(i) {
+    reload();
     let k = optnum[i]
     //let k = options[i].length
     document.getElementById("question").innerHTML = knots[i] 
@@ -178,7 +179,6 @@ function loadquestion(i) {
         document.getElementById("optb").innerHTML = options[i].b;
         elemb.replaceWith(elemb.cloneNode(true));
         document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
-        document.getElementById("linec").innerHTML = "<button> <opt id=optc> </opt> </button>";
         document.getElementById("optc").innerHTML = options[i].c;
         elemc.replaceWith(elemc.cloneNode(true));
         document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
@@ -191,11 +191,9 @@ function loadquestion(i) {
         document.getElementById("optb").innerHTML = options[i].b;
         elemb.replaceWith(elemb.cloneNode(true));
         document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
-        document.getElementById("linec").innerHTML = "<button> <opt id=optc> </opt> </button>";
         document.getElementById("optc").innerHTML = options[i].c;
         elemc.replaceWith(elemc.cloneNode(true));
         document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
-	    document.getElementById("lined").innerHTML = "<button> <opt id=optd> </opt> </button>";
         document.getElementById("optd").innerHTML = options[i].d;
         elemd.replaceWith(elemd.cloneNode(true));
         document.getElementById("optd").addEventListener("click", function() {choice(i,4)},);
@@ -230,12 +228,17 @@ function loadresult(i) {
 Ausserdem wird das Canvas, in welchem der Entscheidungsbaum angezeigt wird, ebenfalls zurückgesetzt.
 Am Ende wird das Spiel über die Start Funktion neu geladen.
 */
+
+function reload() {
+    document.getElementById("options").innerHTML = " <p id=linea> <button> <opt id=opta> </opt> </button> </p>  <p id=lineb> <button> <opt id=optb> </opt> </button> </p>  <p id=linec> <button> <opt id=optc> </opt> </button> </p> <p id=lined> <button> <opt id=optd> </opt> </button> </p> " ;
+}
+
+function loading() {
+    document.getElementById("question").innerHTML = "Frage wird geladen...";
+    document.getElementById("options").innerHTML = "" ;
+}
+
 function restart() {
-    document.getElementById("question").innerHTML = "";
-    document.getElementById("linea").innerHTML = "<button> <opt id=opta> </opt> </button>";
-    document.getElementById("lineb").innerHTML = "<button> <opt id=optb> </opt> </button>" ;
-    document.getElementById("linec").innerHTML = "<button> <opt id=optc> </opt> </button>" ;
-    document.getElementById("lined").innerHTML = "<button> <opt id=optd> </opt> </button>" ;
     clearcanvas()
     clearbackground()
     start()
@@ -258,22 +261,9 @@ Rechtecke gezeichnet.
 
 function dots() {  
     dotsize = 20;
-    const canvas = document.querySelector('#canvas'); 
+    const canvas = document.querySelector('#dots'); 
     const ctx = canvas.getContext('2d');
-    let a = (coordinates[0].a)*size    
-    let b = (coordinates[0].b)*size
-
-    ctx.beginPath();
-    ctx.arc(a, b, dotsize, 0, Math.PI*2);
-    ctx.fillStyle = "white";
-    ctx.fill();
-    ctx.closePath();
-    ctx.beginPath();
-    ctx.arc(a, b, dotsize/2, 0, Math.PI*2);
-    ctx.fillStyle = "black";
-    ctx.fill();
-    ctx.closePath();
-
+    dot(0);
     for (let i = 1; i < 14; i++) {
         let a = (coordinates[i].a)*size    
         let b = (coordinates[i].b)*size  
@@ -360,7 +350,7 @@ function clearcanvas() {
 }
 
 function clearbackground() {
-    var canvas = document.querySelector('#layer');
+    var canvas = document.querySelector('#background');
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
         ctx.clearRect(0,0,400,400);}
@@ -389,7 +379,7 @@ function mover(i,j) {
         setTimeout(function(){clearInterval(repeater2)},distleft*size);
         }, distdown*size)
         setTimeout(function(){
-        const waiter = setInterval(function() {drawonspot()}, rate);
+        const waiter = setInterval(function() {drawonspot()}, rate);loadquestion(j);
         }, (distdown+distleft)*size)   
     }
     else {
@@ -400,7 +390,7 @@ function mover(i,j) {
         setTimeout(function(){clearInterval(repeater2)},distright*size);
         }, distdown*size)
         setTimeout(function(){
-        const waiter = setInterval(function() {drawonspot()}, rate);
+        const waiter = setInterval(function() {drawonspot()}, rate);loadquestion(j);
         }, (distdown+distright)*size)  
     }
 }
@@ -409,7 +399,6 @@ function mover(i,j) {
 //vac() und maask() visualisieren die spielfiguren
 
 function vac() {  
-    dots()
     x = 12;
     var canvas = document.querySelector('#canvas');
     if (canvas.getContext) {
@@ -452,7 +441,6 @@ function vac() {
 } 
 
 function mask() { 
-    dots()
     x = 15;
     var canvas = document.querySelector('#canvas');
     if (canvas.getContext) {
@@ -507,7 +495,7 @@ function mask() {
 //canvascolour() bestimmt die hintergrundfarbe des canvas (zeichnet auf "layer")
 
 function canvascolor(colour) {   
-    const background = document.querySelector('#layer'); 
+    const background = document.querySelector('#background'); 
     const ctx = background.getContext('2d');
     ctx.beginPath();
     ctx.fillStyle = colour;
@@ -518,7 +506,7 @@ function canvascolor(colour) {
 //durch die "clearcanvas()" funktion in animate(), welche die ebene "canvas" pro frame zurücksetzt
 
 function line() { 
-    const background = document.querySelector('#layer'); 
+    const background = document.querySelector('#dots'); 
     if (background.getContext) {
         var ctx = background.getContext('2d');
         ctx.beginPath();
@@ -527,6 +515,25 @@ function line() {
         ctx.fill();
         ctx.closePath();
     }
+}
+
+function dot(i) {  
+    dotsize = 20;
+    const canvas = document.querySelector('#dots'); 
+    const ctx = canvas.getContext('2d');
+    let a = (coordinates[i].a)*size    
+    let b = (coordinates[i].b)*size
+
+    ctx.beginPath();
+    ctx.arc(a, b, dotsize*1.1, 0, Math.PI*2);
+    ctx.fillStyle = "#D0BDFF";
+    ctx.fill();
+    ctx.closePath();
+    ctx.beginPath();
+    ctx.arc(a, b, dotsize/5.5, 0, Math.PI*2);
+    ctx.fillStyle = "grey";
+    ctx.fill();
+    ctx.closePath();
 }
 
 start()
