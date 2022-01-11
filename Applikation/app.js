@@ -131,7 +131,7 @@ function choice(i,x) {
     else if (x == 4) {
         var j = redirection[i].d;}
     if (j < 20) {loading();dot(i);mover(i,j)}
-    else if (j > 21) {mover(i,j); loadresult(j)}
+    else if (j > 21) {loading();dot(i);mover(i,j)}
 };
     
 // Startet das Quiz, indem die Knoten des Entscheidungsbaums gezeichnet werden und die erste Frage geladen wird.
@@ -154,6 +154,8 @@ Durch Klicken der Antwort-Buttons, werden die entsprechenden Parameter an die Ch
 */
 function loadquestion(i) {
     reload();
+    if (i > 20) {loadresult(i)}
+    else {
     let k = optnum[i]
     //let k = options[i].length
     document.getElementById("question").innerHTML = knots[i] 
@@ -162,7 +164,6 @@ function loadquestion(i) {
     var elemc = document.getElementById("optc");
     var elemd = document.getElementById("optd");
     if (k == 2) {
-        document.getElementById("test").innerHTML = k;
 	    document.getElementById("opta").innerHTML = options[i].a;
         elema.replaceWith(elema.cloneNode(true));
         document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
@@ -172,32 +173,31 @@ function loadquestion(i) {
         document.getElementById("linec").innerHTML = "";
         document.getElementById("lined").innerHTML = ""}
     else if (k == 3) {
-        document.getElementById("test").innerHTML = k;
-        document.getElementById("opta").innerHTML = options[i].a;
+        elema.innerHTML = options[i].a;
         elema.replaceWith(elema.cloneNode(true));
         document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
-        document.getElementById("optb").innerHTML = options[i].b;
+        elemb.innerHTML = options[i].b;
         elemb.replaceWith(elemb.cloneNode(true));
         document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
-        document.getElementById("optc").innerHTML = options[i].c;
+        elemc.innerHTML = options[i].c;
         elemc.replaceWith(elemc.cloneNode(true));
         document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
         document.getElementById("lined").innerHTML = ""}
     else if (k == 4) {
-	    document.getElementById("test").innerHTML = k;
-        document.getElementById("opta").innerHTML = options[i].a;
+        elema.innerHTML = options[i].a;
         elema.replaceWith(elema.cloneNode(true));
         document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
-        document.getElementById("optb").innerHTML = options[i].b;
+        elemb.innerHTML = options[i].b;
         elemb.replaceWith(elemb.cloneNode(true));
         document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
-        document.getElementById("optc").innerHTML = options[i].c;
+        elemc.innerHTML = options[i].c;
         elemc.replaceWith(elemc.cloneNode(true));
         document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
-        document.getElementById("optd").innerHTML = options[i].d;
+        elemd.innerHTML = options[i].d;
         elemd.replaceWith(elemd.cloneNode(true));
         document.getElementById("optd").addEventListener("click", function() {choice(i,4)},);
     }
+}
 }
 
 /* Der Parameter wird von der choice Funktion übergeben.
@@ -208,14 +208,15 @@ Der gesamte Text wird dann wiederum über die Eigenschafft innerHTML gelesen und
 Ausserdem wird ein neuer Button für den Neustart des Spiels eingebaut.
 */
 function loadresult(i) {
-    canvascolor("red")
+    canvascolor("orange")
     if (i == 21) {var type = results.a; var text = resultstring.a}
     else if (i == 22) {var type = results.b; var text = resultstring.b}
     else if (i == 23) {var type = results.c; var text = resultstring.c}
     else if (i == 24) {var type = results.d; var text = resultstring.d}
     else if (i == 25) {var type = results.e; var text = resultstring.e}
     else if (i == 26) {var type = results.f; var text = resultstring.f}
-    else if (i == 27) {var type = results.g; var text = resultstring.g}
+    else if (i == 27) {var type = results.g; var text = resultstring.g};
+    reload();
     document.getElementById("question").innerHTML = "";
     document.getElementById("linea").innerHTML = "<r1>" + "Dein Typ ist:" + "</r1>";
     document.getElementById("lineb").innerHTML = "<r2>" + type + "</r2>" ;
@@ -239,8 +240,9 @@ function loading() {
 }
 
 function restart() {
-    clearcanvas()
-    clearbackground()
+    clear("canvas")
+    clear("background")
+    clear("dots")
     start()
 }
 
@@ -248,9 +250,9 @@ function restart() {
 /* die nachfolgenden CONST definieren gewisse repetitive Grössenverhältnisse in der Animation */
 /* CONST size defineirt gleichmässige Abstände zwischen allen Punkten, Linien, Animationen*/
 /* CONST corra und corrb werden genutzt um mover(), vac() und mask() besser auszurichten*/
-const size = 50
-const corra = 40; 
-const corrb = 10;
+const size = 50;
+const corra = size*0.8; 
+const corrb = size*0.2;
 
 
 // Zeichnet die Knoten, also Fragen (rot) und Antworten (blau) des Entscheidungsbaums.
@@ -260,7 +262,7 @@ Rechtecke gezeichnet.
 */
 
 function dots() {  
-    dotsize = 20;
+    var dotsize = size*0.4;
     const canvas = document.querySelector('#dots'); 
     const ctx = canvas.getContext('2d');
     dot(0);
@@ -277,9 +279,6 @@ function dots() {
         ctx.fillStyle = "#598ebb";
         ctx.fill();
         ctx.closePath();
-        ctx.fillStyle = "white";
-        ctx.font = "30px Arial";
-        ctx.fillText("?", a-(dotsize/2), b+(dotsize/2));
     }
     for (let i = 21; i < 28; i++) {
         let a = (coordinates[i].a)*size    
@@ -294,9 +293,6 @@ function dots() {
         ctx.fillStyle = "#d7966d";
         ctx.fill();
         ctx.closePath();
-        ctx.fillStyle = "white";
-        ctx.font = "30px Arial";
-        ctx.fillText("!", a-(dotsize/4), b+(dotsize/2));
     }
 }
 
@@ -305,56 +301,43 @@ function dots() {
 
 
 function animate() {   
-    clearcanvas();
+    clear("canvas");
     var checkBox = document.getElementById('toggleswitch');
     if(checkBox.checked == true) {mask()} 
     else {vac()}
     line();
 }
 
-// drawright(), drawleft(), drawdown(), drawonspot() beinhalten zu zeichnende richtungen und geschwindgkeit pro frame
-
-
-function drawright() {
-    animate()
-    a += speed;
+function draw(direction) {
+    if (direction == "right") {animate(); a += speed}
+    else if (direction == "left") {animate(); a -= speed}
+    else if (direction == "down") {animate(); b += speed}
+    else {animate(); b += 0.000000000000000000001}
 }
 
-function drawleft() {
-    animate()
-    a -= speed;
+
+function clear(layer) {
+    if (layer == "canvas") {
+        var canvas = document.querySelector('#canvas');
+        if (canvas.getContext) {
+            var ctx = canvas.getContext('2d');
+            ctx.clearRect(0,0,400,400);}
+        }
+    else if (layer == "background") {
+        var canvas = document.querySelector('#background');
+        if (canvas.getContext) {
+            var ctx = canvas.getContext('2d');
+            ctx.clearRect(0,0,400,400);}
+        }   
+    else if (layer == "dots") {
+        var canvas = document.querySelector('#dots');
+        if (canvas.getContext) {
+            var ctx = canvas.getContext('2d');
+            ctx.clearRect(0,0,400,400);}
+        }  
 }
 
-function drawdown() {
-    animate()
-    b += speed;
-}
 
-/*drawonspot verschiebt das objekt pro aktualisierung um ein winzig kleines bisschen
-    von klarem auge wäre das erst in monaten oder jahren ersichtlich. dadurch wird jedoch
-    der intervall const waiter innerhalb mover() "am laufen" gehalten*/
-
-function drawonspot() {
-    animate()
-    b += 0.000000000000000000001; 
-}
-
-// clearcanvas() löscht inhalte vorheriger frames und clearbackground() löscht den hintergrund (2 funktionen für verschiedene "layers")
-
-
-function clearcanvas() {
-    var canvas = document.querySelector('#canvas');
-    if (canvas.getContext) {
-        var ctx = canvas.getContext('2d');
-        ctx.clearRect(0,0,400,400);}
-}
-
-function clearbackground() {
-    var canvas = document.querySelector('#background');
-    if (canvas.getContext) {
-        var ctx = canvas.getContext('2d');
-        ctx.clearRect(0,0,400,400);}
-}
 
 // mover() berechnet den weg vom aktuellen punkt im koordinatensystem zum nächsten punkt im koordinatensystem und startet die animation als intervall
 //wäre der wert von distdown/distright NULL würde der intervall abgebrochen durch die kleine manipulation (0.00001) stellen wir sicher, dass eine
@@ -370,27 +353,27 @@ function mover(i,j) {
     distright = (c - a)+0.0001; 
     distleft = (a - c);
     rate = 100;
-    speed = 2;
+    speed = 100/size;
     if (a > c) {
-        const repeater1 = setInterval(function() {drawdown()}, rate);
+        const repeater1 = setInterval(function() {draw("down")}, rate);
         setTimeout(function(){clearInterval(repeater1)},distdown*size);
         setTimeout(function(){
-        const repeater2 = setInterval(function() {drawleft()}, rate);
+        const repeater2 = setInterval(function() {draw("left")}, rate);
         setTimeout(function(){clearInterval(repeater2)},distleft*size);
         }, distdown*size)
         setTimeout(function(){
-        const waiter = setInterval(function() {drawonspot()}, rate);loadquestion(j);
+        const waiter = setInterval(function() {draw("onspot")}, rate);loadquestion(j);
         }, (distdown+distleft)*size)   
     }
     else {
-        const repeater1 = setInterval(function() {drawdown()}, rate);
+        const repeater1 = setInterval(function() {draw("down")}, rate);
         setTimeout(function(){clearInterval(repeater1)},distdown*size);
         setTimeout(function(){
-        const repeater2 = setInterval(function() {drawright()}, rate);
+        const repeater2 = setInterval(function() {draw("right")}, rate);
         setTimeout(function(){clearInterval(repeater2)},distright*size);
         }, distdown*size)
         setTimeout(function(){
-        const waiter = setInterval(function() {drawonspot()}, rate);loadquestion(j);
+        const waiter = setInterval(function() {draw("onspot")}, rate);loadquestion(j);
         }, (distdown+distright)*size)  
     }
 }
@@ -399,7 +382,7 @@ function mover(i,j) {
 //vac() und maask() visualisieren die spielfiguren
 
 function vac() {  
-    x = 12;
+    x = size*0.25;
     var canvas = document.querySelector('#canvas');
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
@@ -441,7 +424,7 @@ function vac() {
 } 
 
 function mask() { 
-    x = 15;
+    x = size*0.3;
     var canvas = document.querySelector('#canvas');
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
@@ -503,7 +486,7 @@ function canvascolor(colour) {
 }
 
 //line() zeichnet zurückgelegte linie auf die ebene "layer", damit dies nicht zurückgesetzt wird
-//durch die "clearcanvas()" funktion in animate(), welche die ebene "canvas" pro frame zurücksetzt
+//durch die "clear()" funktion in animate(), welche die ebene "canvas" pro frame zurücksetzt
 
 function line() { 
     const background = document.querySelector('#dots'); 
@@ -518,22 +501,22 @@ function line() {
 }
 
 function dot(i) {  
-    dotsize = 20;
     const canvas = document.querySelector('#dots'); 
     const ctx = canvas.getContext('2d');
-    let a = (coordinates[i].a)*size    
-    let b = (coordinates[i].b)*size
+    let a = (coordinates[i].a)*size;
+    let b = (coordinates[i].b)*size;
 
     ctx.beginPath();
-    ctx.arc(a, b, dotsize*1.1, 0, Math.PI*2);
+    ctx.arc(a, b, size*0.4, 0, Math.PI*2);
     ctx.fillStyle = "#D0BDFF";
     ctx.fill();
     ctx.closePath();
     ctx.beginPath();
-    ctx.arc(a, b, dotsize/5.5, 0, Math.PI*2);
+    ctx.arc(a, b, size*0.2, 0, Math.PI*2);
     ctx.fillStyle = "grey";
     ctx.fill();
     ctx.closePath();
 }
 
 start()
+
