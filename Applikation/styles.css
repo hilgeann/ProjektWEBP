@@ -1,10 +1,7 @@
 body {
     font-family: arial, sans-serif;
-    margin: 2rem 3rem 3rem 3rem;
     text-align:center;
-}
-
-div {position: relative;
+    background-color: aliceblue;
 }
 
 p {color: black;
@@ -12,18 +9,21 @@ p {color: black;
 
 h1 {position:static;
     margin: 2rem 0 2rem 0;
-    color: red;
+    color: rgb(117, 134, 153);
     font-size: 1.2em;
 }
 
 /* Canvas */
 
 .anim {
-    position:static;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    /*position:static;
     float:center;
     display: block;
-    height: 400px;
-    margin: 0 40% 0 40%;
+    margin: 0 40% 0 40%;*/
 }
 
 canvas {
@@ -48,8 +48,11 @@ canvas {
 /* Quizbuttons */
 
 .options {
-    position:static;
-    float:center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*position:static;
+    float:center; */
 }
 
 button {
@@ -70,17 +73,20 @@ button:hover {
 /* Schieberegler */
 
 .togglebox {
-    float:center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*float:center;
     position:static;
     display:block;
     margin: 1rem 1rem 1rem 1rem;
     height: 2.5rem;
-    width: 400px;
+    width: 400px;*/
 }
 
 .toggletext {
     margin: 1.5rem 1rem 1rem 4rem;
-    color: red;
+    color: rgb(117, 134, 153);
     float:left;
 }
 
