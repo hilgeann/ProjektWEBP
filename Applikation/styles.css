@@ -1,72 +1,92 @@
 body {
     font-family: arial, sans-serif;
-    text-align: left;
     margin: 2rem 3rem 3rem 3rem;
+    text-align:center;
 }
 
 div {position: relative;
 }
 
-anim {
-    padding-top: 50px;
-    padding-right: 100px;
-    padding-bottom: 10px;
-    padding-left: 40px;
-    position: absolute; 
-    left: 50; 
-    top: 50;
-}
-
 p {color: black;
-    padding-left: 40px;
 }
 
-h1 {padding-top: 500px;
-    padding-left: 40px;
+h1 {position:static;
+    margin: 2rem 0 2rem 0;
     color: red;
-    font-size: 2em;
+    font-size: 1.2em;
 }
 
-r1 {color: black;
+/* Canvas */
+
+.anim {
+    position:static;
+    float:center;
+    display: block;
+    height: 400px;
+    margin: 0 40% 0 40%;
+}
+
+canvas {
+    margin: 1rem 0 1rem 0;
+    display: inline;
+}
+
+
+/* Row1 bis Row3 der Ergebnisanzeige */
+
+.r1 {color: black;
     font-size: 1.5em;
 }
 
-r2 {color: red;
+.r2 {color: red;
     font-size: 2.5em;
 }
 
-r3 {color: black;
+.r3 {color: black;
 }
 
+/* Quizbuttons */
+
+.options {
+    position:static;
+    float:center; 
+}
 
 button {
-    display: inline-block;
     border-radius: 4px;
     background-color: #d7966d;
     border: none;
     color: #FFFFFF;
-    text-align: center;
     font-size: 1em;
-    padding: 20px;
+    padding: 10px;
     width: 15em;
     transition: all 0.5s;
-    cursor: pointer;
-    margin: 5px;
 }
 
 button:hover {
 	background-color: #598ebb;
 } 
 
-toggletext{
-    margin: 0 0 0 1rem;
+/* Schieberegler */
+
+.togglebox {
+    float:center;
+    position:static;
+    display:block;
+    margin: 1rem 1rem 1rem 1rem;
+    height: 2.5rem;
+    width: 400px;
+}
+
+.toggletext {
+    margin: 1.5rem 1rem 1rem 4rem;
+    color: red;
     float:left;
-    position: relative;
 }
 
 .toggle {
-    margin: 0 0 1rem 2.5rem;
-    float:left;
+    float:right;
+    margin: 1rem 1rem 1rem 0.5rem;
     position: relative;
     width: 4rem;
     height: 2rem;
