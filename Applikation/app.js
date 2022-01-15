@@ -164,10 +164,10 @@ function loadquestion(i) {
     var elemc = document.getElementById("optc");
     var elemd = document.getElementById("optd");
     if (k == 2) {
-	    document.getElementById("opta").innerHTML = options[i].a;
+	    elema.innerHTML = options[i].a;
         elema.replaceWith(elema.cloneNode(true));
         document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
-        document.getElementById("optb").innerHTML = options[i].b;
+        elemb.innerHTML = options[i].b;
         elemb.replaceWith(elemb.cloneNode(true));
         document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
         document.getElementById("linec").innerHTML = "";
@@ -231,8 +231,8 @@ Am Ende wird das Spiel über die Start Funktion neu geladen.
 */
 
 function reload() {
-    document.getElementById("options").innerHTML = " <p id=linea> <button> <opt id=opta> </opt> </button> </p>  <p id=lineb> <button> <opt id=optb> </opt> </button> </p>  <p id=linec> <button> <opt id=optc> </opt> </button> </p> <p id=lined> <button> <opt id=optd> </opt> </button> </p> " ;
-}
+    document.getElementById("options").innerHTML = "<p id=linea> <button> <opt id=opta> </p> </button> </p> <p id=lineb> <button> <opt id=optb> </opt> </button> </p> <p id=linec> <button> <opt id=optc> </opt> </button> </p> <p id=lined> <button> <opt id=optd> </opt> </button> </p>"
+    }
 
 function loading() {
     document.getElementById("question").innerHTML = "Frage wird geladen...";
@@ -349,9 +349,9 @@ function mover(i,j) {
     b = (coordinates[i].b)*size-corrb;
     c = (coordinates[j].a)*size-corra;
     d = (coordinates[j].b)*size-corrb;
-    distdown = (d - b)+0.0001; 
-    distright = (c - a)+0.0001; 
-    distleft = (a - c);
+    distdown = (d - b)+0.000001; 
+    distright = (c - a)+0.000001; 
+    distleft = (a - c)+0.000001;
     rate = 100;
     speed = 100/size;
     if (a > c) {
@@ -519,4 +519,3 @@ function dot(i) {
 }
 
 start()
-
