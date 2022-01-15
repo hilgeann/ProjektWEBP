@@ -217,7 +217,7 @@ function loadresult(i) {
     else if (i == 26) {var type = results.f; var text = resultstring.f}
     else if (i == 27) {var type = results.g; var text = resultstring.g};
     reload();	
-	/*alert("DeinTyp ist:" + type + text)*/
+	/*alert("DeinTyp ist:" + type + text) Nur als Idee, dann müsste aber gleichzeitig die Anzeige der Buttons entfernt werden.*/
     document.getElementById("question").innerHTML = "";
     document.getElementById("linea").innerHTML = "<r1>" + "Dein Typ ist:" + "</r1>";
     document.getElementById("lineb").innerHTML = "<r2>" + type + "</r2>" ;
