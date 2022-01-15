@@ -216,7 +216,8 @@ function loadresult(i) {
     else if (i == 25) {var type = results.e; var text = resultstring.e}
     else if (i == 26) {var type = results.f; var text = resultstring.f}
     else if (i == 27) {var type = results.g; var text = resultstring.g};
-    reload();
+    reload();	
+	/*alert("DeinTyp ist:" + type + text)*/
     document.getElementById("question").innerHTML = "";
     document.getElementById("linea").innerHTML = "<r1>" + "Dein Typ ist:" + "</r1>";
     document.getElementById("lineb").innerHTML = "<r2>" + type + "</r2>" ;
