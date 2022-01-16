@@ -3,9 +3,9 @@
 damit das "Ansprechen" der Elemente mit 1 beginnen kann.
 */
 
-const knots = ["Platzhalter", 
+const knots = ["", 
 "Corona-Pandemie ist...",
-"Corona = Grippe",
+"Corona ist ja eine kleine Grippe..",
 "Hattest du Corona?",
 "Bist du dennoch geimpft?",
 "Bist du geimpft?",
@@ -20,14 +20,14 @@ const knots = ["Platzhalter",
 ]
 
 // Array mit den möglichen Antworten pro Frage
-const options = [{a:"Platzhalter"},
+const options = [{a:""},
 {a:"Coro-was?", b:"Reine Panikmache!", c:"eine Viruspandemie"},
-{a:"Nein", b:"Ja"},
-{a:"Die Tests sind manipuliert!", b:"Ja, was solls?", c:"Ja, leider...", d:"Nein."},
+{a:"Nein, bestimmt nicht!", b:"Ja, definitiv."},
+{a:"Weiss nicht, diese Tests sind ohnehin manipuliert!", b:"Ja, was solls?", c:"Ja, leider...", d:"Nein."},
 {a:"Ja", b:"Nein"},
 {a:"Ja", b:"Nein"},
 {a:"Ja", b:"Nein"},
-{a:"Ferien sind egal, will Pandemie-Ende!", b:"Genau!"},
+{a:"Die Pandemie muss Enden, mit oder ohne Ferien", b:"Genau, wo sind meine Flipflops?"},
 {a:"Wozu?", b:"Ja, klar!"},
 {a:"Von Reptioloiden eingeführt um Menschen zu unterwerfen", b:"Gift", c:"hä? worum gehts?"},
 {a:"Ein riesen Quatsch!", b:"Eine Super Sache!"},
@@ -40,7 +40,7 @@ const options = [{a:"Platzhalter"},
 const optnum = [0,3,2,4,2,2,2,2,2,3,2,2,2,2]
 
 // Array gibt an, welche Antwort aus "options" zu welcher Frage "knots" bzw. am Ende zu welchem Ergebnis "result" führt.
-const redirection = [{a:"Platzhalter"},
+const redirection = [{a:""},
 {a:25, b:2, c:3},
 {a:3, b:5},
 {a:5, b:7, c:4, d:6},
@@ -58,7 +58,7 @@ const redirection = [{a:"Platzhalter"},
 
 // Array mit den Koordinaten aller Antworten und Ergebnisse, also "knots" und "results" des Entscheidungsbaums.
 const coordinates = [{a:2, b:1},
-{a:4, b:1},
+{a:3, b:1},
 {a:6, b:2},
 {a:2, b:2},
 {a:4, b:2.5},
@@ -71,13 +71,13 @@ const coordinates = [{a:2, b:1},
 {a:2.5, b:6},
 {a:6, b:5},
 {a:5.5, b:6},
-{a:"Platzhalter"},
-{a:"Platzhalter"},
-{a:"Platzhalter"},
-{a:"Platzhalter"},
-{a:"Platzhalter"},
-{a:"Platzhalter"},
-{a:"Platzhalter"},
+{a:""},
+{a:""},
+{a:""},
+{a:""},
+{a:""},
+{a:""},
+{a:""},
 {a:2, b:7.5},
 {a:1, b:7.5},
 {a:3, b:7.5},
@@ -100,13 +100,13 @@ g: "Naturheilpraktikerin"
 
 // Array mit den Beschreibungen der Pandemietypen.
 const resultstring = {
-    a: "Wow! Du nimmst es genau. Du bist der Typ, der immer Vorsicht walten lässt und das Wohl anderer über das Eigene stellt. Super!",
-    b: "Hut ab. Obwohl du dir ein wenig Freiheiten gönnst und dein Leben möglichst normal weiter lebst, bist du vorsichtig, wenn es darauf ankommt. Gut!",
-    c: "Du trägst die Massnahmen zwar mehrheitlich mit, obwohl du keine Lust mehr hast. Motivier dich noch ein wenig, denn wir sind im Endspurt.",
-    d: "Vorsichtig ist anders, du kooperierst leider nicht. Bitte halte dich an die geltenden Massnahmen, es zu deinem Wohl und zum Schutz deiner Mitmenschen!",
-    e: "Du hast wohl nicht viel mitbekommen. Informiere dich doch unter www.bag.admin.ch über die aktuelle Situation.",
-    f: "Ups! Leider lebst du in einer anderen Realität, als die Mehrheit der Bevölkerung. Wir empfehlen dir eine Social-Media-Diät.",
-    g: "Wir stellen fest, dass du die Massnahmen missachtest und eine Grundabneigung gegen Wissenschaft sowie Schulmedizin hast. Bitte informiere dich künftig nur bei offiziellen Stellen und überdenke deine Überzeugungen."
+    a: "Wow! Du nimmst es genau. <br> Du bist der Typ, der immer Vorsicht walten lässt und das Wohl anderer über das Eigene stellt. <br> Super!",
+    b: "Hut ab. <br> Obwohl du dir ein wenig Freiheiten gönnst und dein Leben möglichst normal weiter lebst, bist du vorsichtig, wenn es darauf ankommt. <br> Gut!",
+    c: "Du trägst die Massnahmen zwar mehrheitlich mit, obwohl du keine Lust mehr hast. <br> Motivier dich noch ein wenig, denn wir sind im Endspurt.",
+    d: "Vorsichtig ist anders, du kooperierst leider nicht. <br> Bitte halte dich an die geltenden Massnahmen, es zu deinem Wohl und zum Schutz deiner Mitmenschen!",
+    e: "Du hast wohl nicht viel mitbekommen. <br> Informiere dich doch unter www.bag.admin.ch über die aktuelle Situation.",
+    f: "Ups! Leider lebst du in einer anderen Realität, als die Mehrheit der Bevölkerung. <br> Wir empfehlen dir eine Social-Media-Diät.",
+    g: "Wir stellen fest, dass du die Massnahmen missachtest und eine Grundabneigung gegen Wissenschaft sowie Schulmedizin hast. <br> Bitte informiere dich künftig nur bei offiziellen Stellen und überdenke deine Überzeugungen."
 }
 
 
@@ -138,12 +138,44 @@ function choice(i,x) {
 // Die beiden Funktionen loadquestion und dots werden weiter bei ihrer Definition genauer beschrieben.  
 
 function start(){
+    gameinfo("show")
     canvascolor("#fff0b4")
     dots();
     const waiter = setInterval(function() {drawonspot()}, 100)
     mover(0,1);
     loading();
 };
+
+/* FadeIn FadeOut */
+
+/*function setopacity(string, value) {
+    document.getElementById(string).style.opacity = value;
+}
+*/
+
+function fade(stringid, stringtext, type) {
+    if (type == "in") {
+        document.getElementById(stringid).style.opacity = 0;
+        document.getElementById(stringid).innerHTML = stringtext;
+        var value1 = 0.1
+        const fader1 = setInterval(function() {
+            document.getElementById(stringid).style.opacity = value1;
+            value1 = value1 + 0.1
+            }, 100)
+            setTimeout(function(){clearInterval(fader1)},1100)
+        }
+    else if (type == "out") {
+        document.getElementById(stringid).style.opacity = 1;
+        var value2 = 1
+        const fader2 = setInterval(function() {
+            document.getElementById(stringid).style.opacity = value2;
+            value2 = value2 - 0.1
+            }, 100)
+            setTimeout(function(){clearInterval(fader2)},1100)
+            setTimeout(function(){document.getElementById(stringid).innerHTML = ""},1100)
+    }
+}
+
 
 /* 
 Funktion, mit der die Frage über das Array knots geladen wird und anhand der Variablen k 
@@ -157,8 +189,8 @@ function loadquestion(i) {
     if (i > 20) {loadresult(i)}
     else {
     let k = optnum[i]
-    //let k = options[i].length
-    document.getElementById("question").innerHTML = knots[i] 
+    var queststring = knots[i];
+    fade("question", queststring, "in");
     var elema = document.getElementById("opta");
     var elemb = document.getElementById("optb");
     var elemc = document.getElementById("optc");
@@ -219,10 +251,14 @@ function loadresult(i) {
     reload();	
 	/*alert("DeinTyp ist:" + type + text) Nur als Idee, dann müsste aber gleichzeitig die Anzeige der Buttons entfernt werden.*/
     document.getElementById("question").innerHTML = "";
-    document.getElementById("linea").innerHTML = "<r1>" + "Dein Typ ist:" + "</r1>";
-    document.getElementById("lineb").innerHTML = "<r2>" + type + "</r2>" ;
-    document.getElementById("linec").innerHTML = "<r3>" + text + "</r3>" ;
-    document.getElementById("lined").innerHTML = "<button id=restart> Nochmal spielen! </button>" ;
+    var astring = "<label class=r1>" + "Dein Typ ist:" + "</label>";
+    var bstring = "<label class=r2>" + type + "</label>" ;
+    var cstring = "<label class=r3>" + text + "</label>" ;
+    var dstring = "<button id=restart> Nochmal spielen! </button>" ;
+    fade("linea", astring, "in");
+    fade("lineb", bstring, "in");
+    fade("linec", cstring, "in");
+    fade("lined", dstring, "in");
     document.getElementById("restart").addEventListener("click", function() {restart()},);
 }
 
@@ -232,11 +268,13 @@ Am Ende wird das Spiel über die Start Funktion neu geladen.
 */
 
 function reload() {
-    document.getElementById("options").innerHTML = "<p id=linea> <button> <opt id=opta> </p> </button> </p> <p id=lineb> <button> <opt id=optb> </opt> </button> </p> <p id=linec> <button> <opt id=optc> </opt> </button> </p> <p id=lined> <button> <opt id=optd> </opt> </button> </p>"
-    }
+    document.getElementById("options").innerHTML = "<p id=linea> <button> <opt id=opta> </opt> </button> </p> <p id=lineb> <button> <opt id=optb> </opt> </button> </p> <p id=linec> <button> <opt id=optc> </opt> </button> </p> <p id=lined> <button> <opt id=optd> </opt> </button> </p>" 
+}
+
 
 function loading() {
-    document.getElementById("question").innerHTML = "Frage wird geladen...";
+    var waitstring = "Wird geladen...";
+    fade("question", waitstring, "in");
     document.getElementById("options").innerHTML = "" ;
 }
 
@@ -247,6 +285,20 @@ function restart() {
     start()
 }
 
+function gameinfo(i) {
+    eleminfo = document.getElementById("infobutton");
+    eleminfo.replaceWith(eleminfo.cloneNode(true));
+    if (i == "hide") {
+        fade("infotext", infostring, "out")
+        document.getElementById("infobutton").innerHTML = "Spielinfo anzeigen";
+        document.getElementById("infobutton").addEventListener("click", function() {gameinfo("show")},)}
+    else if (i == "show") {
+        document.getElementById("infobutton").innerHTML = "Spielinfo ausblenden";
+        var infostring = "Dieses Quiz eruiert auf spielerische Art Ihren Pandemietyp. <br> Die orangefarbenen Ringe stellen Fragen, die blauen Ringe stellen mögliche Resultate dar. <br> Abhängig von den gemachten Antworten können Sie bei einem der sieben Pandemietypen enden.";
+        fade("infotext", infostring, "in")
+        document.getElementById("infobutton").addEventListener("click", function() {gameinfo("hide")},)
+    }
+}
 
 /* die nachfolgenden CONST definieren gewisse repetitive Grössenverhältnisse in der Animation */
 /* CONST size defineirt gleichmässige Abstände zwischen allen Punkten, Linien, Animationen*/
@@ -254,7 +306,6 @@ function restart() {
 const size = 50;
 const corra = size*0.8; 
 const corrb = size*0.2;
-
 
 // Zeichnet die Knoten, also Fragen (rot) und Antworten (blau) des Entscheidungsbaums.
 /* Hierzu wird eine 2D-Zeichenfläche, canvas, eingefügt, welcher ein Koordinatensystem hinterlegt ist.
@@ -338,8 +389,6 @@ function clear(layer) {
         }  
 }
 
-
-
 // mover() berechnet den weg vom aktuellen punkt im koordinatensystem zum nächsten punkt im koordinatensystem und startet die animation als intervall
 //wäre der wert von distdown/distright NULL würde der intervall abgebrochen durch die kleine manipulation (0.00001) stellen wir sicher, dass eine
 //strecke zurückzulegen ist, auch wennn diese vom blossen auge nicht zu sehen ist, so kommt die funktion mover() mit nur zwei bedingungen aus: links oder rechts
@@ -378,7 +427,6 @@ function mover(i,j) {
         }, (distdown+distright)*size)  
     }
 }
-
 
 //vac() und maask() visualisieren die spielfiguren
 
