@@ -13,6 +13,13 @@ h1 {position:static;
     font-size: 1.2em;
 }
 
+
+/* Spielinfo Box */
+.info {
+    margin: 1rem 0 1rem 0;
+}
+
+
 /* Canvas */
 
 .anim {
@@ -20,10 +27,6 @@ h1 {position:static;
     justify-content: center;
     align-items: center;
     height: 400px;
-    /*position:static;
-    float:center;
-    display: block;
-    margin: 0 40% 0 40%;*/
 }
 
 canvas {
@@ -31,14 +34,13 @@ canvas {
     display: inline;
 }
 
-
 /* Row1 bis Row3 der Ergebnisanzeige */
 
 .r1 {color: black;
     font-size: 1.5em;
 }
 
-.r2 {color: red;
+.r2 {color: rgb(126, 79, 79);
     font-size: 2.5em;
 }
 
@@ -51,8 +53,6 @@ canvas {
     display: flex;
     justify-content: center;
     align-items: center;
-    /*position:static;
-    float:center; */
 }
 
 button {
@@ -63,7 +63,9 @@ button {
     font-size: 1em;
     padding: 10px;
     width: 15em;
-    transition: all 0.5s;
+    transition: all 1s;
+    cursor: pointer;
+    opacity:1;
 }
 
 button:hover {
@@ -76,12 +78,6 @@ button:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    /*float:center;
-    position:static;
-    display:block;
-    margin: 1rem 1rem 1rem 1rem;
-    height: 2.5rem;
-    width: 400px;*/
 }
 
 .toggletext {
