@@ -1,5 +1,6 @@
-// Array aller Fragen des Entscheidungsbaums
-/* Wie in den folgenden Arrays ist an Indexposition 0 ein "Platzhalter" eingefügt, 
+/* 
+Array aller Fragen des Entscheidungsbaums.
+Wie in den folgenden Arrays ist an Indexposition 0 ein "Platzhalter" eingefügt, 
 damit das "Ansprechen" der Elemente mit 1 beginnen kann.
 */
 
@@ -111,14 +112,14 @@ const resultstring = {
 
 
 /* 
-Choice übernimmt und verarbeitet die gewählte Antwort (Klick auf Button) aus der Funktion loadquestion. Je nach gewählter
-Antwort, also je nach x, wird anhand der If-Schleife, die Variable j ermittelt, welche dann als Parameter 
-an die Funktionen jump und loadquestion bzw. loadresult übergeben wird.
-Ist das daraus resultierende j kleiner als 20 wird die Funktion loadquestion und somit eine neue Frage 
-aus dem knots und dem options Array zusammengestellt.
-Ist j grösser als 21 wird der Pandemietyp aus dem results und dem resultstring Array zusammengestellt.
-Die Parameter i und j werden zusammen an die Funktion jump übergeben, damit die Verbindung zum nächsten Knoten
-im Entscheidungsbaum hergestellt wird. 
+Choice übernimmt und verarbeitet die gewählte Antwort (Klick auf Button) aus der Funktion loadquestion. Je nach Antwort, die geklickt wurde, 
+also je nach x, wird anhand der If-Abfrage, die Variable j ermittelt, welche dann in eine weitere If-Abfrage eingegeben wird
+und darüber entscheidet, welche weiteren Funktionen ausgelöst werden. 
+J wird als Parameter an die Funktion mover übergeben. 
+I stammt als Parameter von der Funktion loadquestion bzw. mover und wird hier als Parameter an die Funktionen dot und mover übergeben.
+Ausserdem wird die Funktion loading gestartet.
+
+FRAGE: WARUM WIRD J NOCH UNTERSCHIEDEN IN GRÖSSER/KLEINER, WENN BEIDES DIE GLEICHEN FUNKTIONEN AUSLÖST?
 */
 
 function choice(i,x) {
@@ -134,8 +135,12 @@ function choice(i,x) {
     else if (j > 21) {loading();dot(i);mover(i,j)}
 };
     
-// Startet das Quiz, indem die Knoten des Entscheidungsbaums gezeichnet werden und die erste Frage geladen wird.
-// Die beiden Funktionen loadquestion und dots werden weiter bei ihrer Definition genauer beschrieben.  
+/*
+Startet das Quiz, indem die Anleitung mit gameinfo eingeblendet und die Hintergrundfarbe des "untersten" Canvas mit canvascolor festgelegt wird.
+Alle Punkte des Entscheidungsbaums im "mittleren" Canvas werden gezeichnet und es wird die Konstante waiter definiert, aber noch ohne gültige Funktion, 
+nur mit einer Aktualisierungsrate, so dass die Spielfigur angezeigt bleibt --> STIMMT DAS SO?
+Die beiden Funktionen mover und loading starten das Anzeigen der Frage/Antwort Kombinationen bzw. den beginnenden Pfad durch den Entscheidungsbaum.  
+*/
 
 function start(){
     gameinfo("show")
@@ -146,23 +151,34 @@ function start(){
     loading();
 };
 
-/* FadeIn FadeOut */
 
-/*function setopacity(string, value) {
-    document.getElementById(string).style.opacity = value;
+/*
+function setopacity(string, value) {
+    document.getElementById(string).style.opacity = value; --> BRAUCHT ES DAS NOCH?
 }
 */
 
+/* 
+Eine FadeIn FadeOut Funktion wird hier definiert, um sie beliebig für alle Arten von Text einsetzen zu können.
+Als Parameter erhält sie jeweils den Namen des Strings, den String selbst und als Typ, ob es sich um ein In oder Out Fading handelt.
+Das FadeIn und FadeOut erhöht/verkleinert die Durchsichtigkeit mit der selben Schrittzahl. Beide Intervalle werden nach 1.1 Sekunden abgebrochen. 
+*/
 function fade(stringid, stringtext, type) {
     if (type == "in") {
-        document.getElementById(stringid).style.opacity = 0;
+        document.getElementById(stringid).style.opacity = 0; 
+	/*
+	getElementById als Methode des document-Objekts, um auf den jeweiligen Elementknoten zu zugreifen,
+	der ein eindeutiges id-Atrribut erhält. Hier wird der Schrift die Deckkraft Null vergeben, da sie zu Beginn unsichtbar ist. 
+	*/
         document.getElementById(stringid).innerHTML = stringtext;
+	/* Durch inner.HTML wird der Inhalt für das jeweiligen HTML-Element gelesen und gespeichert.
+	*/
         var value1 = 0.1
         const fader1 = setInterval(function() {
-            document.getElementById(stringid).style.opacity = value1;
+            document.getElementById(stringid).style.opacity = value1; //wiederholt die Vergabe des neuen Opacity-Werts alle 100mS
             value1 = value1 + 0.1
             }, 100)
-            setTimeout(function(){clearInterval(fader1)},1100)
+            setTimeout(function(){clearInterval(fader1)},1100) //bricht das obige Interval nach 1100mS ab
         }
     else if (type == "out") {
         document.getElementById(stringid).style.opacity = 1;
@@ -180,23 +196,25 @@ function fade(stringid, stringtext, type) {
 /* 
 Funktion, mit der die Frage über das Array knots geladen wird und anhand der Variablen k 
 über die If-Abfrage die (Anzahl) möglichen Antworten.
+Zuvor findet eine weiter If-Abfrage statt, denn falls es sich um ein i grösser 20 handelt, würden nicht die Fragen, sondern Antworten geladen werden.
 Es werden vier Variablen definiert, welche dann in der If-Abfrage dafür eingesetzt werden, die im 
-vorherigen Durchlauf geklickten Antworten zurückzusetzen ("replacewith").
+vorherigen Durchlauf geklickten Antworten zurückzusetzen ("replacewith"). Mit dem Clone, wird das Element, also die Antwortoptionen zwar übernommen, aber ohne,
+dass der Event Listener aus der Antwort zuvor übernommen wird.
 Durch Klicken der Antwort-Buttons, werden die entsprechenden Parameter an die Choice-Funktion weitergegeben.
 */
 function loadquestion(i) {
-    reload();
+    reload(); // nach dem Klick auf eine Antwort, werden diese mit der Funktion reload wieder ausgeblendet, bis die neuen geladen wurden
     if (i > 20) {loadresult(i)}
     else {
     let k = optnum[i]
     var queststring = knots[i];
-    fade("question", queststring, "in");
+    fade("question", queststring, "in"); // FadeIn der neuen Frage
     var elema = document.getElementById("opta");
     var elemb = document.getElementById("optb");
     var elemc = document.getElementById("optc");
     var elemd = document.getElementById("optd");
     if (k == 2) {
-	    elema.innerHTML = options[i].a;
+	elema.innerHTML = options[i].a;
         elema.replaceWith(elema.cloneNode(true));
         document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
         elemb.innerHTML = options[i].b;
@@ -240,7 +258,7 @@ Der gesamte Text wird dann wiederum über die Eigenschafft innerHTML gelesen und
 Ausserdem wird ein neuer Button für den Neustart des Spiels eingebaut.
 */
 function loadresult(i) {
-    canvascolor("orange")
+    canvascolor("orange") // beim Beenden des Spiels, ändert die Hintergrundfarbe des Canvas
     if (i == 21) {var type = results.a; var text = resultstring.a}
     else if (i == 22) {var type = results.b; var text = resultstring.b}
     else if (i == 23) {var type = results.c; var text = resultstring.c}
@@ -249,7 +267,6 @@ function loadresult(i) {
     else if (i == 26) {var type = results.f; var text = resultstring.f}
     else if (i == 27) {var type = results.g; var text = resultstring.g};
     reload();	
-	/*alert("DeinTyp ist:" + type + text) Nur als Idee, dann müsste aber gleichzeitig die Anzeige der Buttons entfernt werden.*/
     document.getElementById("question").innerHTML = "";
     var astring = "<label class=r1>" + "Dein Typ ist:" + "</label>";
     var bstring = "<label class=r2>" + type + "</label>" ;
@@ -259,31 +276,44 @@ function loadresult(i) {
     fade("lineb", bstring, "in");
     fade("linec", cstring, "in");
     fade("lined", dstring, "in");
-    document.getElementById("restart").addEventListener("click", function() {restart()},);
+    document.getElementById("restart").addEventListener("click", function() {restart()},); // der Button für den Neustart wird eingeblendet
 }
 
-/* Diese Funktion setzt die Frage, sowie die Antwortbuttons wieder zurück, so dass sie keinen Text enthalten.
-Ausserdem wird das Canvas, in welchem der Entscheidungsbaum angezeigt wird, ebenfalls zurückgesetzt.
-Am Ende wird das Spiel über die Start Funktion neu geladen.
+/* 
+Nach erfolgtem Klick, verschwinden die Buttons, sie enthalten keinen Inhalt mehr. 
+Wird ausgelöst durch loadquestion und loadresult.
 */
 
 function reload() {
-    document.getElementById("options").innerHTML = "<p id=linea> <button> <opt id=opta> </opt> </button> </p> <p id=lineb> <button> <opt id=optb> </opt> </button> </p> <p id=linec> <button> <opt id=optc> </opt> </button> </p> <p id=lined> <button> <opt id=optd> </opt> </button> </p>" 
+    document.getElementById("options").innerHTML =
+	"<p id=linea> <button> <opt id=opta> </opt> </button> </p>
+	<p id=lineb> <button> <opt id=optb> </opt> </button> </p>
+	<p id=linec> <button> <opt id=optc> </opt> </button> </p>
+	<p id=lined> <button> <opt id=optd> </opt> </button> </p>" 
 }
 
-
+/*
+Wird ausgelöst über die Funktion start bzw. nach jedem Klick auf eine Antwort und blendet jeweils den Übergangstext ein und die Buttons aus.
+*/
 function loading() {
     var waitstring = "Wird geladen...";
     fade("question", waitstring, "in");
-    document.getElementById("options").innerHTML = "" ;
+    document.getElementById("options").innerHTML = "" ; //MACHT DAS HIER NICHT DAS SELBE, WIE SCHON RELOAD OBEN?
 }
 
+/*
+Alle drei Layer des Canvas werden entfernt, das Spiel wird neu gestartet.
+*/
 function restart() {
     clear("canvas")
     clear("background")
     clear("dots")
     start()
 }
+
+/*
+Klickbarer Button zum Ein- und Ausblenden einer Anleitung über die Funktion fade.
+*/
 
 function gameinfo(i) {
     eleminfo = document.getElementById("infobutton");
@@ -294,28 +324,34 @@ function gameinfo(i) {
         document.getElementById("infobutton").addEventListener("click", function() {gameinfo("show")},)}
     else if (i == "show") {
         document.getElementById("infobutton").innerHTML = "Spielinfo ausblenden";
-        var infostring = "Dieses Quiz eruiert auf spielerische Art Ihren Pandemietyp. <br> Die orangefarbenen Ringe stellen Fragen, die blauen Ringe stellen mögliche Resultate dar. <br> Abhängig von den gemachten Antworten können Sie bei einem der sieben Pandemietypen enden.";
+        var infostring =
+	"Dieses Quiz eruiert auf spielerische Art Ihren Pandemietyp. <br> 
+	Die orangefarbenen Ringe stellen Fragen, die blauen Ringe stellen mögliche Resultate dar. <br> 
+	Abhängig von den gemachten Antworten können Sie bei einem der sieben Pandemietypen enden.";
         fade("infotext", infostring, "in")
         document.getElementById("infobutton").addEventListener("click", function() {gameinfo("hide")},)
     }
 }
 
-/* die nachfolgenden CONST definieren gewisse repetitive Grössenverhältnisse in der Animation */
-/* CONST size defineirt gleichmässige Abstände zwischen allen Punkten, Linien, Animationen*/
-/* CONST corra und corrb werden genutzt um mover(), vac() und mask() besser auszurichten*/
+/* 
+Die nachfolgenden Konstanten definieren gewisse repetitive Grössenverhältnisse in der Animation.
+CONST size definiert gleichmässige Abstände zwischen allen Punkten, Linien, Animationen
+CONST corra und corrb werden genutzt um mover(), vac() und mask() besser auszurichten. BIN HIER NICHT SICHER, WARUM WURDE 0.8 UND 0.2 VERWENDET?
+*/
 const size = 50;
 const corra = size*0.8; 
 const corrb = size*0.2;
 
-// Zeichnet die Knoten, also Fragen (rot) und Antworten (blau) des Entscheidungsbaums.
-/* Hierzu wird eine 2D-Zeichenfläche, canvas, eingefügt, welcher ein Koordinatensystem hinterlegt ist.
+/*
+Zeichnet die Knoten, also Fragen (orange Kreise) und Antworten (blaue Kreise) des Entscheidungsbaums.
+Hierzu wird eine 2D-Zeichenfläche, canvas, eingefügt, welcher ein Koordinatensystem hinterlegt ist.
 Über zwei For-Schleifen werden die Punkte anhand ihrer Indizes im Array coordinates aufgerufen und als 
 Rechtecke gezeichnet.
 */
 
 function dots() {  
     var dotsize = size*0.4;
-    const canvas = document.querySelector('#dots'); 
+    const canvas = document.querySelector('#dots'); // das Layer mit den Dots, wird in der Konstante Canvas gespeichert
     const ctx = canvas.getContext('2d');
     dot(0);
     for (let i = 1; i < 14; i++) {
@@ -348,25 +384,37 @@ function dots() {
     }
 }
 
-// Nachfolgend kommen einige Funktionen die für die Animation relevant sind.
-// animate() läuft in der eingestellten rate (z.b. 50 frames pro Sekunde), zeichnet die spielfigur und linie
-
+/*
+Nachfolgend kommen einige Funktionen die für die Animation relevant sind.
+animate() läuft in der eingestellten Rate (z.b. 50 frames pro Sekunde), zeichnet die Spielfigur und den Pfad.
+Wird über die Funktion draw ausgelöst. Durch das clear zu Beginn, wird die Figur
+immer wieder "ausgeblendet" und an neuer Stelle wieder eingeblendet. STIMMT DAS SO?
+*/
 
 function animate() {   
-    clear("canvas");
-    var checkBox = document.getElementById('toggleswitch');
+    clear("canvas"); // HIER BIN ICH NICHT SICHER, OB ICH DAS RICHTIG VERSTANDEN HABE?
+    var checkBox = document.getElementById('toggleswitch'); // ermöglicht das Wechseln der Spilefigur auch während der Pfad gezeichnet wird.
     if(checkBox.checked == true) {mask()} 
     else {vac()}
     line();
 }
 
+/*
+Bewegt die Spielfigur aufgrund der Berechnungen aus der Funktion mover in die entsprechende Richtung und zeichnet den Pfad.
+Bzw. bleibt die Figur beim letzten Intervall innerhalb der If-Abfrage der Funktion mover vermeintlich an Ort stehen, bis die neue Frage geladen
+bzw. die nächste Antwortoption geklickt wurde.
+*/
+
 function draw(direction) {
     if (direction == "right") {animate(); a += speed}
     else if (direction == "left") {animate(); a -= speed}
     else if (direction == "down") {animate(); b += speed}
-    else {animate(); b += 0.000000000000000000001}
+    else {animate(); b += 0.000000000000000000001} // Distanz der Fortbewegung ist so klein gewählt, dass nicht wahrnehmbar
 }
 
+/*
+Alle drei Layer des Spielfelds werden gelöscht.
+*/
 
 function clear(layer) {
     if (layer == "canvas") {
@@ -389,9 +437,11 @@ function clear(layer) {
         }  
 }
 
-// mover() berechnet den weg vom aktuellen punkt im koordinatensystem zum nächsten punkt im koordinatensystem und startet die animation als intervall
-//wäre der wert von distdown/distright NULL würde der intervall abgebrochen durch die kleine manipulation (0.00001) stellen wir sicher, dass eine
-//strecke zurückzulegen ist, auch wennn diese vom blossen auge nicht zu sehen ist, so kommt die funktion mover() mit nur zwei bedingungen aus: links oder rechts
+/* 
+mover() berechnet den Weg vom aktuellen Punkt im Koordinatensystem zum nächsten Punkt im Koordinatensystem und startet die Animation als Intervall.
+Wäre der Wert von distdown/distright NULL würde der Intervall abgebrochen. Durch die kleine Manipulation (0.00001) stellen wir sicher, dass eine
+Strecke zurückzulegen ist, auch wennn diese vom blossen Auge nicht zu sehen ist, so kommt die Funktion mover() mit nur zwei Bedingungen aus: links oder rechts
+*/
 
 
 function mover(i,j) {
@@ -402,8 +452,8 @@ function mover(i,j) {
     distdown = (d - b)+0.000001; 
     distright = (c - a)+0.000001; 
     distleft = (a - c)+0.000001;
-    rate = 100;
-    speed = 100/size;
+    rate = 100; // das Interval wiederholt sich alle 100mS
+    speed = 100/size; // WAS IST DAS HIER FÜR EINE GRÖSSENANGABE? AUCH MILLISEK ODER EINE STRECKE? WÄRE ES BESSER DAS IN ANIMATE REINZUNEHMEN?
     if (a > c) {
         const repeater1 = setInterval(function() {draw("down")}, rate);
         setTimeout(function(){clearInterval(repeater1)},distdown*size);
@@ -428,7 +478,7 @@ function mover(i,j) {
     }
 }
 
-//vac() und maask() visualisieren die spielfiguren
+//vac() und maask() Visualisieren die Spielfiguren, werden mit canvas gezeichnet.
 
 function vac() {  
     x = size*0.25;
@@ -524,7 +574,7 @@ function mask() {
     }
 } 
 
-//canvascolour() bestimmt die hintergrundfarbe des canvas (zeichnet auf "layer")
+//canvascolour() bestimmt die Hintergrundfarbe des canvas (zeichnet auf "layer")
 
 function canvascolor(colour) {   
     const background = document.querySelector('#background'); 
@@ -534,8 +584,10 @@ function canvascolor(colour) {
     ctx.fillRect(0,0,400,400);
 }
 
-//line() zeichnet zurückgelegte linie auf die ebene "layer", damit dies nicht zurückgesetzt wird
-//durch die "clear()" funktion in animate(), welche die ebene "canvas" pro frame zurücksetzt
+/*
+line() zeichnet zurückgelegte Linie auf die Ebene "Dots", damit dies nicht zurückgesetzt wird
+durch die "clear()" Funktion in animate(), welche die Ebene "Canvas" pro Frame zurücksetzt.
+*/
 
 function line() { 
     const background = document.querySelector('#dots'); 
@@ -548,6 +600,10 @@ function line() {
         ctx.closePath();
     }
 }
+
+/*
+Verändert die Farbe der Dots, nachdem diese im Spiel "überquert" wurden.
+*/
 
 function dot(i) {  
     const canvas = document.querySelector('#dots'); 
