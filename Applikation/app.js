@@ -1,8 +1,4 @@
-/* 
-Array aller Fragen des Entscheidungsbaums.
-Wie in den folgenden Arrays ist an Indexposition 0 ein "Platzhalter" eingefügt, 
-damit das "Ansprechen" der Elemente mit 1 beginnen kann.
-*/
+/* ABSCHNITT 0: ARRAYS */
 
 const knots = ["", 
 "Corona-Pandemie ist...",
@@ -110,6 +106,7 @@ const resultstring = {
     g: "Wir stellen fest, dass du die Massnahmen missachtest und eine Grundabneigung gegen Wissenschaft sowie Schulmedizin hast. <br> Bitte informiere dich künftig nur bei offiziellen Stellen und überdenke deine Überzeugungen."
 }
 
+/* ABSCHNITT 1: QUIZ ABLAUF */
 
 /* 
 Choice übernimmt und verarbeitet die gewählte Antwort (Klick auf Button) aus der Funktion loadquestion. Je nach Antwort, die geklickt wurde, 
@@ -332,6 +329,8 @@ function gameinfo(i) {
         document.getElementById("infobutton").addEventListener("click", function() {gameinfo("hide")},)
     }
 }
+
+/* ABSCHNITT 2: CANVAS VISUALISIERUNG */
 
 /* 
 Die nachfolgenden Konstanten definieren gewisse repetitive Grössenverhältnisse in der Animation.
