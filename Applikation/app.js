@@ -1,5 +1,9 @@
 /* ABSCHNITT 0: ARRAYS */
 
+/* Es gibt 13 Fragen, so sind in allen Arrays Positionen 1 bis 13 fragenbezogene Daten
+Positionen 14 bis 20 sind Platzhalter (übersichtlichkeitshalber)
+Positionen 21 bis 27 sind resultatbezogene Daten. */
+
 const knots = ["", 
 "Corona-Pandemie ist...",
 "Corona ist ja eine kleine Grippe..",
@@ -115,8 +119,6 @@ und darüber entscheidet, welche weiteren Funktionen ausgelöst werden.
 J wird als Parameter an die Funktion mover übergeben. 
 I stammt als Parameter von der Funktion loadquestion bzw. mover und wird hier als Parameter an die Funktionen dot und mover übergeben.
 Ausserdem wird die Funktion loading gestartet.
-
-FRAGE: WARUM WIRD J NOCH UNTERSCHIEDEN IN GRÖSSER/KLEINER, WENN BEIDES DIE GLEICHEN FUNKTIONEN AUSLÖST?
 */
 
 function choice(i,x) {
@@ -128,15 +130,13 @@ function choice(i,x) {
         var j = redirection[i].c;}
     else if (x == 4) {
         var j = redirection[i].d;}
-    if (j < 20) {loading();dot(i);mover(i,j)}
-    else if (j > 21) {loading();dot(i);mover(i,j)}
+    loading();dot(i);mover(i,j)
 };
     
 /*
-Startet das Quiz, indem die Anleitung mit gameinfo eingeblendet und die Hintergrundfarbe des "untersten" Canvas mit canvascolor festgelegt wird.
-Alle Punkte des Entscheidungsbaums im "mittleren" Canvas werden gezeichnet und es wird die Konstante waiter definiert, aber noch ohne gültige Funktion, 
-nur mit einer Aktualisierungsrate, so dass die Spielfigur angezeigt bleibt --> STIMMT DAS SO?
-Die beiden Funktionen mover und loading starten das Anzeigen der Frage/Antwort Kombinationen bzw. den beginnenden Pfad durch den Entscheidungsbaum.  
+start() initialisiert das Quiz: Gameinfo wird eingeblendet, Hintergrundfarbe gesetzt, Dots im mittleren Canvas eingezeichnet,
+waiter (Spielfigur wartet an der Stelle) und mover (weg von startpunkt zu frage 1) wird gestartet. (Stören einander bei der ausführung nicht)
+am ende von mover() werden die Fragen und Antworten eingeblendet. 
 */
 
 function start(){
@@ -149,17 +149,12 @@ function start(){
 };
 
 
-/*
-function setopacity(string, value) {
-    document.getElementById(string).style.opacity = value; --> BRAUCHT ES DAS NOCH?
-}
-*/
-
 /* 
 Eine FadeIn FadeOut Funktion wird hier definiert, um sie beliebig für alle Arten von Text einsetzen zu können.
 Als Parameter erhält sie jeweils den Namen des Strings, den String selbst und als Typ, ob es sich um ein In oder Out Fading handelt.
 Das FadeIn und FadeOut erhöht/verkleinert die Durchsichtigkeit mit der selben Schrittzahl. Beide Intervalle werden nach 1.1 Sekunden abgebrochen. 
 */
+
 function fade(stringid, stringtext, type) {
     if (type == "in") {
         document.getElementById(stringid).style.opacity = 0; 
@@ -199,6 +194,7 @@ vorherigen Durchlauf geklickten Antworten zurückzusetzen ("replacewith"). Mit d
 dass der Event Listener aus der Antwort zuvor übernommen wird.
 Durch Klicken der Antwort-Buttons, werden die entsprechenden Parameter an die Choice-Funktion weitergegeben.
 */
+
 function loadquestion(i) {
     reload(); // nach dem Klick auf eine Antwort, werden diese mit der Funktion reload wieder ausgeblendet, bis die neuen geladen wurden
     if (i > 20) {loadresult(i)}
@@ -299,7 +295,7 @@ function loading() {
 }
 
 /*
-Alle drei Layer des Canvas werden entfernt, das Spiel wird neu gestartet.
+Alle drei Layer des Canvas werden bereinigt, das Spiel wird neu gestartet.
 */
 function restart() {
     clear("canvas")
@@ -321,10 +317,7 @@ function gameinfo(i) {
         document.getElementById("infobutton").addEventListener("click", function() {gameinfo("show")},)}
     else if (i == "show") {
         document.getElementById("infobutton").innerHTML = "Spielinfo ausblenden";
-        var infostring =
-	"Dieses Quiz eruiert auf spielerische Art Ihren Pandemietyp. <br> 
-	Die orangefarbenen Ringe stellen Fragen, die blauen Ringe stellen mögliche Resultate dar. <br> 
-	Abhängig von den gemachten Antworten können Sie bei einem der sieben Pandemietypen enden.";
+        var infostring = "Dieses Quiz eruiert auf spielerische Art Ihren Pandemietyp. <br> Die orangefarbenen Ringe stellen Fragen, die blauen Ringe stellen mögliche Resultate dar. <br> Abhängig von den gemachten Antworten können Sie bei einem der sieben Pandemietypen enden.";
         fade("infotext", infostring, "in")
         document.getElementById("infobutton").addEventListener("click", function() {gameinfo("hide")},)
     }
@@ -335,7 +328,9 @@ function gameinfo(i) {
 /* 
 Die nachfolgenden Konstanten definieren gewisse repetitive Grössenverhältnisse in der Animation.
 CONST size definiert gleichmässige Abstände zwischen allen Punkten, Linien, Animationen
-CONST corra und corrb werden genutzt um mover(), vac() und mask() besser auszurichten. BIN HIER NICHT SICHER, WARUM WURDE 0.8 UND 0.2 VERWENDET?
+CONST corra und corrb werden genutzt um mover(), vac() und mask() besser auszurichten.
+0.8 und 0.2 beschreiben die Abstände, die addiert oder subtrahiert werden müssen, damit Linie/Spielfigur sich schön mittig befinden.
+Grund dafür ist, dass Maske und Spritze ihren Ausgangspunkt am linken rand haben, corra/corrb legen sie mittig über die Linie.
 */
 const size = 50;
 const corra = size*0.8; 
@@ -452,7 +447,7 @@ function mover(i,j) {
     distright = (c - a)+0.000001; 
     distleft = (a - c)+0.000001;
     rate = 100; // das Interval wiederholt sich alle 100mS
-    speed = 100/size; // WAS IST DAS HIER FÜR EINE GRÖSSENANGABE? AUCH MILLISEK ODER EINE STRECKE? WÄRE ES BESSER DAS IN ANIMATE REINZUNEHMEN?
+    speed = 100/size;
     if (a > c) {
         const repeater1 = setInterval(function() {draw("down")}, rate);
         setTimeout(function(){clearInterval(repeater1)},distdown*size);
@@ -477,7 +472,7 @@ function mover(i,j) {
     }
 }
 
-//vac() und maask() Visualisieren die Spielfiguren, werden mit canvas gezeichnet.
+//vac() und mask() Visualisieren die Spielfiguren, werden mit canvas gezeichnet.
 
 function vac() {  
     x = size*0.25;
