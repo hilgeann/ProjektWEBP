@@ -279,10 +279,7 @@ Wird ausgelöst durch loadquestion und loadresult.
 
 function reload() {
     document.getElementById("options").innerHTML =
-	"<p id=linea> <button> <opt id=opta> </opt> </button> </p>
-	<p id=lineb> <button> <opt id=optb> </opt> </button> </p>
-	<p id=linec> <button> <opt id=optc> </opt> </button> </p>
-	<p id=lined> <button> <opt id=optd> </opt> </button> </p>" 
+	"<p id=linea> <button> <opt id=opta> </opt> </button> </p> <p id=lineb> <button> <opt id=optb> </opt> </button> </p> <p id=linec> <button> <opt id=optc> </opt> </button> </p> <p id=lined> <button> <opt id=optd> </opt> </button> </p>" 
 }
 
 /*
