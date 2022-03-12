@@ -98,7 +98,8 @@ const path = [
     {a:200,b:300} 
 ]
 
-//So habe ich die Funktionen getestet. Komischerweise funktioniert es aktuell nur wenn zuerst drawdown ausgeführt wird, warum weiss ich nicht (Spielt von der funktionalität her aber keine rolle aktuell)
+//So habe ich die Funktionen getestet. Komischerweise funktioniert es aktuell nur wenn zuerst drawdown ausgeführt wird, 
+//warum weiss ich nicht (Spielt von der funktionalität her aber keine rolle aktuell)
 
 drawdown(200,300,350,350,0);
 loadlines(path);
