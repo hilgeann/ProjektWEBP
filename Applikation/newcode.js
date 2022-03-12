@@ -5,12 +5,17 @@ Da wir in WEBP ohne zwischenspeicher gearbeitet haben, hatten wir einen Salat au
 die miteinander kollidiert sind, einander gestört haben, "nodes" die nicht richtig zurückgesetzt wurden usw.usw.
 
 Neu soll der Ablauf so sein:
-1. Durch Seitenabruf entsteht auf API Server eine Identifikationsdatei, welche der Session einen einmaligen Schlüssel zuweist und eine Liste erstellt, welche die Antworten speichert.
-2. Bei der Wahl der Antwort, wird die ganze Zeite auf einen neutralen Stand zurückgesetzt und die Identifikationsdatei wird neu eingelesen.
-3. Aus der Identifikationsdatei ergibt sich, welche bisherigen Antworten gegeben wurden (der Path wird neu eingeblendet) und welche Frage an der Reihe ist (Quiz wird eingeblendet).
+1. Durch Seitenabruf entsteht auf API Server eine Identifikationsdatei, welche der Session einen einmaligen Schlüssel 
+zuweist und eine Liste erstellt, welche die Antworten speichert.
+2. Bei der Wahl der Antwort, wird die ganze Zeite auf einen neutralen Stand zurückgesetzt und die Identifikationsdatei 
+wird neu eingelesen.
+3. Aus der Identifikationsdatei ergibt sich, welche bisherigen Antworten gegeben wurden (der Path wird neu eingeblendet) 
+und welche Frage an der Reihe ist (Quiz wird eingeblendet).
 4. Beim laden der Antwort wieder von vorne...
 
-Vorteil: Keine Loops/Aktualisierungen die endlos laufen, kein ewiges überschreiben bisheriger Strings (Quizbuttons etc.) weil jeder "Quiz-Schritt" einfach dasselbe macht: Bisherigen Path laden - Aktuelle Quizfrage anzeigen - Antwort abholen + speichern - Alles zurücksetzen.
+Vorteil: Keine Loops/Aktualisierungen die endlos laufen, kein ewiges überschreiben bisheriger Strings (Quizbuttons etc.) 
+weil jeder "Quiz-Schritt" einfach dasselbe macht: 
+Bisherigen Path laden - Aktuelle Quizfrage anzeigen - Antwort abholen + speichern - Alles zurücksetzen.
 */
 
 var c = document.getElementById("myCanvas");
