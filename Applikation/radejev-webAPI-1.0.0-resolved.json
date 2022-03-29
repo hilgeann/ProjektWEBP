@@ -35,7 +35,7 @@
         "summary": "neuer User wird erstellt",
         "description": "Auf dem Server wird ein neuer User angelegt.\n",
         "operationId": "createUser",
-        "consumes": [ //braucht es immer "consumes" und "produces"? und das bei jedem einzelnen Befehl?
+        "consumes":
           "application/json": {},
           "application/xml": {}
         ],
@@ -49,7 +49,7 @@
         "parameters": []
       }  
     },
-    "/user{userId}": { //oder nach Username?
+    "/user{userId}": { 
       "get": {
         "tags": ["users"],
         "summary": "Userdaten anhand ID abfragen",
@@ -144,7 +144,7 @@
         "id": {
           "type": "string"
         },
-        "timestamp":{ //hier sein Vorschlag, einen Zeitstempel pro Spiel zu hinterlegen?
+        "timestamp":{ 
           "type": "integer"
         },
         "inputs": {
