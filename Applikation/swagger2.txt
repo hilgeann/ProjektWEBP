@@ -30,7 +30,7 @@ paths:
         in: body
         required: true
         schema:
-          $ref: '#/definitions/gamerid'
+          $ref: '#/definitions/gameid'
       responses:
         200:
           description: successful operation
@@ -116,18 +116,18 @@ paths:
         404:
           description: object not found
 definitions: 
-  gamerid: 
+  gameid: 
     type: string
-    example: '192.168.10.1'
+    example: '192.168.10.1-001'
   game: 
     type: object
     required: 
-    - gamerid
+    - gameid
     - username
     - trackrecord
     properties: 
       gamerid: 
-        $ref: '#/definitions/gamerid'
+        $ref: '#/definitions/gameid'
       trackrecord:
         type: array
         items: 
