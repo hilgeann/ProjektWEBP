@@ -9,8 +9,6 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 tags: 
-  - name: users
-    description: Daten über die Useraccounts und ihre Spielergebnisse.
   - name: games
     description: Spielergebnisse werden pro Spiel verwaltet.
   - name: statistik
@@ -61,7 +59,7 @@ paths:
       tags: 
       - games
       summary: Spielstand überschreiben
-      description: Der aktuelle Spielstand wird auf dem Server abgerufen.\n
+      description: Der aktuelle Spielstand wird auf dem Server aktualisiert.\n
       operationId: updateGame
       parameters: 
       - name: game
