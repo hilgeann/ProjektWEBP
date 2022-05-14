@@ -56,7 +56,7 @@
     fetch ("https://343505-26.web.fhgr.ch/api/covid/games/",{method:'GET'}).then (function (response) {
     return response.json();
     }).then (function (data) {
-    appendData (data);
+    appendData (data[1]["trackrecord"]);
     }).catch (function (error) {
     console.log ("error: " + error);
     });
