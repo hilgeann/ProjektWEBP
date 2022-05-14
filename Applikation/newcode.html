@@ -6,7 +6,7 @@
      <!-- Einbinden des CSS-Stylsheets -->
 </head>
 <body>
-    <canvas width="500" height="500" id="myCanvas" style="background-color: lightgrey ;position:absolute"></canvas>
+    <canvas width="500" height="500" id="myCanvas" style="background-color: lightblue ;position:absolute"></canvas>
 </body>
 
 <script>
@@ -48,11 +48,7 @@ const coordinates = [{a:2, b:1},
     {a:7, b:7.5}
     ]
 
-const games = [
-    {userid:"001", username:"Martha", path:[1,2,5]},
-    {userid:"002", username:"Theodor", path:[1,3,7]},
-    {userid:"003", username:"Damiana", path:[1,3,4,8]}
-]
+
 
 // Circle und Line habe ich hier in meinem Beispielfile definiert und Benutzt 
 
@@ -71,7 +67,7 @@ function line(a,b,c,d) {
 
 // Drawdown bewegt die Spielfigur auf die korrekte vertikale höhe und löst drawside aus
 
-function drawdown(p1,p2,i){
+function drawdown(p1,p2,i,j){
     var a1 = (coordinates[p1].a)*size
     var a2 = (coordinates[p1].b)*size
     var b1 = (coordinates[p2].a)*size
@@ -81,15 +77,16 @@ function drawdown(p1,p2,i){
     var j = disbd*2;                               //j = Anzahl Aktualisierungen die nötig sind bei 2px/Aktualisierung
     var  movebd = disbd / j;                       //Abstand der Teilschritte damit bei verschiedenen Distanze gleichmässige Bewegung generiert wird
     circle(a,b);
-    if (i == j) {drawside(a1,a2,b1,b2,0)}
-    else {var i = i + 1;
+    if (i == j) {drawside(p1,p2,0)}
+    else {
+        var i = i + 1;
         const myTimeout = setTimeout(function() {
             line(a,b,a,b+(movebd*i)),              // bei jeder wiederholung wird die gleiche linie gezeichnet von a1,a2 aus aber sie wird um (movebd+j) verlängert
-            drawdown(a1,a2,b1,b2,i,j)              //nach 10 millisekunden wird drawdown mit aktualisierte i neu gestartet
+            drawdown(p1,p2,i,j)                    //nach 10 millisekunden wird drawdown mit aktualisierte i neu gestartet
         }, 10);}
 }
 
-function drawside(p1,p2,i){
+function drawside(p1,p2,i,j){
     var a1 = (coordinates[p1].a)*size
     var a2 = (coordinates[p1].b)*size
     var b1 = (coordinates[p2].a)*size
@@ -104,7 +101,7 @@ function drawside(p1,p2,i){
             var i = i + 1;
             const myTimeout = setTimeout(function() {
                 line(a,b,a-(moveac*i),b),              // bei jeder wiederholung wird die gleiche linie gezeichnet von a1,a2 aus aber sie wird um (moveac+j) verlängert
-                drawside(a1,a2,b1,b2,i,j)              //nach 10 millisekunden wird drawdown mit aktualisierte i neu gestartet
+                drawside(p1,p2,i,j)                    //nach 10 millisekunden wird drawdown mit aktualisierte i neu gestartet
             }, 10);}
     }
     else if (c > a) {                                 // c grösser als a: nach rechts gehen
@@ -113,7 +110,7 @@ function drawside(p1,p2,i){
             var i = i + 1;
             const myTimeout = setTimeout(function() {
                 line(a,b,a+(moveac*i),b),
-                drawside(a1,a2,b1,b2,i,j)
+                drawside(p1,p2,i,j)
             }, 10);}
     };
 }
@@ -121,8 +118,8 @@ function drawside(p1,p2,i){
 // Loadlines liest die bisherigen Punkte als Array ein und generiert eine Line die alle passierten Punkte auf einmal einblendet
 
 function loadlines(knots){
-    for (let i = 0; i < knots.length; i++) {
-        var a1 = knots[i]["a"]; a2 = knots[i]["b"]; b1 = knots[i+1]["a"]; b2 = knots[i+1]["b"];
+    for (let i = 0; i < (knots.length)-2; i++) {
+        var a1 = (coordinates[knots[i]].a)*size; a2 = (coordinates[knots[i]].b)*size; b1 = (coordinates[knots[i+1]].a)*size; b2 = (coordinates[knots[i+1]].b)*size;
         var a = a1; b = a2; c = a1; d = b2;        //start-/endpunkte vertikale linie
         circle(a,b);
         line(a,b,c,d);                             //vertikale linie
@@ -134,6 +131,18 @@ function loadlines(knots){
 //So habe ich die Funktionen getestet. Komischerweise funktioniert es aktuell nur wenn zuerst drawdown ausgeführt wird, 
 //warum weiss ich nicht (Spielt von der funktionalität her aber keine rolle aktuell)
 
-drawdown(1,2,0);
+const games = [
+    {userid:"001", username:"Martha", trackrecord:[1,2,5]},
+    {userid:"002", username:"Theodor", trackrecord:[1,3,7]},
+    {userid:"003", username:"Damiana", trackrecord:[1,3,4,8]}
+]
+
+var game = games[2];
+function initialise(game) {
+    var path = game["trackrecord"]; loadlines(path);
+    var count = (path.length); var start = path[count-2]; var end = path[count-1]; drawdown(start,end,0,0)
+}
+initialise(game)
+
 
 </script>
