@@ -1,16 +1,12 @@
 <!doctype html>
-
 <html lang="de">
-
 <head> 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <!-- Einbinden des CSS-Stylsheets -->
 </head>
-
-
 <body>
-<canvas width="400" height="400" id="background" style="position:absolute"></canvas>
+    <canvas width="500" height="500" id="myCanvas" style="background-color: lightgrey ;position:absolute"></canvas>
 </body>
 
 <script>
@@ -76,10 +72,10 @@ function line(a,b,c,d) {
 // Drawdown bewegt die Spielfigur auf die korrekte vertikale höhe und löst drawside aus
 
 function drawdown(p1,p2,i){
-    var a1 = (coordinates[p1].a)*size-corra;
-    var a2 = (coordinates[p1].b)*size-corrb;
-    var b1 = (coordinates[p2].a)*size-corra;
-    var b2 = (coordinates[p2].b)*size-corrb;
+    var a1 = (coordinates[p1].a)*size
+    var a2 = (coordinates[p1].b)*size
+    var b1 = (coordinates[p2].a)*size
+    var b2 = (coordinates[p2].b)*size
     var a = a1; b = a2; c = a1; d = b2;            // Zuweisung Start und Endpunkte
     var disbd = d-b;                               // Abstände zwischen den Punkten
     var j = disbd*2;                               //j = Anzahl Aktualisierungen die nötig sind bei 2px/Aktualisierung
@@ -94,10 +90,10 @@ function drawdown(p1,p2,i){
 }
 
 function drawside(p1,p2,i){
-    var a1 = (coordinates[p1].a)*size-corra;
-    var a2 = (coordinates[p1].b)*size-corrb;
-    var b1 = (coordinates[p2].a)*size-corra;
-    var b2 = (coordinates[p2].b)*size-corrb;
+    var a1 = (coordinates[p1].a)*size
+    var a2 = (coordinates[p1].b)*size
+    var b1 = (coordinates[p2].a)*size
+    var b2 = (coordinates[p2].b)*size
     var a = a1; b = b2; c = b1; d = b2;            // Zuweisung Start und Endpunkte
     var disac = Math.sqrt((c-a)**2);               // Abstände zwischen den Punkten, zuerst quadriert + dann wurzel damit wert positiv
     var j = disac*2;                               //j = Anzahl Aktualisierungen die nötig sind bei 2px/Aktualisierung
@@ -139,4 +135,5 @@ function loadlines(knots){
 //warum weiss ich nicht (Spielt von der funktionalität her aber keine rolle aktuell)
 
 drawdown(1,2,0);
+
 </script>

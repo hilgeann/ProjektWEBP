@@ -1,3 +1,11 @@
+/* TEST ARRAYS "SERVER" */
+
+const games = [
+    {userid:"001", username:"Martha", path:[1,2,5]},
+    {userid:"002", username:"Theodor", path:[1,3,7]},
+    {userid:"003", username:"Damiana", path:[1,3,4,8]}
+]
+
 /* ABSCHNITT 0: ARRAYS */
 
 /* Es gibt 13 Fragen, so sind in allen Arrays Positionen 1 bis 13 fragenbezogene Daten
