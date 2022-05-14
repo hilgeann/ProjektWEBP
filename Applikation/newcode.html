@@ -6,19 +6,135 @@
      <!-- Einbinden des CSS-Stylsheets -->
 </head>
 <body>
-    <canvas width="500" height="500" id="myCanvas" style="background-color: lightblue ;position:absolute"></canvas>
+    <div class ="togglebox">
+        <label class="toggle">
+            <input id="toggleswitch" type="checkbox">
+            <span class="roundbutton"></span>
+         </label>
+        <label class="toggletext">Wähle deine Spielfigur!</label class="toggletext">
+    </div class ="togglebox">    
+    
+    <canvas width="400" height="400" id="myCanvas" style="background-color: lightblue ;position:absolute"></canvas>
+    <canvas width="400" height="400" id="front" style="position:absolute"></canvas>
 </body>
 
 <script>
-
-var c = document.getElementById("myCanvas");
-var ctx = c.getContext("2d");
 
 const size = 50;
 const corra = size*0.8; 
 const corrb = size*0.2;
 
-const coordinates = [{a:2, b:1},
+function clear(layer) {
+    var canvas = document.getElementById(layer)
+        if (canvas.getContext) {
+            var ctx = canvas.getContext('2d');
+            ctx.clearRect(0,0,400,400);
+        }
+}
+
+function vac(a,b) {
+    clear("front")
+    var checkBox = document.getElementById("toggleswitch"); // ermöglicht das Wechseln der Spilefigur auch während der Pfad gezeichnet wird.
+    if (checkBox.checked == true) {
+        x = size*0.3;
+        var canvas = document.getElementById("front");
+        if (canvas.getContext) {
+            var ctx = canvas.getContext('2d');
+            
+            ctx.beginPath();
+            ctx.fillStyle = "white";
+            ctx.fillRect(a+1.5*x,b+0.1*x, 2.5*x, 1.4*x);
+            
+            ctx.beginPath();
+            ctx.lineWidth = 0.1*x;
+            ctx.strokeStyle = "black";
+            ctx.moveTo(a+1.5*x,b+0.1*x)
+            ctx.quadraticCurveTo(a+0.2*x, b+0.3*x, a+1.5*x,b+1.5*x);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.lineWidth = 0.1*x;
+            ctx.strokeStyle = "black";
+            ctx.moveTo(a+4*x,b+0.1*x)
+            ctx.quadraticCurveTo(a+5.3*x, b+0.3*x, a+4*x,b+1.5*x);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.lineWidth = 0.1*x;
+            ctx.strokeStyle = "black";
+            ctx.rect(a+1.5*x,b+0.1*x, 2.5*x, 1.4*x);
+            ctx.stroke();
+
+            ax = a+1.7*x;
+            bx = b+0.35*x;
+            for (let i = 0; i < 3; i++) {
+                shadow = 0.1*x
+                ctx.beginPath();
+                ctx.lineWidth = shadow;
+                ctx.strokeStyle = "#DCdCdC";
+                ctx.moveTo(ax, bx+shadow);
+                ctx.lineTo(ax+2*x, bx+shadow);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.lineWidth = 0.1*x;
+                ctx.strokeStyle = "black";
+                ctx.moveTo(ax, bx);
+                ctx.lineTo(ax+2*x, bx);
+                ctx.stroke();
+                bx = bx + 0.4*x;
+            }
+        }
+    } 
+    else {
+        x = size*0.25;
+        var canvas = document.getElementById("front");
+        if (canvas.getContext) {
+            var ctx = canvas.getContext('2d');
+            
+            ctx.beginPath();
+            ctx.fillStyle = "white";
+            ctx.fillRect(a+1*x, b+0, 4*x, 1.5*x);
+            ctx.fillRect(a+0, b+0.6*x, 1*x, 0.25*x);
+            
+            ax = a+2*x;
+            bx = b+0;
+            for (let i = 0; i < 7; i++) {
+                ctx.beginPath();
+                ctx.lineWidth = x/20;
+                ctx.strokeStyle = "black";
+
+                ctx.moveTo(ax, bx);
+                ctx.lineTo(ax, bx+0.8*x);
+                ctx.stroke();
+                ax = ax + 0.4*x;
+            }
+            
+            ctx.beginPath();
+            ctx.fillStyle = "#87CEEB";
+            ctx.fillRect(a+1*x, b+0, 1*x, 1.5*x)
+
+            ctx.beginPath();
+            ctx.lineWidth = x/8;
+            ctx.strokeStyle = "black";
+            ctx.rect(a+1*x, b+0, 4*x, 1.5*x);
+            ctx.stroke();
+            ctx.rect(a+0, b+0.6*x, 1*x, 0.25*x);
+            ctx.stroke();
+            ctx.rect(a+0, b+0.47*x, 0.05*x, 0.5*x);
+            ctx.stroke();
+            ctx.rect(a+5*x, b+0.7*x, 1.2*x, 0.01*x);
+            ctx.stroke();
+         } 
+    }
+}
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+
+
+const coordinates = [
+    {a:2, b:1},
     {a:3, b:1},
     {a:6, b:2},
     {a:2, b:2},
@@ -32,7 +148,7 @@ const coordinates = [{a:2, b:1},
     {a:2.5, b:6},
     {a:6, b:5},
     {a:5.5, b:6},
-    {a:""},
+    {a:0, b:1}, //Startpunkt hinzugefügt
     {a:""},
     {a:""},
     {a:""},
@@ -81,7 +197,8 @@ function drawdown(p1,p2,i,j){
     else {
         var i = i + 1;
         const myTimeout = setTimeout(function() {
-            line(a,b,a,b+(movebd*i)),              // bei jeder wiederholung wird die gleiche linie gezeichnet von a1,a2 aus aber sie wird um (movebd+j) verlängert
+            line(a,b,a,b+(movebd*i));              // bei jeder wiederholung wird die gleiche linie gezeichnet von a1,a2 aus aber sie wird um (movebd+j) verlängert
+            vac(a,b+(movebd*i));
             drawdown(p1,p2,i,j)                    //nach 10 millisekunden wird drawdown mit aktualisierte i neu gestartet
         }, 10);}
 }
@@ -100,7 +217,8 @@ function drawside(p1,p2,i,j){
         else {
             var i = i + 1;
             const myTimeout = setTimeout(function() {
-                line(a,b,a-(moveac*i),b),              // bei jeder wiederholung wird die gleiche linie gezeichnet von a1,a2 aus aber sie wird um (moveac+j) verlängert
+                line(a,b,a-(moveac*i),b);
+                vac(a-(moveac*i),b);              // bei jeder wiederholung wird die gleiche linie gezeichnet von a1,a2 aus aber sie wird um (moveac+j) verlängert
                 drawside(p1,p2,i,j)                    //nach 10 millisekunden wird drawdown mit aktualisierte i neu gestartet
             }, 10);}
     }
@@ -110,6 +228,7 @@ function drawside(p1,p2,i,j){
             var i = i + 1;
             const myTimeout = setTimeout(function() {
                 line(a,b,a+(moveac*i),b),
+                vac(a+(moveac*i),b);
                 drawside(p1,p2,i,j)
             }, 10);}
     };
@@ -118,6 +237,8 @@ function drawside(p1,p2,i,j){
 // Loadlines liest die bisherigen Punkte als Array ein und generiert eine Line die alle passierten Punkte auf einmal einblendet
 
 function loadlines(knots){
+    var start = [14,0];
+    var knots = start.concat(knots);
     for (let i = 0; i < (knots.length)-2; i++) {
         var a1 = (coordinates[knots[i]].a)*size; a2 = (coordinates[knots[i]].b)*size; b1 = (coordinates[knots[i+1]].a)*size; b2 = (coordinates[knots[i+1]].b)*size;
         var a = a1; b = a2; c = a1; d = b2;        //start-/endpunkte vertikale linie
@@ -132,17 +253,22 @@ function loadlines(knots){
 //warum weiss ich nicht (Spielt von der funktionalität her aber keine rolle aktuell)
 
 const games = [
-    {userid:"001", username:"Martha", trackrecord:[1,2,5]},
+    {userid:"001", username:"Martha", trackrecord:[1,2]},
     {userid:"002", username:"Theodor", trackrecord:[1,3,7]},
-    {userid:"003", username:"Damiana", trackrecord:[1,3,4,8]}
+    {userid:"003", username:"Damiana", trackrecord:[1,3,4,8]},
+    {userid:"004", username:"Noah", trackrecord:[]},
+    {userid:"005", username:"Jo", trackrecord:[1]}
 ]
 
 var game = games[2];
-function initialise(game) {
-    var path = game["trackrecord"]; loadlines(path);
-    var count = (path.length); var start = path[count-2]; var end = path[count-1]; drawdown(start,end,0,0)
-}
-initialise(game)
 
+function initialise(game) {
+    var path = game["trackrecord"]; var count = (path.length); var start = path[count-2]; var end = path[count-1];
+    if (count == 0) {drawdown(14,0,0,0)}
+    else if (count == 1) {loadlines(path); drawdown(0,end,0,0)}
+    else {loadlines(path); drawdown(start,end,0,0)}
+}
+
+initialise(game)
 
 </script>
