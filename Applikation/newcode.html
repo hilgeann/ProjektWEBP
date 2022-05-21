@@ -14,9 +14,30 @@
         <label class="toggletext">Wähle deine Spielfigur!</label class="toggletext">
     </div class ="togglebox">    
     <div class="anim">
-        <canvas width="400" height="400" id="back" style="background-color: lightyellow ;position:absolute"></canvas>
+        <canvas width="400" height="400" id="back" style="background-color: #FFF0B5 ;position:absolute"></canvas>
         <canvas width="400" height="400" id="front" style="position:absolute"></canvas>
     </div class="anim">
+
+    <table>
+        <tr>
+            <td>UserID:</td>
+            <td id="userid">
+                Unbekannt
+            </td>
+        </tr>
+        <tr>
+          <td>UserName</td>
+            <td id="username">
+                Unbekannt
+            </td>
+         </tr>
+         <tr>
+           <td>Trackrecord:</td>
+            <td id="trec">
+                Unbekannt
+            </td>
+         </tr>
+      </table>
 </body>
 
 <script>
@@ -27,10 +48,10 @@ const corrb = size*0.2;
 
 function clear(layer) {
     var canvas = document.getElementById(layer)
-        if (canvas.getContext) {
-            var ctx = canvas.getContext('2d');
-            ctx.clearRect(0,0,400,400);
-        }
+    if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,400,400);
+    }
 }
 
 function vac(a,b) {
@@ -252,6 +273,7 @@ function drawside(p1,p2,i,j){
 }
 
 function dots() {  
+    let c = coordinates; let s = size;let a = (c[0].a)*s;let b = (c[0].b)*s; maindots(a,b,1);
     for (let i = 1; i < 14; i++) {
         let c = coordinates; let s = size;
         let a = (c[i].a)*s;let b = (c[i].b)*s;
@@ -267,7 +289,7 @@ function dots() {
 // Loadlines liest die bisherigen Punkte als Array ein und generiert eine Line die alle passierten Punkte auf einmal einblendet
 
 function loadlines(knots){
-    var start = [14,0];
+    var start = [0];
     var knots = start.concat(knots);
     for (let i = 0; i < (knots.length)-2; i++) {
         let c = coordinates; let k = knots; let s = size; 
@@ -285,23 +307,44 @@ function loadlines(knots){
 //warum weiss ich nicht (Spielt von der funktionalität her aber keine rolle aktuell)
 
 const games = [
-    {userid:"001", username:"Martha", trackrecord:[1,2]},
-    {userid:"002", username:"Theodor", trackrecord:[1,3,7]},
-    {userid:"003", username:"Damiana", trackrecord:[1,3,4,8]},
-    {userid:"004", username:"Noah", trackrecord:[]},
-    {userid:"005", username:"Jo", trackrecord:[1]}
+    {userid:"1", username:"Martha", trackrecord:[1,2]},
+    {userid:"2", username:"Theodor", trackrecord:[1,3,7]},
+    {userid:"3", username:"Damiana", trackrecord:[1,3,4,8]},
+    {userid:"4", username:"Noah", trackrecord:[1]}
 ]
 
-var game = games[1];
+
 
 function initialise(game) {
     dots();
     var path = game["trackrecord"]; var count = (path.length); var start = path[count-2]; var end = path[count-1];
-    if (count == 0) {drawdown(14,0,0,0)}
-    else if (count == 1) {loadlines(path); drawdown(0,end,0,0)}
+    if (count == 1) {drawdown(0,1,0,0)}
     else {loadlines(path); drawdown(start,end,0,0)}
+    document.getElementById("userid").innerHTML = game["userid"];
+    document.getElementById("username").innerHTML = game["username"];
+    document.getElementById("trec").innerHTML = game["trackrecord"];
 }
 
+//Testlauf:
+//Beim Laden des Fensters wird User aufgefordert Name einzugeben
+//Danach wird der User erstellt und die ersta Frage geladen
+
+var name = prompt('Enter your name');
+games.push(
+    {userid: (games.length).toString(), 
+    username:name, 
+    trackrecord:[1]}
+)
+var game = games[4];
 initialise(game)
+
+/*
+1. Seite wird geladen: User generiert + Server geschickt: POST {userid:"055", username:"Amy", trackrecord:[1]}; + Frage laden
+2. Nutzer*in klickt auf eine Antwort. PUT {userid:"055", username:"Amy", trackrecord:[1;2]}
+3. GET {userid:"055"} - nur nötig wenn Fenster neu geöffnet wird
+4. Wir erhalten Antwort: {userid:"055", username:"Amy", trackrecord:[1;2]}
+5. Letzte Zahl im trackrecord auslesen + Frage laden
+6. Nutzerin klickt auf zweeite Antwort PUT {userid:"055", username:"Amy", trackrecord:[1;2;3]}
+*/
 
 </script>
