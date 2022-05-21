@@ -48,7 +48,21 @@
     } */
 
 
-//Holt mit GET die Daten aus der Datenbank
+
+    //Fügt mit POST neue Game-Daten zur Datenbank hinzu. 
+    var data = { username: 'Ben', gamesid: '009', trackrecord: [1,2]};
+    fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,{method:'POST',headers: {
+        'Content-Type': 'application/json',
+    }, body: JSON.stringify(data)})
+    .then(response => response.json())
+    .then(data => {
+        console.log ('Success:', data);
+    })
+    .catch (function (error) {
+    console.log ("error: " + error);
+    });
+
+//Holt mit GET die gesamten Game-Daten aus der Datenbank
     function getData (data) {
     console.log (data);
     document.querySelector ("div").innerHTML = JSON.stringify(data);
@@ -61,20 +75,20 @@
     console.log ("error: " + error);
     }); 
 
-    //Fügt mit POST neue Daten zur Datenbank hinzu. 
-const data = { username: 'Tim', gamesid: '008', trackrecord: [1,2],};
-fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,{method:'POST',headers: {
-    'Content-Type': 'application/json',
-  }, body: JSON.stringify(data)})
-.then(response => response.json())
-then(data => {
-    console.log ('Success:', data);
-})
-.catch (function (error) {
+
+
+//Updatet die Game-Daten der Datenbank mit PUT
+var data = { username: 'Ben', gamesid: '009', trackrecord: [1,2,3],};
+    fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,{method:'PUT',headers: {
+        'Content-Type': 'application/json',
+    }, body: JSON.stringify(data)})
+    .then(response => response.json())
+    .then(data => {
+        console.log ('Success:', data);
+    })
+    .catch (function (error) {
     console.log ("error: " + error);
-});
-
-
+    });
 
     /*var c = document.getElementById("myCanvas");
     var ctx = c.getContext("2d");
