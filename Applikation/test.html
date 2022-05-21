@@ -61,33 +61,18 @@
     console.log ("error: " + error);
     }); 
 
-    //Fügt mit POST neue Daten zur Datenbank hinzu.
-    function appendData (data) {
-    console.log (data);
-    document.querySelector ("div").innerHTML = JSON.stringify(data);
-    }
-    fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,{method:'POST'}).then (function (response) {
-    return response.json();
-    }).then (function (data) {
-    appendData (data);
-    }).catch (function (error) {
+    //Fügt mit POST neue Daten zur Datenbank hinzu. 
+const data = { username: 'Tim', gamesid: '008', trackrecord: [1,2],};
+fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,{method:'POST',headers: {
+    'Content-Type': 'application/json',
+  }, body: JSON.stringify(data)})
+.then(response => response.json())
+then(data => {
+    console.log ('Success:', data);
+})
+.catch (function (error) {
     console.log ("error: " + error);
-    }); 
-
-
-
-console.log("--Section 1 started--");  
-  var games = {};  
-  games.username = "Tim";  
-  games.gamesid = "007";
-  games.trackrecord = [];  
-  
-  var entitySetName = "https://343505-26.web.fhgr.ch/api/covid/games";  
-  
-  Sdk.request("POST", entitySetName, games)  
- 
-
-
+});
 
 
 
