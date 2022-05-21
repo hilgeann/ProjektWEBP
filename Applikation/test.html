@@ -50,7 +50,7 @@
 
 
     //Fügt mit POST neue Game-Daten zur Datenbank hinzu. 
-    var data = {username: "Ben", gamesid: "009", trackrecord: [1,2]};
+    var data = {username: "Ines", gamesid: "010", trackrecord: [1,2,7,8]};
     fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,{method:'POST',headers: {
         'Content-Type': 'application/json',
     }, body: JSON.stringify(data)})
@@ -78,8 +78,8 @@
 
 
 //Updatet die Game-Daten der Datenbank mit PUT
-var data = { username: 'Ben', gamesid: '009', trackrecord: [1,2,3],};
-    fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,{method:'PUT',headers: {
+var data = {username: "Ben", gamesid: "009", trackrecord: [1,2,3,4,6]};
+    fetch ("https://343505-26.web.fhgr.ch/api/covid/games/009" ,{method:'PUT',headers: {
         'Content-Type': 'application/json',
     }, body: JSON.stringify(data)})
     .then(response => response.json())
@@ -89,6 +89,72 @@ var data = { username: 'Ben', gamesid: '009', trackrecord: [1,2,3],};
     .catch (function (error) {
     console.log ("error: " + error);
     });
+
+
+
+
+
+/* 
+Funktion, mit der die Frage über das Array knots geladen wird und anhand der Variablen k 
+über die If-Abfrage die (Anzahl) möglichen Antworten.
+Zuvor findet eine weiter If-Abfrage statt, denn falls es sich um ein i grösser 20 handelt, würden nicht die Fragen, sondern Antworten geladen werden.
+Es werden vier Variablen definiert, welche dann in der If-Abfrage dafür eingesetzt werden, die im 
+vorherigen Durchlauf geklickten Antworten zurückzusetzen ("replacewith"). Mit dem Clone, wird das Element, also die Antwortoptionen zwar übernommen, aber ohne,
+dass der Event Listener aus der Antwort zuvor übernommen wird.
+Durch Klicken der Antwort-Buttons, werden die entsprechenden Parameter an die Choice-Funktion weitergegeben.
+*/
+
+function loadquestion(i) {
+    reload(); // nach dem Klick auf eine Antwort, werden diese mit der Funktion reload wieder ausgeblendet, bis die neuen geladen wurden
+    if (i > 20) {loadresult(i)}
+    else {
+    let k = optnum[i]
+    var queststring = knots[i];
+    fade("question", queststring, "in"); // FadeIn der neuen Frage
+    var elema = document.getElementById("opta");
+    var elemb = document.getElementById("optb");
+    var elemc = document.getElementById("optc");
+    var elemd = document.getElementById("optd");
+    if (k == 2) {
+	elema.innerHTML = options[i].a;
+        elema.replaceWith(elema.cloneNode(true));
+        document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
+        elemb.innerHTML = options[i].b;
+        elemb.replaceWith(elemb.cloneNode(true));
+        document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
+        document.getElementById("linec").innerHTML = "";
+        document.getElementById("lined").innerHTML = ""}
+    else if (k == 3) {
+        elema.innerHTML = options[i].a;
+        elema.replaceWith(elema.cloneNode(true));
+        document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
+        elemb.innerHTML = options[i].b;
+        elemb.replaceWith(elemb.cloneNode(true));
+        document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
+        elemc.innerHTML = options[i].c;
+        elemc.replaceWith(elemc.cloneNode(true));
+        document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
+        document.getElementById("lined").innerHTML = ""}
+    else if (k == 4) {
+        elema.innerHTML = options[i].a;
+        elema.replaceWith(elema.cloneNode(true));
+        document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
+        elemb.innerHTML = options[i].b;
+        elemb.replaceWith(elemb.cloneNode(true));
+        document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
+        elemc.innerHTML = options[i].c;
+        elemc.replaceWith(elemc.cloneNode(true));
+        document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
+        elemd.innerHTML = options[i].d;
+        elemd.replaceWith(elemd.cloneNode(true));
+        document.getElementById("optd").addEventListener("click", function() {choice(i,4)},);
+    }
+    
+}
+}
+
+
+
 
     /*var c = document.getElementById("myCanvas");
     var ctx = c.getContext("2d");
