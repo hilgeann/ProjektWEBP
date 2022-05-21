@@ -50,7 +50,7 @@
 
 
     //Fügt mit POST neue Game-Daten zur Datenbank hinzu. 
-    var data = { username: 'Ben', gamesid: '009', trackrecord: [1,2]};
+    var data = {username: "Ben", gamesid: "009", trackrecord: [1,2]};
     fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,{method:'POST',headers: {
         'Content-Type': 'application/json',
     }, body: JSON.stringify(data)})
