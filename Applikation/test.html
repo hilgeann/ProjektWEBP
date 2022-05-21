@@ -148,8 +148,21 @@ function loadquestion(i) {
         elemd.innerHTML = options[i].d;
         elemd.replaceWith(elemd.cloneNode(true));
         document.getElementById("optd").addEventListener("click", function() {choice(i,4)},);
-    }
-    
+    }  
+}
+function update_trackrecord(){
+    var data = {username: "Ben", gamesid: "009", trackrecord: [1,2,3,4,6]};
+    fetch ("https://343505-26.web.fhgr.ch/api/covid/games/009" ,{method:'PUT',headers: {
+        'Content-Type': 'application/json',
+    }, body: JSON.stringify(data)})
+    .then(response => response.json())
+    .then(data => {
+        console.log ('Success:', data);
+    })
+    .catch (function (error) {
+    console.log ("error: " + error);
+    });
+
 }
 }
 
