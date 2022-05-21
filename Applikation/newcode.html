@@ -3,7 +3,7 @@
 <head> 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <!-- Einbinden des CSS-Stylsheets -->
+    <link rel="stylesheet" href="styles.css"> <!-- Einbinden des CSS-Stylsheets -->
 </head>
 <body>
     <div class ="togglebox">
@@ -13,9 +13,10 @@
          </label>
         <label class="toggletext">Wähle deine Spielfigur!</label class="toggletext">
     </div class ="togglebox">    
-    
-    <canvas width="400" height="400" id="myCanvas" style="background-color: lightblue ;position:absolute"></canvas>
-    <canvas width="400" height="400" id="front" style="position:absolute"></canvas>
+    <div class="anim">
+        <canvas width="400" height="400" id="back" style="background-color: lightyellow ;position:absolute"></canvas>
+        <canvas width="400" height="400" id="front" style="position:absolute"></canvas>
+    </div class="anim">
 </body>
 
 <script>
@@ -33,6 +34,8 @@ function clear(layer) {
 }
 
 function vac(a,b) {
+    var a = a - corra;
+    var b = b - corrb;
     clear("front")
     var checkBox = document.getElementById("toggleswitch"); // ermöglicht das Wechseln der Spilefigur auch während der Pfad gezeichnet wird.
     if (checkBox.checked == true) {
@@ -129,10 +132,6 @@ function vac(a,b) {
     }
 }
 
-var c = document.getElementById("myCanvas");
-var ctx = c.getContext("2d");
-
-
 const coordinates = [
     {a:2, b:1},
     {a:3, b:1},
@@ -162,37 +161,55 @@ const coordinates = [
     {a:5, b:7.5},
     {a:6, b:7.5},
     {a:7, b:7.5}
-    ]
+]
 
+const linecolour = "grey";
+const linewidth = 7;
 
-
-// Circle und Line habe ich hier in meinem Beispielfile definiert und Benutzt 
-
-function circle(a,b){
-    ctx.beginPath();
-    ctx.arc(a,b, 3, 0, Math.PI*2);
-    ctx.stroke();
+function dot(a,b,dotsize,colour) {
+    var canvas = document.getElementById("back");
+    if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+        ctx.beginPath();
+        ctx.arc(a, b, dotsize, 0, Math.PI*2);
+        ctx.fillStyle = colour;
+        ctx.fill();
+        ctx.closePath();
+    }
 }
 
 function line(a,b,c,d) {
-    ctx.beginPath();
-    ctx.moveTo(a,b);
-    ctx.lineTo(c,d);
-    ctx.stroke();
+    var canvas = document.getElementById("back");
+    if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');   
+        dot(a,b,linewidth*0.5,linecolour);
+        ctx.beginPath();
+        ctx.moveTo(a,b);
+        ctx.stroke();
+        ctx.lineTo(c,d);
+        ctx.lineWidth = linewidth;
+        ctx.strokeStyle = linecolour;
+        ctx.stroke();
+        dot(a,b,linewidth*0.4,linecolour);
+    }
 } 
+
+function maindots(a,b,type) {             //type 1: durchquerte dots; type 2: offene dots; type 3: zieldots
+    if (type == 1) {dot(a,b,20,"#d0bdfb"); dot(a,b,10,"#808080")}
+    else if (type == 2) { dot(a,b,20,"#d7966d"); dot(a,b,10,"#598ebb") }
+    else if (type == 3) { dot(a,b,20,"#598ebb"); dot(a,b,10,"#d7966d") }
+}
+
 
 // Drawdown bewegt die Spielfigur auf die korrekte vertikale höhe und löst drawside aus
 
 function drawdown(p1,p2,i,j){
-    var a1 = (coordinates[p1].a)*size
-    var a2 = (coordinates[p1].b)*size
-    var b1 = (coordinates[p2].a)*size
-    var b2 = (coordinates[p2].b)*size
+    let c = coordinates; let s = size;
+    var a1 = (c[p1].a)*s; a2 = (c[p1].b)*s; b1 = (c[p2].a)*s; b2 = (c[p2].b)*s;
     var a = a1; b = a2; c = a1; d = b2;            // Zuweisung Start und Endpunkte
     var disbd = d-b;                               // Abstände zwischen den Punkten
     var j = disbd*2;                               //j = Anzahl Aktualisierungen die nötig sind bei 2px/Aktualisierung
     var  movebd = disbd / j;                       //Abstand der Teilschritte damit bei verschiedenen Distanze gleichmässige Bewegung generiert wird
-    circle(a,b);
     if (i == j) {drawside(p1,p2,0)}
     else {
         var i = i + 1;
@@ -203,17 +220,17 @@ function drawdown(p1,p2,i,j){
         }, 10);}
 }
 
+//onspot-Intervall muss mit dem drücken des buttons gestoppt werden, nicht vergessen
+
 function drawside(p1,p2,i,j){
-    var a1 = (coordinates[p1].a)*size
-    var a2 = (coordinates[p1].b)*size
-    var b1 = (coordinates[p2].a)*size
-    var b2 = (coordinates[p2].b)*size
-    var a = a1; b = b2; c = b1; d = b2;            // Zuweisung Start und Endpunkte
+    let c = coordinates; let s = size;
+    var a1 = (c[p1].a)*s; a2 = (c[p1].b)*s; b1 = (c[p2].a)*s; b2 = (c[p2].b)*s;    var a = a1; b = b2; c = b1; d = b2;            // Zuweisung Start und Endpunkte
     var disac = Math.sqrt((c-a)**2);               // Abstände zwischen den Punkten, zuerst quadriert + dann wurzel damit wert positiv
     var j = disac*2;                               //j = Anzahl Aktualisierungen die nötig sind bei 2px/Aktualisierung
     var moveac = disac / j;                        //Abstand der Teilschritte damit bei verschiedenen Distanze gleichmässige Bewegung generiert wird
     if (a > c) {                                   // a grösser als c: nach links gehen
-        if (i == j) {circle(c,d)}
+        if (i == j) { 
+            dot(a1,a2,10,linecolour); {onspot = setInterval(function () {vac(b1,b2)}, 100)}}  //onspot interval aktualisiert die spielfigur im stillstand
         else {
             var i = i + 1;
             const myTimeout = setTimeout(function() {
@@ -223,7 +240,7 @@ function drawside(p1,p2,i,j){
             }, 10);}
     }
     else if (c > a) {                                 // c grösser als a: nach rechts gehen
-        if (i == j) {circle(c,d)}
+        if (i == j) {dot(a1,a2,10,linecolour); {onspot = setInterval(function () {vac(b1,b2)}, 100)}}  //onspot interval aktualisiert die spielfigur im stillstand
         else {
             var i = i + 1;
             const myTimeout = setTimeout(function() {
@@ -231,7 +248,20 @@ function drawside(p1,p2,i,j){
                 vac(a+(moveac*i),b);
                 drawside(p1,p2,i,j)
             }, 10);}
-    };
+    }
+}
+
+function dots() {  
+    for (let i = 1; i < 14; i++) {
+        let c = coordinates; let s = size;
+        let a = (c[i].a)*s;let b = (c[i].b)*s;
+        maindots(a,b,2);
+    }
+    for (let i = 21; i < 28; i++) {
+        let c = coordinates; let s = size;
+        let a = (c[i].a)*s;let b = (c[i].b)*s;
+        maindots(a,b,3);
+    }
 }
 
 // Loadlines liest die bisherigen Punkte als Array ein und generiert eine Line die alle passierten Punkte auf einmal einblendet
@@ -240,13 +270,15 @@ function loadlines(knots){
     var start = [14,0];
     var knots = start.concat(knots);
     for (let i = 0; i < (knots.length)-2; i++) {
-        var a1 = (coordinates[knots[i]].a)*size; a2 = (coordinates[knots[i]].b)*size; b1 = (coordinates[knots[i+1]].a)*size; b2 = (coordinates[knots[i+1]].b)*size;
+        let c = coordinates; let k = knots; let s = size; 
+        var a1 = (c[k[i]].a)*s; a2 = (c[k[i]].b)*s; b1 = (c[k[i+1]].a)*s; b2 = (c[k[i+1]].b)*s;
         var a = a1; b = a2; c = a1; d = b2;        //start-/endpunkte vertikale linie
-        circle(a,b);
         line(a,b,c,d);                             //vertikale linie
         var a = a1; b = b2; c = b1; d = b2;        //start-/endpunkte horizontale linie
-        line(a,b,c,d);                             // horizontale linie
+        line(a,b,c,d);
+        maindots(c,d,1);
     }
+
 }
 
 //So habe ich die Funktionen getestet. Komischerweise funktioniert es aktuell nur wenn zuerst drawdown ausgeführt wird, 
@@ -260,9 +292,10 @@ const games = [
     {userid:"005", username:"Jo", trackrecord:[1]}
 ]
 
-var game = games[2];
+var game = games[1];
 
 function initialise(game) {
+    dots();
     var path = game["trackrecord"]; var count = (path.length); var start = path[count-2]; var end = path[count-1];
     if (count == 0) {drawdown(14,0,0,0)}
     else if (count == 1) {loadlines(path); drawdown(0,end,0,0)}
