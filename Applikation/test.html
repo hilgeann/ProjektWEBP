@@ -151,6 +151,7 @@ function loadquestion(i) {
     }  
 }
 function update_trackrecord(){
+    getData (gamesid)
     var data = {username: "Ben", gamesid: "009", trackrecord: [1,2,3,4,6]};
     fetch ("https://343505-26.web.fhgr.ch/api/covid/games/009" ,{method:'PUT',headers: {
         'Content-Type': 'application/json',
@@ -167,6 +168,24 @@ function update_trackrecord(){
 }
 
 
+const games = [
+    {userid:"001", username:"Martha", trackrecord:[1,2]},
+    {userid:"002", username:"Theodor", trackrecord:[1,3,7]},
+    {userid:"003", username:"Damiana", trackrecord:[1,3,4,8]},
+    {userid:"004", username:"Noah", trackrecord:[]},
+    {userid:"005", username:"Jo", trackrecord:[1]}
+]
+
+var game = games[2];
+
+function initialise(game) {
+    var path = game["trackrecord"]; var count = (path.length); var start = path[count-2]; var end = path[count-1];
+    if (count == 0) {drawdown(14,0,0,0)}
+    else if (count == 1) {loadlines(path); drawdown(0,end,0,0)}
+    else {loadlines(path); drawdown(start,end,0,0)}
+}
+
+initialise(game)
 
 
     /*var c = document.getElementById("myCanvas");
