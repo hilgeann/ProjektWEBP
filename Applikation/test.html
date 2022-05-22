@@ -49,48 +49,88 @@
 
 
 
-    //Fügt mit POST neue Game-Daten zur Datenbank hinzu. 
+    //Legt mit POST ein neus Game an. 
+function new_game () {
     var data = {username: "Ines", gamesid: "010", trackrecord: [1,2,7,8]};
-    fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,{method:'POST',headers: {
-        'Content-Type': 'application/json',
-    }, body: JSON.stringify(data)})
-    .then(response => response.json())
-    .then(data => {
+    fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,
+        {method:'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
         console.log ('Success:', data);
-    })
-    .catch (function (error) {
-    console.log ("error: " + error);
-    });
+        })
+        .catch (function (error) {
+        console.log ("error: " + error);
+        });
+}
 
-//Holt mit GET die gesamten Game-Daten aus der Datenbank
-    function getData (data) {
+//Holt mit GET alle Games
+function getData (data) {
     console.log (data);
     document.querySelector ("div").innerHTML = JSON.stringify(data);
     }
-    fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,{method:'GET'}).then (function (response) {
-    return response.json();
-    }).then (function (data) {
-    getData (data);
-    }).catch (function (error) {
-    console.log ("error: " + error);
+    fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,
+        {method:'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }, 
+        //body: JSON.stringify(data)
+        })
+        .then (function (response) {
+        return response.json();
+        })
+        .then (function (data) {
+        getData (data);
+        })
+        .catch (function (error) {
+        console.log ("error: " + error);
     }); 
 
 
 
-//Updatet die Game-Daten der Datenbank mit PUT
+//Aktualisierung des Trackrecords eines Games
+function update_trackrecord (data) {
 var data = {username: "Ben", gamesid: "009", trackrecord: [1,2,3,4,6]};
-    fetch ("https://343505-26.web.fhgr.ch/api/covid/games/009" ,{method:'PUT',headers: {
-        'Content-Type': 'application/json',
-    }, body: JSON.stringify(data)})
-    .then(response => response.json())
+    fetch ("https://343505-26.web.fhgr.ch/api/covid/games/009" ,
+        {method:'PUT',
+        headers: {
+        'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+        console.log ('Success:', data);
+        })
+        .catch (function (error) {
+        console.log ("error: " + error);
+        });
+}
+
+new_game()
+
+
+
+function handlingServerError (msg) {
+    fetch ("https://343505-26.web.fhgr.ch/api/covid")
+    .then(response => {
+        if (response.status === 500) {
+            handlingServerError(msg)
+            throw new Error ('Hat nicht funktioniert - retry');
+        }
+        return response.json();
+    })
     .then(data => {
         console.log ('Success:', data);
-    })
-    .catch (function (error) {
-    console.log ("error: " + error);
-    });
-
-
+        })
+        .catch (function (error) {
+        console.log ("error: " + error);
+    });   
+}
 
 
 
