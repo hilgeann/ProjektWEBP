@@ -63,7 +63,7 @@ function new_game () {
         .then(data => {
         console.log ('Success:', data);
         })
-        .catch (function (error) {
+        .catch (error => {
         console.log ("error: " + error);
         });
 }
@@ -80,13 +80,13 @@ function getData (data) {
         }, 
         //body: JSON.stringify(data)
         })
-        .then (function (response) {
+        .then (response => {
         return response.json();
         })
-        .then (function (data) {
+        .then (data => {
         getData (data);
         })
-        .catch (function (error) {
+        .catch (error => {
         console.log ("error: " + error);
     }); 
 
@@ -106,7 +106,7 @@ var data = {username: "Ben", gamesid: "009", trackrecord: [1,2,3,4,6]};
         .then(data => {
         console.log ('Success:', data);
         })
-        .catch (function (error) {
+        .catch (error => {
         console.log ("error: " + error);
         });
 }
@@ -114,24 +114,23 @@ var data = {username: "Ben", gamesid: "009", trackrecord: [1,2,3,4,6]};
 new_game()
 
 
-// Handling Server Error 500
+// Handling Server Error 500 - funktioniert noch nicht
 function handlingServerError (msg) {
-    fetch ("https://343505-26.web.fhgr.ch/api/covid")
-    .then(response => {
-        if (response.status === 500) {
-            handlingServerError(msg)
-            throw new Error ('Hat nicht funktioniert - retry');
-        }
-        return response.json();
+    fetch("https://343505-26.web.fhgr.ch/api/covid")
+    .then (response => {
+    if (response.status === 500) {
+        handlingServerError (msg)
+        throw new Error ('Hat nicht funktioniert - retry');
+    }         
+    return response.json();
     })
     .then(data => {
-        console.log ('Success:', data);
-        })
-        .catch (function (error) {
-        console.log ("error: " + error);
-    });   
+    console.log ('Success:', data);
+    })
+    .catch (error => {
+    console.log ("error: " + error);
+    });                   
 }
-
 
 
 /* 
