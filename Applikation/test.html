@@ -115,11 +115,11 @@ new_game()
 
 
 // Handling Server Error 500 - funktioniert noch nicht
-function handlingServerError (msg) {
+function handlingServerError (response) {
     fetch("https://343505-26.web.fhgr.ch/api/covid")
     .then (response => {
     if (response.status === 500) {
-        handlingServerError (msg)
+        handlingServerError (response)
         throw new Error ('Hat nicht funktioniert - retry');
     }         
     return response.json();
@@ -132,6 +132,20 @@ function handlingServerError (msg) {
     });                   
 }
 
+
+//Dieser Code sollte alle möglichen Errors abfangen.
+//https://towardsdev.com/how-to-handle-404-500-and-more-using-fetch-api-in-javascript-f4e301925a51
+function manageErrors(response) {
+  if (!response.ok) { 
+    throw Error(response.statusText);  
+  }
+  return response;
+}
+let url = 'https://343505-26.web.fhgr.ch/api/covid';
+fetch(url) 
+  .then(manageErrors) 
+  .then(response => console.log('200 - ok'))
+  .catch(error => console.log(error)); 
 
 /* 
 Funktion, mit der die Frage über das Array knots geladen wird und anhand der Variablen k 
