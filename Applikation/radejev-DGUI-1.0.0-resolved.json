@@ -1,0 +1,687 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "FHGR FS22 / DGUI Projekt",
+    "version": "1.0.0",
+    "title": "DGUI Projekt",
+    "contact": {
+      "name": "Hilgert Jevdenic Siefert"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "virtserver.swaggerhub.com",
+  "basePath": "/radejev/DGUI/1.0.0",
+  "tags": [
+    {
+      "name": "games",
+      "description": "Spielstände und -ergebnisse inkl. User werden pro Spiel verwaltet."
+    },
+    {
+      "name": "statistik",
+      "description": "Auswertungen verschiedenster Art pro Ergebnis, pro Spielaufruf/ -abschluss, Einschätzung der User etc."
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/games": {
+      "get": {
+        "tags": [
+          "games"
+        ],
+        "summary": "get all games",
+        "description": "Alle bisher gestarteten Spiele vom Server abrufen.\\n",
+        "operationId": "loadGames",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "games",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/games"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/games"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "games"
+        ],
+        "summary": "create new game",
+        "description": "Erstellt neues Spiel.\\n",
+        "operationId": "createGame",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "games",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/games"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/games"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "games"
+        ],
+        "summary": "update existing game",
+        "description": "Daten eines Spiels werden überschrieben.\\n",
+        "operationId": "updateGame",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "games",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/games"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/games"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      }
+    },
+    "/games/{gamesid}": {
+      "get": {
+        "tags": [
+          "games"
+        ],
+        "summary": "get game",
+        "description": "Ein spezifisches Spiel vom Server abrufen.\\n",
+        "operationId": "loadGame",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "gamesid",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/gamesid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/gamesid"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "games"
+        ],
+        "summary": "update property of existing game",
+        "description": "Eine Eigenschaft eines Spiels wird überschrieben.\\n",
+        "operationId": "updateGameProperty",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "gamesid",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/gamesid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/gamesid"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      }
+    },
+    "/statistik": {
+      "post": {
+        "tags": [
+          "statistik"
+        ],
+        "summary": "create new statistic",
+        "description": "Erstellt eine neue Statistik.\\n",
+        "operationId": "createStat",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "statistik",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/statistik"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/statistik"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "statistik"
+        ],
+        "summary": "update statistic",
+        "description": "Überschreibt eine Statistik.\\n",
+        "operationId": "editStat",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "statistik",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/statistik"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/statistik"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      }
+    },
+    "/statistik/{statid}": {
+      "get": {
+        "tags": [
+          "statistik"
+        ],
+        "summary": "get statistic",
+        "description": "Abfrage einer Statistik.\\n",
+        "operationId": "getStat",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "statid",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/statid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/statid"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "statistik"
+        ],
+        "summary": "update property of existing statistic",
+        "description": "Eine Eigenschaft einer Statistik wird überschrieben.\\n",
+        "operationId": "updateStatProperty",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "statid",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/statid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/statid"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      }
+    },
+    "/results": {
+      "get": {
+        "tags": [
+          "results"
+        ],
+        "summary": "get all results",
+        "description": "Alle möglichen Resultattexte vom Server abrufen.\\n",
+        "operationId": "loadResultStrings",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "results",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/results"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/results"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "results"
+        ],
+        "summary": "create new result",
+        "description": "Erstellt neuen Resultattext.\\n",
+        "operationId": "createResultString",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "results",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/results"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/results"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "results"
+        ],
+        "summary": "update existing result",
+        "description": "Resulttext wird überschrieben.\\n",
+        "operationId": "updateResultString",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "results",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/results"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/results"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      }
+    },
+    "/results/{resultid}": {
+      "get": {
+        "tags": [
+          "results"
+        ],
+        "summary": "get resultid",
+        "description": "Abfrage eines Resultattextes.\\n",
+        "operationId": "getResultString",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "resultid",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/resultid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/resultid"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      }
+    },
+    "/fragen": {
+      "get": {
+        "tags": [
+          "fragen"
+        ],
+        "summary": "get all infos",
+        "description": "Alle möglichen Infos zum Anzeigen der Fragen vom Server abrufen.\\n",
+        "operationId": "loadInfoStrings",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "fragen",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/fragen"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/fragen"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "fragen"
+        ],
+        "summary": "create new info",
+        "description": "Erstellt neuen Infotexte.\\n",
+        "operationId": "createInfoString",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "result",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/fragen"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/fragen"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "fragen"
+        ],
+        "summary": "update existing infos",
+        "description": "Infotexte werden überschrieben.\\n",
+        "operationId": "updateInfoString",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "fragen",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/fragen"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/fragen"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      }
+    },
+    "/fragen/{frageid}": {
+      "get": {
+        "tags": [
+          "fragen"
+        ],
+        "summary": "get frageid",
+        "description": "Abfrage eines Infotextes.\\n",
+        "operationId": "getInfoString",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "frageid",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/frageid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/frageid"
+            }
+          },
+          "404": {
+            "description": "object not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "gamesid": {
+      "type": "integer",
+      "example": 4
+    },
+    "games": {
+      "type": "object",
+      "required": [
+        "gamesid",
+        "username",
+        "trackrecord"
+      ],
+      "properties": {
+        "gamesid": {
+          "type": "integer",
+          "$ref": "#/definitions/gamesid"
+        },
+        "username": {
+          "type": "string",
+          "example": "Miriam"
+        },
+        "trackrecord": {
+          "type": "array",
+          "example": [
+            1,
+            2,
+            3
+          ],
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "statid": {
+      "type": "integer",
+      "example": 4
+    },
+    "statistik": {
+      "type": "object",
+      "required": [
+        "statid",
+        "statname",
+        "maincount"
+      ],
+      "properties": {
+        "statid": {
+          "type":"integer",
+          "$ref": "#/definitions/statid"
+        },
+        "statname": {
+          "type": "string",
+          "example":
+            "Wellensurfer"
+        },
+        "maincount": {
+          "type": "integer",
+          "example": 2
+        },
+        "att1": {
+          "type":"array",
+          "example": "Geschlecht"
+        },
+        "att2": {
+          "type":"array",
+          "example": "Pandemietyp"
+        },
+        "att3": {
+          "type":"array",
+          "example": "Meinung"
+        },
+        "att4": {
+          "type":"array",
+          "example": "Gestartete Spiele"
+        },
+        "att5": {
+          "type":"array",
+          "example": "Beendete Spiele"
+        }
+      }
+    },
+    "resultid":{
+      "type":"integer",
+      "example": 6
+    },
+    "results":{
+      "type":"object",
+      "required": [
+        "resultid",
+        "resultname",
+        "resulttext"
+      ],
+      "properties": {
+        "resultid":{
+          "type":"integer",
+          "$ref": "#/definitions/resultid"
+        },
+        "resultname":{
+          "type":"string",
+          "example": "Vorsichtige"
+        },
+        "resulttext":{
+          "type":"string",
+          "example": "Wow! Du nimmst es genau..."
+        }
+      }
+    },
+    "frageid":{
+      "type":"integer",
+      "example": 6
+    },
+    "fragen":{
+      "type":"object",
+      "required": [
+        "frageid",
+        "fragetext",
+        "optnum",
+        "opttexts",
+        "redirections"
+      ],
+      "properties": {
+        "frageid":{
+          "type":"integer",
+          "$ref": "#/definitions/frageid"
+        },
+        "fragetext":{
+          "type":"string",
+          "example": "Bist du...?"
+        },
+        "optnum":{
+          "type":"integer",
+          "example": 2
+        },
+        "opttexts":{
+          "type":"array",
+          "example":"Ja"
+        },
+        "redirections":{
+          "type":"array",
+          "example":{
+            "a":3, "b":5
+          }
+        }
+      }
+    }
+  }
+}
