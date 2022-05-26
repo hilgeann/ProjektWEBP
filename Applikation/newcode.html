@@ -123,14 +123,6 @@ const redirection = [{a:""},
 {a:24, b:25},
 ]
 
-const games = [ 
-    {userid:"0", username:"test", trackrecord:[1,2]},
-    {userid:"1", username:"Martha", trackrecord:[1,2]},
-    {userid:"2", username:"Theodor", trackrecord:[1,3,7]},
-    {userid:"3", username:"Damiana", trackrecord:[1,3,4,8]},
-    {userid:"4", username:"Noah", trackrecord:[1]}
-]
-
 const size = 50;
 const corra = size*0.8; 
 const corrb = size*0.2;
@@ -583,7 +575,6 @@ function checkGame() {
     else {getTrackrecord(status)}
 }
 
-
 function getCount() {
     fetch ("https://343505-26.web.fhgr.ch/api/covid/games/scount", {method:'GET', headers: {'Content-Type': 'application/json'}})
     .then(response => response.json())
@@ -606,7 +597,7 @@ function createGame(count) {
     let data = {"gamesid":currid, "username":name, "trackrecord":[1]};
     currentgame["gamesid"] = currid; currentgame["trackrecord"] = [1]; currentgame["username"] = name;
     var cdata = {"username":"gcount","gamesid":"scount","trackrecord":currid};
-    //localStorage.setItem("gamesid", currid);
+    localStorage.setItem("gamesid", currid);
     initialise()
     new_game(data);update_trackrecord(cdata);
 }
@@ -621,21 +612,29 @@ function reloadGame(result) {
 
 checkGame()
 
-/* 
-1 Adam startet spiel (Gamer Nr. 1)
-2 Server fragt gcount ab, erhält rückmeldung 0
-3 lokal: gcount + 1 ist gameid
-4 neues game "hochpushen" + gcount überschreiben
-*/
-
-
 /*
-1. Seite wird geladen: User generiert + Server geschickt: POST {userid:"055", username:"Amy", trackrecord:[1]}; + Frage laden
-2. Nutzer*in klickt auf eine Antwort. PUT {userid:"055", username:"Amy", trackrecord:[1;2]}
-3. GET {userid:"055"} - nur nötig wenn Fenster neu geöffnet wird
-4. Wir erhalten Antwort: {userid:"055", username:"Amy", trackrecord:[1;2]}
-5. Letzte Zahl im trackrecord auslesen + Frage laden
-6. Nutzerin klickt auf zweeite Antwort PUT {userid:"055", username:"Amy", trackrecord:[1;2;3]}
-*/
 
-</script>
+Code Ergänzungen:
+- Reload Funktion geht noch nicht
+- Willkommensseite mit schönem Feld zur Namenseingabe
+- Für laufende Spiele "Abbruch"-Button? 
+- Für abgeschlossene Spiele: Zurückkehrende User die abgeschlossen haben Fragen, ob sie nochmal machen wollen.
+
+Visualisierung + Statistik:
+- Visiualisierung wie? evtl. D3?
+- Statistik überarbeiten? 
+- Swagger: Statistik POST-Befehl (statistik) / Patch-Befehl (Games/statistik)
+
+Statistik
+{
+"statid": 1, #int
+"statname": "Wellensurfer", #str
+"maincount": 2, #int
+"att1": 0, #int
+"att2": 0, #int
+"att3": 0, #int
+"att4": 0, #int
+"att5": 0 #int
+}
+
+*/
