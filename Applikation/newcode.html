@@ -6,24 +6,48 @@
     <link rel="stylesheet" href="styles.css"> <!-- Einbinden des CSS-Stylsheets -->
 </head>
 <body>
-    <div class ="togglebox">
-        <label class="toggle">
-            <input id="toggleswitch" type="checkbox">
-            <span class="roundbutton"></span>
-         </label>
-        <label class="toggletext">Wähle deine Spielfigur!</label class="toggletext">
-    </div class ="togglebox">    
+    <div id="welcome"> 
+        <h1>Willkommen bei der interaktiven Bestimmung deines Pandemietyps</h1>
+        <p>Gib bitte zuerst bitte deinen Namen ein!</p>
+        <input type="text" id="entername">
+        <button onclick="validate()">Start</button>
+    </div>
+    <div id="game"> 
+        <div class ="togglebox">
+            <label class="toggle">
+                <input id="toggleswitch" type="checkbox">
+                <span class="roundbutton"></span>
+            </label>
+            <label class="toggletext">Wähle deine Spielfigur!</label class="toggletext">
+        </div class ="togglebox">    
 
-    <div class="anim">
-        <canvas width="400" height="400" id="back" style="background-color: #FFF0B5 ;position:absolute"></canvas>
-        <canvas width="400" height="400" id="front" style="position:absolute"></canvas>
-    </div class="anim">
+        <div class="anim">
+            <canvas width="400" height="400" id="back" style="background-color: #FFF0B5 ;position:absolute"></canvas>
+            <canvas width="400" height="400" id="front" style="position:absolute"></canvas>
+        </div class="anim">
 
-    <h1 id="question"> </h1>
-
-    <!-- Einblenden der möglichen Antwort-Buttons je nach Anzahl -->
-    <div id="options"> </div>
-
+        
+        <!-- Einblenden der möglichen Antwort-Buttons je nach Anzahl -->
+        <div id="options"> 
+            <h1 id="question"> </h1>
+            <p id=linea> <button> <opt id=opta> </opt> </button> </p> 
+            <p id=lineb> <button> <opt id=optb> </opt> </button> </p> 
+            <p id=linec> <button> <opt id=optc> </opt> </button> </p> 
+            <p id=lined> <button> <opt id=optd> </opt> </button> </p> 
+        </div>
+    </div>
+    <div id="result"> 
+        <h1>Dein Resultat</h1>
+        <label class=r1> <p id=resa>  </p> </label>
+        <label class=r1> <p id=resb>  </p> </label>
+        <label class=r1> <p id=resc>  </p> </label>
+        <label class=r1> <p id=resd>  </p> </label>
+    </div>   
+    <div id="stats"> 
+        <h1>Willkommen bei den Umfragestatistiken</h1>
+        <p>...</p>
+        <button onclick="">New Game</button>
+    </div>   
     <table>
         <tr>
             <td>UserID:</td>
@@ -322,7 +346,6 @@ function drawdown(p1,p2,i,j){
         }, 10);}
 }
 
-//onspot-Intervall muss mit dem drücken des buttons gestoppt werden, nicht vergessen 
 
 function drawside(p1,p2,i,j){
     let c = coordinates; let s = size;
@@ -416,33 +439,39 @@ function fade(stringid, stringtext, type) {
     }
 }
 
-
 function reload() {
-    document.getElementById("options").innerHTML =
-	"<p id=linea> <button> <opt id=opta> </opt> </button> </p> <p id=lineb> <button> <opt id=optb> </opt> </button> </p> <p id=linec> <button> <opt id=optc> </opt> </button> </p> <p id=lined> <button> <opt id=optd> </opt> </button> </p>" 
+    document.getElementById("linec").style.display = "initial";
+    document.getElementById("lined").style.display = "initial";
 }
 
 function loadresult(i) {
-    if (i == 21) {var type = results.a; var text = resultstring.a}
-    else if (i == 22) {var type = results.b; var text = resultstring.b}
-    else if (i == 23) {var type = results.c; var text = resultstring.c}
-    else if (i == 24) {var type = results.d; var text = resultstring.d}
-    else if (i == 25) {var type = results.e; var text = resultstring.e}
-    else if (i == 26) {var type = results.f; var text = resultstring.f}
-    else if (i == 27) {var type = results.g; var text = resultstring.g};
-    reload();	
-    document.getElementById("question").innerHTML = "";
-    var astring = "<label class=r1>" + "Dein Typ ist:" + "</label>";
-    var bstring = "<label class=r2>" + type + "</label>" ;
-    var cstring = "<label class=r3>" + text + "</label>" ;
-    var dstring = "<button id=restart> Nochmal spielen! </button>" ;
-    fade("linea", astring, "in");
-    fade("lineb", bstring, "in");
-    fade("linec", cstring, "in");
-    fade("lined", dstring, "in");
-    document.getElementById("restart").addEventListener("click", function() {newgame()},); // der Button für den Neustart wird eingeblendet
+    let rs = resultstring; let re = results; 
+    if (i == 21) {var type = re.a; var text = rs.a}
+    else if (i == 22) {var type = re.b; var text = rs.b}
+    else if (i == 23) {var type = re.c; var text = rs.c}
+    else if (i == 24) {var type = re.d; var text = rs.d}
+    else if (i == 25) {var type = re.e; var text = rs.e}
+    else if (i == 26) {var type = re.f; var text = rs.f}
+    else if (i == 27) {var type = re.g; var text = rs.g};
+    document.getElementById("options").style.display = "none";
+    loadsite("result")
+    fade("resa", "Dein Typ ist:", "in");
+    fade("resb", type, "in");
+    fade("resc", text, "in");
+    fade("resd", "<button id=restart> Neues Spiel starten! </button>" , "in");
+    document.getElementById("restart").addEventListener("click", function() {
+        document.getElementById("options").style.display = "initial";
+        restart()
+    },); // der Button für den Neustart wird eingeblendet
 }
 
+function restart() {
+    localStorage.removeItem("gamesid");
+    clear("front"), clear("back");
+    clearInterval(onspot);
+    loadsite("welcome");
+    checkGame()
+}
 
 function choice(i,x) {
     clearInterval(onspot);
@@ -459,53 +488,51 @@ function choice(i,x) {
     initialise();
 };
     
-
 function loadquestion(i) {
     reload(); // nach dem Klick auf eine Antwort, werden diese mit der Funktion reload wieder ausgeblendet, bis die neuen geladen wurden
     if (i > 20) {loadresult(i)}
     else {
-    let k = optnum[i]
-    var queststring = knots[i];
-    fade("question", queststring, "in"); // FadeIn der neuen Frage
-    var elema = document.getElementById("opta");
-    var elemb = document.getElementById("optb");
-    var elemc = document.getElementById("optc");
-    var elemd = document.getElementById("optd");
-    if (k == 2) {
-	elema.innerHTML = options[i].a;
-        elema.replaceWith(elema.cloneNode(true));
-        document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
-        elemb.innerHTML = options[i].b;
-        elemb.replaceWith(elemb.cloneNode(true));
-        document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
-        document.getElementById("linec").innerHTML = "";
-        document.getElementById("lined").innerHTML = ""}
-    else if (k == 3) {
+        let k = optnum[i]
+        var queststring = knots[i];
+        fade("question", queststring, "in"); // FadeIn der neuen Frage
+        var elema = document.getElementById("opta");
+        var elemb = document.getElementById("optb");
+        var elemc = document.getElementById("optc");
+        var elemd = document.getElementById("optd");
+        if (k == 2) {
         elema.innerHTML = options[i].a;
-        elema.replaceWith(elema.cloneNode(true));
-        document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
-        elemb.innerHTML = options[i].b;
-        elemb.replaceWith(elemb.cloneNode(true));
-        document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
-        elemc.innerHTML = options[i].c;
-        elemc.replaceWith(elemc.cloneNode(true));
-        document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
-        document.getElementById("lined").innerHTML = ""}
-    else if (k == 4) {
-        elema.innerHTML = options[i].a;
-        elema.replaceWith(elema.cloneNode(true));
-        document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
-        elemb.innerHTML = options[i].b;
-        elemb.replaceWith(elemb.cloneNode(true));
-        document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
-        elemc.innerHTML = options[i].c;
-        elemc.replaceWith(elemc.cloneNode(true));
-        document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
-        elemd.innerHTML = options[i].d;
-        elemd.replaceWith(elemd.cloneNode(true));
-        document.getElementById("optd").addEventListener("click", function() {choice(i,4)},);
+            elema.replaceWith(elema.cloneNode(true));
+            document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
+            elemb.innerHTML = options[i].b;
+            elemb.replaceWith(elemb.cloneNode(true));
+            document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
+            document.getElementById("linec").style.display = "none";
+            document.getElementById("lined").style.display = "none";}
+        else if (k == 3) {
+            elema.innerHTML = options[i].a;
+            elema.replaceWith(elema.cloneNode(true));
+            document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
+            elemb.innerHTML = options[i].b;
+            elemb.replaceWith(elemb.cloneNode(true));
+            document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
+            elemc.innerHTML = options[i].c;
+            elemc.replaceWith(elemc.cloneNode(true));
+            document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
+            document.getElementById("lined").style.display = "none";}
+        else if (k == 4) {
+            elema.innerHTML = options[i].a;
+            elema.replaceWith(elema.cloneNode(true));
+            document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
+            elemb.innerHTML = options[i].b;
+            elemb.replaceWith(elemb.cloneNode(true));
+            document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
+            elemc.innerHTML = options[i].c;
+            elemc.replaceWith(elemc.cloneNode(true));
+            document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
+            elemd.innerHTML = options[i].d;
+            elemd.replaceWith(elemd.cloneNode(true));
+            document.getElementById("optd").addEventListener("click", function() {choice(i,4)},);}
     }
-}
 }
 
 function initialise() {
@@ -569,10 +596,16 @@ function update_trackrecord (data) {
         });
 }
 
+function validate() {
+    let name = document.getElementById("entername").value;
+    if (name == "") {alert("Bitte Namen eingeben!")}
+    else {getCount()}
+}
+
 function checkGame() {
     var status = localStorage.getItem("gamesid");
-    if (status == null) {getCount()}
-    else {getTrackrecord(status)}
+    if (status == null) {loadsite("welcome")}
+    else {loadsite("game");getTrackrecord(status)}
 }
 
 function getCount() {
@@ -591,14 +624,42 @@ function getTrackrecord(gameid) {
     .catch (error => {console.log ("error: " + error);})
 }
 
+function loadsite(site) {
+    if (site == "welcome") {
+        document.getElementById("game").style.display = "none";
+        document.getElementById("welcome").style.display = "initial";
+        document.getElementById("stats").style.display = "none";
+        document.getElementById("result").style.display = "none";
+    }
+    else if (site == "game") {
+        document.getElementById("game").style.display = "initial";
+        document.getElementById("welcome").style.display = "none";
+        document.getElementById("stats").style.display = "none";
+        document.getElementById("result").style.display = "none";
+    }
+    else if (site == "stats") {
+        document.getElementById("game").style.display = "none";
+        document.getElementById("welcome").style.display = "none";
+        document.getElementById("stats").style.display = "initial";
+        document.getElementById("result").style.display = "none";
+    }
+    else if (site == "result") {
+        document.getElementById("game").style.display = "initial";
+        document.getElementById("welcome").style.display = "none";
+        document.getElementById("stats").style.display = "none";
+        document.getElementById("result").style.display = "initial";
+    }
+}
+
 function createGame(count) {
     let currid = parseInt(count)+1;
-    let name = prompt("Name: ");
+    let name = document.getElementById("entername").value;
     let data = {"gamesid":currid, "username":name, "trackrecord":[1]};
     currentgame["gamesid"] = currid; currentgame["trackrecord"] = [1]; currentgame["username"] = name;
     var cdata = {"username":"gcount","gamesid":"scount","trackrecord":currid};
-    localStorage.setItem("gamesid", currid);
-    initialise()
+    //localStorage.setItem("gamesid", currid);
+    loadsite("game");
+    initialise();
     new_game(data);update_trackrecord(cdata);
 }
 
@@ -608,7 +669,6 @@ function reloadGame(result) {
     currentgame["username"] = result["username"];
     initialise()
 }
-
 
 checkGame()
 
