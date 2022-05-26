@@ -631,16 +631,16 @@ Statistik Neuer Aufbau
 "statname": "Wellensurfer", #str / required
 "statndesc": "Wellensurfer", #str / notrequired
 "maincount": 2, #int / required
-"att1": 0, #int / notrequired
-"att2": 0, #int / notrequired
-"att3": 0, #int / notrequired
-"att4": 0, #int / notrequired
-"att5": 0 #int / notrequired
+"att1": 0, #arr / notrequired
+"att2": 0, #arr / notrequired
+"att3": 0, #arr / notrequired
+"att4": 0, #arr / notrequired
+"att5": 0 #arr / notrequired
 }
 
 Strings: post/get/put
 strings/results {resultid: int, resultname: "str"; resulttext: "str"} 
-string/fragen {frageid: int, fragetest: str, optnum: int, opttexts, redirection: array (key+value oder liste)}
+string/fragen {frageid: int, fragetext: str, optnum: int, opttexts: array, redirection: array (key+value oder liste)}
 
 */
 
