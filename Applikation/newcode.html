@@ -13,10 +13,16 @@
          </label>
         <label class="toggletext">Wähle deine Spielfigur!</label class="toggletext">
     </div class ="togglebox">    
+
     <div class="anim">
         <canvas width="400" height="400" id="back" style="background-color: #FFF0B5 ;position:absolute"></canvas>
         <canvas width="400" height="400" id="front" style="position:absolute"></canvas>
     </div class="anim">
+
+    <h1 id="question"> </h1>
+
+    <!-- Einblenden der möglichen Antwort-Buttons je nach Anzahl -->
+    <div id="options"> </div>
 
     <table>
         <tr>
@@ -41,6 +47,89 @@
 </body>
 
 <script>
+
+// Array mit den Ergebnissen bzw. Pandemietypen.
+const results = {
+a: "Vorsichtige",
+b: "Wellensurfer",
+c: "Wiederwillige",
+d: "Superspreader",
+e: "Uninformierte",
+f: "Kritikerin",
+g: "Naturheilpraktikerin"
+}
+
+// Array mit den Beschreibungen der Pandemietypen.
+const resultstring = {
+    a: "Wow! Du nimmst es genau. <br> Du bist der Typ, der immer Vorsicht walten lässt und das Wohl anderer über das Eigene stellt. <br> Super!",
+    b: "Hut ab. <br> Obwohl du dir ein wenig Freiheiten gönnst und dein Leben möglichst normal weiter lebst, bist du vorsichtig, wenn es darauf ankommt. <br> Gut!",
+    c: "Du trägst die Massnahmen zwar mehrheitlich mit, obwohl du keine Lust mehr hast. <br> Motivier dich noch ein wenig, denn wir sind im Endspurt.",
+    d: "Vorsichtig ist anders, du kooperierst leider nicht. <br> Bitte halte dich an die geltenden Massnahmen, es zu deinem Wohl und zum Schutz deiner Mitmenschen!",
+    e: "Du hast wohl nicht viel mitbekommen. <br> Informiere dich doch unter www.bag.admin.ch über die aktuelle Situation.",
+    f: "Ups! Leider lebst du in einer anderen Realität, als die Mehrheit der Bevölkerung. <br> Wir empfehlen dir eine Social-Media-Diät.",
+    g: "Wir stellen fest, dass du die Massnahmen missachtest und eine Grundabneigung gegen Wissenschaft sowie Schulmedizin hast. <br> Bitte informiere dich künftig nur bei offiziellen Stellen und überdenke deine Überzeugungen."
+}
+
+const knots = ["", 
+"Corona-Pandemie ist...",
+"Corona ist ja eine kleine Grippe..",
+"Hattest du Corona?",
+"Bist du dennoch geimpft?",
+"Bist du geimpft?",
+"Bist du geimpft?",
+"Ach, wen kümmert die Pandemie will einfach nach Mallorca",
+"Trägst du Maske?",
+"Impfungen sind...",
+"Distance Learning ist...",
+"dieses Wochenende...",
+"Weisst du um welche Impfungen es überhaupt geht?",
+"Mein Immunsystem ist sowieso besser als jede Impfung"
+]
+
+// Array mit den möglichen Antworten pro Frage
+const options = [{a:""},
+{a:"Coro-was?", b:"Reine Panikmache!", c:"eine Viruspandemie"},
+{a:"Nein, bestimmt nicht!", b:"Ja, definitiv."},
+{a:"Weiss nicht, diese Tests sind ohnehin manipuliert!", b:"Ja, was solls?", c:"Ja, leider...", d:"Nein."},
+{a:"Ja", b:"Nein"},
+{a:"Ja", b:"Nein"},
+{a:"Ja", b:"Nein"},
+{a:"Die Pandemie muss Enden, mit oder ohne Ferien", b:"Genau, wo sind meine Flipflops?"},
+{a:"Wozu?", b:"Ja, klar!"},
+{a:"Von Reptioloiden eingeführt um Menschen zu unterwerfen", b:"Gift", c:"hä? worum gehts?"},
+{a:"Ein riesen Quatsch!", b:"Eine Super Sache!"},
+{a:"muss ich an eien Party", b:"bleibe ich daheim (wie immer)"},
+{a:"Nein", b:"Ja, aber...."},
+{a:"Ja", b:"Weiss auch nicht"},
+]
+
+// Array gibt an, wie viele Antwortmöglichkeiten pro Frage zur Auswahl stehen.
+const optnum = [0,3,2,4,2,2,2,2,2,3,2,2,2,2]
+
+// Array gibt an, welche Antwort aus "options" zu welcher Frage "knots" bzw. am Ende zu welchem Ergebnis "result" führt.
+const redirection = [{a:""},
+{a:25, b:2, c:3},
+{a:3, b:5},
+{a:5, b:7, c:4, d:6},
+{a:8, b:7},
+{a:7, b:9},
+{a:8, b:7},
+{a:23, b:13},
+{a:7, b:10},
+{a:26, b:27, c:12},
+{a:22, b:11},
+{a:22, b:21},
+{a:25, b:13},
+{a:24, b:25},
+]
+
+const games = [ 
+    {userid:"0", username:"test", trackrecord:[1,2]},
+    {userid:"1", username:"Martha", trackrecord:[1,2]},
+    {userid:"2", username:"Theodor", trackrecord:[1,3,7]},
+    {userid:"3", username:"Damiana", trackrecord:[1,3,4,8]},
+    {userid:"4", username:"Noah", trackrecord:[1]}
+]
 
 const size = 50;
 const corra = size*0.8; 
@@ -241,7 +330,7 @@ function drawdown(p1,p2,i,j){
         }, 10);}
 }
 
-//onspot-Intervall muss mit dem drücken des buttons gestoppt werden, nicht vergessen
+//onspot-Intervall muss mit dem drücken des buttons gestoppt werden, nicht vergessen 
 
 function drawside(p1,p2,i,j){
     let c = coordinates; let s = size;
@@ -306,37 +395,239 @@ function loadlines(knots){
 //So habe ich die Funktionen getestet. Komischerweise funktioniert es aktuell nur wenn zuerst drawdown ausgeführt wird, 
 //warum weiss ich nicht (Spielt von der funktionalität her aber keine rolle aktuell)
 
-const games = [
-    {userid:"1", username:"Martha", trackrecord:[1,2]},
-    {userid:"2", username:"Theodor", trackrecord:[1,3,7]},
-    {userid:"3", username:"Damiana", trackrecord:[1,3,4,8]},
-    {userid:"4", username:"Noah", trackrecord:[1]}
-]
+function fade(stringid, stringtext, type) {
+    if (type == "in") {
+        document.getElementById(stringid).style.opacity = 0; 
+	/*
+	getElementById als Methode des document-Objekts, um auf den jeweiligen Elementknoten zu zugreifen,
+	der ein eindeutiges id-Atrribut erhält. Hier wird der Schrift die Deckkraft Null vergeben, da sie zu Beginn unsichtbar ist. 
+	*/
+        document.getElementById(stringid).innerHTML = stringtext;
+	/* Durch inner.HTML wird der Inhalt für das jeweiligen HTML-Element gelesen und gespeichert.
+	*/
+        var value1 = 0.1
+        const fader1 = setInterval(function() {
+            document.getElementById(stringid).style.opacity = value1; //wiederholt die Vergabe des neuen Opacity-Werts alle 100mS
+            value1 = value1 + 0.1
+            }, 100)
+            setTimeout(function(){clearInterval(fader1)},1100) //bricht das obige Interval nach 1100mS ab
+        }
+    else if (type == "out") {
+        document.getElementById(stringid).style.opacity = 1;
+        var value2 = 1
+        const fader2 = setInterval(function() {
+            document.getElementById(stringid).style.opacity = value2;
+            value2 = value2 - 0.1
+            }, 100)
+            setTimeout(function(){clearInterval(fader2)},1100)
+            setTimeout(function(){document.getElementById(stringid).innerHTML = ""},1100)
+    }
+}
 
 
+function reload() {
+    document.getElementById("options").innerHTML =
+	"<p id=linea> <button> <opt id=opta> </opt> </button> </p> <p id=lineb> <button> <opt id=optb> </opt> </button> </p> <p id=linec> <button> <opt id=optc> </opt> </button> </p> <p id=lined> <button> <opt id=optd> </opt> </button> </p>" 
+}
 
-function initialise(game) {
+function loadresult(i) {
+    if (i == 21) {var type = results.a; var text = resultstring.a}
+    else if (i == 22) {var type = results.b; var text = resultstring.b}
+    else if (i == 23) {var type = results.c; var text = resultstring.c}
+    else if (i == 24) {var type = results.d; var text = resultstring.d}
+    else if (i == 25) {var type = results.e; var text = resultstring.e}
+    else if (i == 26) {var type = results.f; var text = resultstring.f}
+    else if (i == 27) {var type = results.g; var text = resultstring.g};
+    reload();	
+    document.getElementById("question").innerHTML = "";
+    var astring = "<label class=r1>" + "Dein Typ ist:" + "</label>";
+    var bstring = "<label class=r2>" + type + "</label>" ;
+    var cstring = "<label class=r3>" + text + "</label>" ;
+    var dstring = "<button id=restart> Nochmal spielen! </button>" ;
+    fade("linea", astring, "in");
+    fade("lineb", bstring, "in");
+    fade("linec", cstring, "in");
+    fade("lined", dstring, "in");
+    document.getElementById("restart").addEventListener("click", function() {newgame()},); // der Button für den Neustart wird eingeblendet
+}
+
+
+function choice(i,x) {
+    clearInterval(onspot);
+    if (x == 1) {
+        var j = redirection[i].a}
+    else if (x == 2) {
+        var j = redirection[i].b}
+    else if (x == 3) {
+        var j = redirection[i].c}
+    else if (x == 4) {
+        var j = redirection[i].d}
+    currentgame["trackrecord"].push(j);
+    update_trackrecord(currentgame);
+    initialise();
+};
+    
+
+function loadquestion(i) {
+    reload(); // nach dem Klick auf eine Antwort, werden diese mit der Funktion reload wieder ausgeblendet, bis die neuen geladen wurden
+    if (i > 20) {loadresult(i)}
+    else {
+    let k = optnum[i]
+    var queststring = knots[i];
+    fade("question", queststring, "in"); // FadeIn der neuen Frage
+    var elema = document.getElementById("opta");
+    var elemb = document.getElementById("optb");
+    var elemc = document.getElementById("optc");
+    var elemd = document.getElementById("optd");
+    if (k == 2) {
+	elema.innerHTML = options[i].a;
+        elema.replaceWith(elema.cloneNode(true));
+        document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
+        elemb.innerHTML = options[i].b;
+        elemb.replaceWith(elemb.cloneNode(true));
+        document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
+        document.getElementById("linec").innerHTML = "";
+        document.getElementById("lined").innerHTML = ""}
+    else if (k == 3) {
+        elema.innerHTML = options[i].a;
+        elema.replaceWith(elema.cloneNode(true));
+        document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
+        elemb.innerHTML = options[i].b;
+        elemb.replaceWith(elemb.cloneNode(true));
+        document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
+        elemc.innerHTML = options[i].c;
+        elemc.replaceWith(elemc.cloneNode(true));
+        document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
+        document.getElementById("lined").innerHTML = ""}
+    else if (k == 4) {
+        elema.innerHTML = options[i].a;
+        elema.replaceWith(elema.cloneNode(true));
+        document.getElementById("opta").addEventListener("click", function() {choice(i,1)},);
+        elemb.innerHTML = options[i].b;
+        elemb.replaceWith(elemb.cloneNode(true));
+        document.getElementById("optb").addEventListener("click", function() {choice(i,2)},);
+        elemc.innerHTML = options[i].c;
+        elemc.replaceWith(elemc.cloneNode(true));
+        document.getElementById("optc").addEventListener("click", function() {choice(i,3)},);
+        elemd.innerHTML = options[i].d;
+        elemd.replaceWith(elemd.cloneNode(true));
+        document.getElementById("optd").addEventListener("click", function() {choice(i,4)},);
+    }
+}
+}
+
+function initialise() {
     dots();
-    var path = game["trackrecord"]; var count = (path.length); var start = path[count-2]; var end = path[count-1];
-    if (count == 1) {drawdown(0,1,0,0)}
-    else {loadlines(path); drawdown(start,end,0,0)}
-    document.getElementById("userid").innerHTML = game["userid"];
-    document.getElementById("username").innerHTML = game["username"];
-    document.getElementById("trec").innerHTML = game["trackrecord"];
+    var path = currentgame["trackrecord"];
+    var count = (path.length); 
+    if (count == 1) {
+        drawdown(0,1,0,0); 
+        loadquestion(1)
+    }
+    else {
+        var start = path[count-2]; var end = path[count-1];
+        loadlines(path); 
+        loadquestion(end);
+        drawdown(start,end,0,0);
+    }
+    document.getElementById("userid").innerHTML = currentgame["gamesid"];
+    document.getElementById("username").innerHTML = currentgame["username"];
+    document.getElementById("trec").innerHTML = currentgame["trackrecord"];
 }
 
 //Testlauf:
 //Beim Laden des Fensters wird User aufgefordert Name einzugeben
 //Danach wird der User erstellt und die ersta Frage geladen
 
-var name = prompt('Enter your name');
-games.push(
-    {userid: (games.length).toString(), 
-    username:name, 
-    trackrecord:[1]}
-)
-var game = games[4];
-initialise(game)
+const currentgame =  {"username":"","gamesid":"","trackrecord":""}
+
+function new_game (data) {
+    fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,
+        {method:'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+        console.log ('Success:', data);
+        })
+        .catch (error => {
+        console.log ("error: " + error);
+        });
+}
+
+function update_trackrecord (data) {
+    var link = "https://343505-26.web.fhgr.ch/api/covid/games/";
+    var serverlink = link.concat(data["gamesid"].toString());
+    fetch (serverlink,
+        {method:'PUT',
+        headers: {
+        'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+        console.log ('Success:', data);
+        })
+        .catch (error => {
+        console.log ("error: " + error);
+        });
+}
+
+function checkGame() {
+    var status = localStorage.getItem("gamesid");
+    if (status == null) {getCount()}
+    else {getTrackrecord(status)}
+}
+
+
+function getCount() {
+    fetch ("https://343505-26.web.fhgr.ch/api/covid/games/scount", {method:'GET', headers: {'Content-Type': 'application/json'}})
+    .then(response => response.json())
+    .then(result => {createGame(result["trackrecord"])})
+    .catch (error => {console.log ("error: " + error);})
+}
+
+function getTrackrecord(gameid) {
+    var link = "https://343505-26.web.fhgr.ch/api/covid/games/";
+    var serverlink = link.concat(gameid.toString());
+    fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
+    .then(response => response.json())
+    .then(result => {reloadGame(result)})
+    .catch (error => {console.log ("error: " + error);})
+}
+
+function createGame(count) {
+    let currid = parseInt(count)+1;
+    let name = prompt("Name: ");
+    let data = {"gamesid":currid, "username":name, "trackrecord":[1]};
+    currentgame["gamesid"] = currid; currentgame["trackrecord"] = [1]; currentgame["username"] = name;
+    var cdata = {"username":"gcount","gamesid":"scount","trackrecord":currid};
+    //localStorage.setItem("gamesid", currid);
+    initialise()
+    new_game(data);update_trackrecord(cdata);
+}
+
+function reloadGame(result) {
+    currentgame["gamesid"] = result["gamesid"]; 
+    currentgame["trackrecord"] = result["trackrecord"]; 
+    currentgame["username"] = result["username"];
+    initialise()
+}
+
+
+checkGame()
+
+/* 
+1 Adam startet spiel (Gamer Nr. 1)
+2 Server fragt gcount ab, erhält rückmeldung 0
+3 lokal: gcount + 1 ist gameid
+4 neues game "hochpushen" + gcount überschreiben
+*/
+
 
 /*
 1. Seite wird geladen: User generiert + Server geschickt: POST {userid:"055", username:"Amy", trackrecord:[1]}; + Frage laden
