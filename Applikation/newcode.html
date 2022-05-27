@@ -456,7 +456,7 @@ function loadresult(i) {
     document.getElementById("resb").innerHTML = type;
     document.getElementById("resc").innerHTML = text;
     fade("resa", "in");
-    fade("resb",  "in");
+    fade("resb", "in");
     fade("resc", "in");
     fade("resd", "in");
     document.getElementById("restart").addEventListener("click", function() {
@@ -473,6 +473,7 @@ function restart() {
     checkGame()
 }
 
+
 function choice(i,x) {
     clearInterval(onspot);
     if (x == 1) {
@@ -484,7 +485,7 @@ function choice(i,x) {
     else if (x == 4) {
         var j = redirection[i].d}
     currentgame["trackrecord"].push(j);
-    update_trackrecord(currentgame);
+    var link = "games/"; link2 = link.concat(currentgame["gamesid"].toString());fetcher(3, link2, currentgame);
     initialise();
 };
     
@@ -561,59 +562,16 @@ function initialise() {
 
 const currentgame =  {"username":"","gamesid":"","trackrecord":""}
 
-function new_game (data) {
-    fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,
-        {method:'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }, 
-        body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-        console.log ('Success:', data);
-        })
-        .catch (error => {
-        console.log ("error: " + error);
-        });
-}
-
-function update_trackrecord (data) {
-    var link = "https://343505-26.web.fhgr.ch/api/covid/games/";
-    var serverlink = link.concat(data["gamesid"].toString());
-    fetch (serverlink,
-        {method:'PUT',
-        headers: {
-        'Content-Type': 'application/json'
-        }, 
-        body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-        console.log ('Success:', data);
-        })
-        .catch (error => {
-        console.log ("error: " + error);
-        });
-}
-
 function validate() {
     let name = document.getElementById("entername").value;
     if (name == "") {alert("Bitte Namen eingeben!")}
-    else {getCount()}
+    else {fetcher(4,0,0)}
 }
 
 function checkGame() {
     var status = localStorage.getItem("gamesid");
     if (status == null) {loadsite("welcome")}
     else {loadsite("game");getTrackrecord(status)}
-}
-
-function getCount() {
-    fetch ("https://343505-26.web.fhgr.ch/api/covid/games/scount", {method:'GET', headers: {'Content-Type': 'application/json'}})
-    .then(response => response.json())
-    .then(result => {createGame(result["trackrecord"])})
-    .catch (error => {console.log ("error: " + error);})
 }
 
 function getTrackrecord(gameid) {
@@ -664,8 +622,9 @@ function createGame(count) {
     var cdata = {"username":"gcount","gamesid":"scount","trackrecord":currid};
     //localStorage.setItem("gamesid", currid);
     loadsite("game");
+    var link = "games/"; link2 = link.concat(currentgame["gamesid"].toString());
+    fetcher(2,"games",currentgame);fetcher(3, "games/scount", cdata);
     initialise();
-    new_game(data);update_trackrecord(cdata);
 }
 
 function reloadGame(result) {
@@ -675,10 +634,44 @@ function reloadGame(result) {
     initialise()
 }
 
+
+//fetcher methods info:
+//1: existierenden Spielstand laden | Beispiel: fetcher(1, "games/5", 0)
+//2: neues Spiel auf Server laden   | Beispiel: fetcher(2, "games", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
+//3: neuen Trackrecord an Server    | Beispiel: fetcher(3, "games/5", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
+// 4 
+async function fetcher(method, directory, data) {
+    var link = "https://343505-26.web.fhgr.ch/api/covid/";
+    var serverlink = link.concat(directory.toString());
+    if (method == 1) {
+        let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
+        .then(response => response.json())
+        .then(result => {reloadGame(result)})
+        .catch (error => {console.log ("error: " + error);})
+    }
+    else if (method == 2) { 
+        fetch (serverlink, {method:'POST',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
+        .then(response => response.json())
+        .then(data => {console.log ('Success:', data);})
+        .catch (error => {console.log ("error: " + error);})
+    }
+    else if (method == 3) {
+        fetch (serverlink,{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
+        .then(response => response.json())
+        .then(data => {console.log ('Success:', data);})
+        .catch (error => {console.log ("error: " + error);});
+    }
+    else if (method == 4) {
+        fetch ("https://343505-26.web.fhgr.ch/api/covid/games/scount", {method:'GET', headers: {'Content-Type': 'application/json'}})
+        .then(response => response.json())
+        .then(result => {createGame(result["trackrecord"])})
+        .catch (error => {console.log ("error: " + error);})
+    }
+}
+
 checkGame()
 
 /*
-
 Code Ergänzungen:
 - Reload Funktion geht noch nicht
 - Willkommensseite mit schönem Feld zur Namenseingabe
