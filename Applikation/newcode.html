@@ -6,6 +6,15 @@
     <link rel="stylesheet" href="styles.css"> <!-- Einbinden des CSS-Stylsheets -->
 </head>
 <body>
+    <div id=info> 
+        <button id=infobutton> </button> 
+        <br> 
+        <p id=infotext> 
+            Dieses Quiz eruiert auf spielerische Art Ihren Pandemietyp. <br> 
+            Die orangefarbenen Ringe stellen Fragen, die blauen Ringe stellen mögliche Resultate dar. <br> 
+            Abhängig von den gemachten Antworten können Sie bei einem der sieben Pandemietypen enden.
+        </p> 
+    </div>
     <div id="welcome"> 
         <h1>Willkommen bei der interaktiven Bestimmung deines Pandemietyps</h1>
         <p>Gib bitte zuerst bitte deinen Namen ein!</p>
@@ -355,7 +364,9 @@ function drawside(p1,p2,i,j){
     var moveac = disac / j;                        //Abstand der Teilschritte damit bei verschiedenen Distanze gleichmässige Bewegung generiert wird
     if (a > c) {                                   // a grösser als c: nach links gehen
         if (i == j) { 
-            dot(a1,a2,10,linecolour); {onspot = setInterval(function () {vac(b1,b2)}, 100)}}  //onspot interval aktualisiert die spielfigur im stillstand
+            dot(a1,a2,10,linecolour); { 
+                fade("options","in"); 
+                onspot = setInterval(function () {vac(b1,b2)}, 100)}}  //onspot interval aktualisiert die spielfigur im stillstand
         else {
             var i = i + 1;
             const myTimeout = setTimeout(function() {
@@ -413,27 +424,17 @@ function loadlines(knots){
 function fade(stringid, type) {
     var getstr = document.getElementById(stringid);
     if (type == "in") {
-        getstr.style.opacity = 0; 
-	/*
-	getElementById als Methode des document-Objekts, um auf den jeweiligen Elementknoten zu zugreifen,
-	der ein eindeutiges id-Atrribut erhält. Hier wird der Schrift die Deckkraft Null vergeben, da sie zu Beginn unsichtbar ist.
-	*/
-        var value1 = 0.1
-        const fader1 = setInterval(function() {
-            getstr.style.opacity = value1; //wiederholt die Vergabe des neuen Opacity-Werts alle 100mS
-            value1 = value1 + 0.1
-            }, 100)
-            setTimeout(function(){clearInterval(fader1)},1100) //bricht das obige Interval nach 1100mS ab
+        getstr.style.display = "initial";
+        getstr.style.opacity = 0; var value1 = 0.1
+        const fader1 = setInterval(function() {getstr.style.opacity = value1; value1 = value1 + 0.1}, 100)
+        setTimeout(function(){clearInterval(fader1)},1100)
         }
-    else if (type == "out") {
+    else if (type == "out") {        
         getstr.style.opacity = 1;
         var value2 = 1
-        const fader2 = setInterval(function() {
-            getstr.style.opacity = value2;
-            value2 = value2 - 0.1
-            }, 100)
-            setTimeout(function(){clearInterval(fader2)},1100)
-            setTimeout(function(){getstr.innerHTML = ""},1100)
+        const fader2 = setInterval(function() {getstr.style.opacity = value2;value2 = value2 - 0.1}, 100)
+        setTimeout(function(){clearInterval(fader2)},1100)
+        setTimeout(function(){getstr.style.display = "none"},1100)
     }
 }
 
@@ -455,10 +456,6 @@ function loadresult(i) {
     loadsite("result")
     document.getElementById("resb").innerHTML = type;
     document.getElementById("resc").innerHTML = text;
-    fade("resa", "in");
-    fade("resb", "in");
-    fade("resc", "in");
-    fade("resd", "in");
     document.getElementById("restart").addEventListener("click", function() {
         document.getElementById("options").style.display = "initial";
         restart()
@@ -473,19 +470,16 @@ function restart() {
     checkGame()
 }
 
-
 function choice(i,x) {
+    let cg = currentgame; let re = redirection;
     clearInterval(onspot);
-    if (x == 1) {
-        var j = redirection[i].a}
-    else if (x == 2) {
-        var j = redirection[i].b}
-    else if (x == 3) {
-        var j = redirection[i].c}
-    else if (x == 4) {
-        var j = redirection[i].d}
-    currentgame["trackrecord"].push(j);
-    var link = "games/"; link2 = link.concat(currentgame["gamesid"].toString());fetcher(3, link2, currentgame);
+    fade("options","out");
+    if (x == 1) {var j = re[i].a}
+    else if (x == 2) {var j = re[i].b}
+    else if (x == 3) {var j = re[i].c}
+    else if (x == 4) {var j = re[i].d}
+    cg["trackrecord"].push(j);
+    fetcher(3, ("games/"+cg["gamesid"]), cg);
     initialise();
 };
     
@@ -496,7 +490,7 @@ function loadquestion(i) {
         let k = optnum[i]
         var queststring = knots[i];
         document.getElementById("question").innerHTML = queststring;
-        fade("question", "in"); // FadeIn der neuen Frage
+        //fade("question", "in"); // FadeIn der neuen Frage
         var elema = document.getElementById("opta");
         var elemb = document.getElementById("optb");
         var elemc = document.getElementById("optc");
@@ -541,10 +535,7 @@ function initialise() {
     dots();
     var path = currentgame["trackrecord"];
     var count = (path.length); 
-    if (count == 1) {
-        drawdown(0,1,0,0); 
-        loadquestion(1)
-    }
+    if (count == 1) { drawdown(0,1,0,0); loadquestion(1)}
     else {
         var start = path[count-2]; var end = path[count-1];
         loadlines(path); 
@@ -556,10 +547,6 @@ function initialise() {
     document.getElementById("trec").innerHTML = currentgame["trackrecord"];
 }
 
-//Testlauf:
-//Beim Laden des Fensters wird User aufgefordert Name einzugeben
-//Danach wird der User erstellt und die ersta Frage geladen
-
 const currentgame =  {"username":"","gamesid":"","trackrecord":""}
 
 function validate() {
@@ -569,18 +556,10 @@ function validate() {
 }
 
 function checkGame() {
+    gameinfo("hide");
     var status = localStorage.getItem("gamesid");
     if (status == null) {loadsite("welcome")}
-    else {loadsite("game");getTrackrecord(status)}
-}
-
-function getTrackrecord(gameid) {
-    var link = "https://343505-26.web.fhgr.ch/api/covid/games/";
-    var serverlink = link.concat(gameid.toString());
-    fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
-    .then(response => response.json())
-    .then(result => {reloadGame(result)})
-    .catch (error => {console.log ("error: " + error);})
+    else {loadsite("game"); fetcher(1, ("games/"+status), 0);}
 }
 
 function loadsite(site) {
@@ -593,24 +572,30 @@ function loadsite(site) {
         getwelcome.style.display = "initial";
         getstats.style.display = "none";
         getresults.style.display = "none";
+        document.getElementById("infotext").style.display = "none";
+        fade("welcome","in")
     }
     else if (site == "game") {
         getgame.style.display = "initial";
+        getresults.style.display = "none"
         getwelcome.style.display = "none";
         getstats.style.display = "none";
         getresults.style.display = "none";
+        fade("game","in")
     }
     else if (site == "stats") {
         getgame.style.display = "none";
         getwelcome.style.display = "none";
         getstats.style.display = "initial";
         getresults.style.display = "none";
+        fade("stats","in")
     }
     else if (site == "result") {
         getgame.style.display = "initial";
         getwelcome.style.display = "none";
         getstats.style.display = "none";
         getresults.style.display = "initial";
+        fade("welcome","in")
     }
 }
 
@@ -622,7 +607,6 @@ function createGame(count) {
     var cdata = {"username":"gcount","gamesid":"scount","trackrecord":currid};
     //localStorage.setItem("gamesid", currid);
     loadsite("game");
-    var link = "games/"; link2 = link.concat(currentgame["gamesid"].toString());
     fetcher(2,"games",currentgame);fetcher(3, "games/scount", cdata);
     initialise();
 }
@@ -639,7 +623,9 @@ function reloadGame(result) {
 //1: existierenden Spielstand laden | Beispiel: fetcher(1, "games/5", 0)
 //2: neues Spiel auf Server laden   | Beispiel: fetcher(2, "games", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
 //3: neuen Trackrecord an Server    | Beispiel: fetcher(3, "games/5", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
-// 4 
+//4: scount abfragen                | Beispiel: fetcher(4,0,0) 
+//5: usw.... 
+
 async function fetcher(method, directory, data) {
     var link = "https://343505-26.web.fhgr.ch/api/covid/";
     var serverlink = link.concat(directory.toString());
@@ -666,6 +652,20 @@ async function fetcher(method, directory, data) {
         .then(response => response.json())
         .then(result => {createGame(result["trackrecord"])})
         .catch (error => {console.log ("error: " + error);})
+    }
+}
+
+function gameinfo(i) {
+    eleminfo = document.getElementById("infobutton");
+    eleminfo.replaceWith(eleminfo.cloneNode(true));
+    if (i == "hide") {
+        fade("infotext","out")
+        document.getElementById("infobutton").innerHTML = "Spielinfo anzeigen";
+        document.getElementById("infobutton").addEventListener("click", function() {gameinfo("show")},)}
+    else if (i == "show") {
+        document.getElementById("infobutton").innerHTML = "Spielinfo ausblenden";
+        fade("infotext","in")
+        document.getElementById("infobutton").addEventListener("click", function() {gameinfo("hide")},)
     }
 }
 
