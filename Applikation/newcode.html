@@ -365,7 +365,7 @@ function drawside(p1,p2,i,j){
     if (a > c) {                                   // a grösser als c: nach links gehen
         if (i == j) { 
             dot(a1,a2,10,linecolour); { 
-                fade("options","in"); 
+                fetcher(5,("fragen/"+p2),0)
                 onspot = setInterval(function () {vac(b1,b2)}, 100)}}  //onspot interval aktualisiert die spielfigur im stillstand
         else {
             var i = i + 1;
@@ -376,7 +376,10 @@ function drawside(p1,p2,i,j){
             }, 10);}
     }
     else if (c > a) {                                 // c grösser als a: nach rechts gehen
-        if (i == j) {dot(a1,a2,10,linecolour); {onspot = setInterval(function () {vac(b1,b2)}, 100)}}  //onspot interval aktualisiert die spielfigur im stillstand
+        if (i == j) {
+            dot(a1,a2,10,linecolour); {
+                fetcher(5,("fragen/"+p2),0)
+                onspot = setInterval(function () {vac(b1,b2)}, 100)}}  //onspot interval aktualisiert die spielfigur im stillstand
         else {
             var i = i + 1;
             const myTimeout = setTimeout(function() {
@@ -474,15 +477,15 @@ function choice(i,x) {
     let cg = currentgame; let re = redirection;
     clearInterval(onspot);
     fade("options","out");
-    if (x == 1) {var j = re[i].a}
+    /*if (x == 1) {var j = re[i].a}
     else if (x == 2) {var j = re[i].b}
     else if (x == 3) {var j = re[i].c}
-    else if (x == 4) {var j = re[i].d}
-    cg["trackrecord"].push(j);
+    else if (x == 4) {var j = re[i].d}*/
+    cg["trackrecord"].push(x);
     fetcher(3, ("games/"+cg["gamesid"]), cg);
     initialise();
 };
-    
+ /*   
 function loadquestion(i) {
     reload(); // nach dem Klick auf eine Antwort, werden diese mit der Funktion reload wieder ausgeblendet, bis die neuen geladen wurden
     if (i > 20) {loadresult(i)}
@@ -530,16 +533,65 @@ function loadquestion(i) {
             document.getElementById("optd").addEventListener("click", function() {choice(i,4)},);}
     }
 }
+*/
+
+function loadquestion(data) {
+    reload(); // nach dem Klick auf eine Antwort, werden diese mit der Funktion reload wieder ausgeblendet, bis die neuen geladen wurden
+    fade("options","in"); 
+    var i = data["frageid"];
+    if (i > 20) {loadresult(i)}
+    else {
+        let k = data["optnum"] 
+        var queststring = data["fragetext"] ;
+        document.getElementById("question").innerHTML = queststring;
+        var elema = document.getElementById("opta");
+        var elemb = document.getElementById("optb");
+        var elemc = document.getElementById("optc");
+        var elemd = document.getElementById("optd");
+        if (k == 2) {
+            elema.innerHTML = data["opttexts"][0];
+            elema.replaceWith(elema.cloneNode(true));
+            document.getElementById("opta").addEventListener("click", function() {choice(i,data["redirections"][0])},);
+            elemb.innerHTML = data["opttexts"][1];
+            elemb.replaceWith(elemb.cloneNode(true));
+            document.getElementById("optb").addEventListener("click", function() {choice(i,data["redirections"][1])},);
+            document.getElementById("linec").style.display = "none";
+            document.getElementById("lined").style.display = "none";}
+        else if (k == 3) {
+            elema.innerHTML = data["opttexts"][0];
+            elema.replaceWith(elema.cloneNode(true));
+            document.getElementById("opta").addEventListener("click", function() {choice(i,data["redirections"][0])},);
+            elemb.innerHTML = data["opttexts"][1];
+            elemb.replaceWith(elemb.cloneNode(true));
+            document.getElementById("optb").addEventListener("click", function() {choice(i,data["redirections"][1])},);
+            elemc.innerHTML = data["opttexts"][2];
+            elemc.replaceWith(elemc.cloneNode(true));
+            document.getElementById("optc").addEventListener("click", function() {choice(i,data["redirections"][2])},);
+            document.getElementById("lined").style.display = "none";}
+        else if (k == 4) {
+            elema.innerHTML =data["opttexts"][0];
+            elema.replaceWith(elema.cloneNode(true));
+            document.getElementById("opta").addEventListener("click", function() {choice(i,data["redirections"][0])},);
+            elemb.innerHTML = data["opttexts"][1];
+            elemb.replaceWith(elemb.cloneNode(true));
+            document.getElementById("optb").addEventListener("click", function() {choice(i,data["redirections"][1])},);
+            elemc.innerHTML = data["opttexts"][2];
+            elemc.replaceWith(elemc.cloneNode(true));
+            document.getElementById("optc").addEventListener("click", function() {choice(i,data["redirections"][2])},);
+            elemd.innerHTML = data["opttexts"][3];
+            elemd.replaceWith(elemd.cloneNode(true));
+            document.getElementById("optd").addEventListener("click", function() {choice(i,data["redirections"][3])},);}
+    }
+}
 
 function initialise() {
     dots();
     var path = currentgame["trackrecord"];
     var count = (path.length); 
-    if (count == 1) { drawdown(0,1,0,0); loadquestion(1)}
+    if (count == 1) { drawdown(0,1,0,0); fetcher(5,"fragen/1",0)}
     else {
         var start = path[count-2]; var end = path[count-1];
         loadlines(path); 
-        loadquestion(end);
         drawdown(start,end,0,0);
     }
     document.getElementById("userid").innerHTML = currentgame["gamesid"];
@@ -624,7 +676,7 @@ function reloadGame(result) {
 //2: neues Spiel auf Server laden   | Beispiel: fetcher(2, "games", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
 //3: neuen Trackrecord an Server    | Beispiel: fetcher(3, "games/5", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
 //4: scount abfragen                | Beispiel: fetcher(4,0,0) 
-//5: usw.... 
+//5: frage laden fetcher            | Beispiel: fetcher(5,"fragen/1",0)
 
 async function fetcher(method, directory, data) {
     var link = "https://343505-26.web.fhgr.ch/api/covid/";
@@ -653,6 +705,13 @@ async function fetcher(method, directory, data) {
         .then(result => {createGame(result["trackrecord"])})
         .catch (error => {console.log ("error: " + error);})
     }
+    else if (method == 5) {
+        let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
+        .then(response => response.json())
+        .then(result => {console.log("Question successfully loaded: " + result["frageid"]);loadquestion(result)
+        })
+        .catch (error => {console.log ("error: " + error);})
+    }
 }
 
 function gameinfo(i) {
@@ -669,7 +728,10 @@ function gameinfo(i) {
     }
 }
 
+//fetcher(5,"fragen/8",0)
+
 checkGame()
+
 
 /*
 Code Ergänzungen:
@@ -703,3 +765,5 @@ string/fragen {frageid: int, fragetext: str, optnum: int, opttexts: array, redir
 */
 
 </script>
+
+
