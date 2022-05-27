@@ -626,29 +626,33 @@ function getTrackrecord(gameid) {
 }
 
 function loadsite(site) {
+    var getgame = document.getElementById("game");
+    var getwelcome = document.getElementById("welcome");
+    var getstats = document.getElementById("stats");
+    var getresults = document.getElementById("result");
     if (site == "welcome") {
-        document.getElementById("game").style.display = "none";
-        document.getElementById("welcome").style.display = "initial";
-        document.getElementById("stats").style.display = "none";
-        document.getElementById("result").style.display = "none";
+        getgame.style.display = "none";
+        getwelcome.style.display = "initial";
+        getstats.style.display = "none";
+        getresults.style.display = "none";
     }
     else if (site == "game") {
-        document.getElementById("game").style.display = "initial";
-        document.getElementById("welcome").style.display = "none";
-        document.getElementById("stats").style.display = "none";
-        document.getElementById("result").style.display = "none";
+        getgame.style.display = "initial";
+        getwelcome.style.display = "none";
+        getstats.style.display = "none";
+        getresults.style.display = "none";
     }
     else if (site == "stats") {
-        document.getElementById("game").style.display = "none";
-        document.getElementById("welcome").style.display = "none";
-        document.getElementById("stats").style.display = "initial";
-        document.getElementById("result").style.display = "none";
+        getgame.style.display = "none";
+        getwelcome.style.display = "none";
+        getstats.style.display = "initial";
+        getresults.style.display = "none";
     }
     else if (site == "result") {
-        document.getElementById("game").style.display = "initial";
-        document.getElementById("welcome").style.display = "none";
-        document.getElementById("stats").style.display = "none";
-        document.getElementById("result").style.display = "initial";
+        getgame.style.display = "initial";
+        getwelcome.style.display = "none";
+        getstats.style.display = "none";
+        getresults.style.display = "initial";
     }
 }
 
