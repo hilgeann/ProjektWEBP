@@ -38,10 +38,10 @@
     </div>
     <div id="result"> 
         <h1>Dein Resultat</h1>
-        <label class=r1> <p id=resa>  </p> </label>
-        <label class=r1> <p id=resb>  </p> </label>
-        <label class=r1> <p id=resc>  </p> </label>
-        <label class=r1> <p id=resd>  </p> </label>
+         <p id=resa> Dein Typ ist: </p>
+         <p id=resb>  </p> 
+         <p id=resc>  </p> 
+         <p id=resd> <button id=restart> Neues Spiel starten! </button>  </p> </label>
     </div>   
     <div id="stats"> 
         <h1>Willkommen bei den Umfragestatistiken</h1>
@@ -410,32 +410,30 @@ function loadlines(knots){
 //So habe ich die Funktionen getestet. Komischerweise funktioniert es aktuell nur wenn zuerst drawdown ausgeführt wird, 
 //warum weiss ich nicht (Spielt von der funktionalität her aber keine rolle aktuell)
 
-function fade(stringid, stringtext, type) {
+function fade(stringid, type) {
+    var getstr = document.getElementById(stringid);
     if (type == "in") {
-        document.getElementById(stringid).style.opacity = 0; 
+        getstr.style.opacity = 0; 
 	/*
 	getElementById als Methode des document-Objekts, um auf den jeweiligen Elementknoten zu zugreifen,
-	der ein eindeutiges id-Atrribut erhält. Hier wird der Schrift die Deckkraft Null vergeben, da sie zu Beginn unsichtbar ist. 
-	*/
-        document.getElementById(stringid).innerHTML = stringtext;
-	/* Durch inner.HTML wird der Inhalt für das jeweiligen HTML-Element gelesen und gespeichert.
+	der ein eindeutiges id-Atrribut erhält. Hier wird der Schrift die Deckkraft Null vergeben, da sie zu Beginn unsichtbar ist.
 	*/
         var value1 = 0.1
         const fader1 = setInterval(function() {
-            document.getElementById(stringid).style.opacity = value1; //wiederholt die Vergabe des neuen Opacity-Werts alle 100mS
+            getstr.style.opacity = value1; //wiederholt die Vergabe des neuen Opacity-Werts alle 100mS
             value1 = value1 + 0.1
             }, 100)
             setTimeout(function(){clearInterval(fader1)},1100) //bricht das obige Interval nach 1100mS ab
         }
     else if (type == "out") {
-        document.getElementById(stringid).style.opacity = 1;
+        getstr.style.opacity = 1;
         var value2 = 1
         const fader2 = setInterval(function() {
-            document.getElementById(stringid).style.opacity = value2;
+            getstr.style.opacity = value2;
             value2 = value2 - 0.1
             }, 100)
             setTimeout(function(){clearInterval(fader2)},1100)
-            setTimeout(function(){document.getElementById(stringid).innerHTML = ""},1100)
+            setTimeout(function(){getstr.innerHTML = ""},1100)
     }
 }
 
@@ -455,10 +453,12 @@ function loadresult(i) {
     else if (i == 27) {var type = re.g; var text = rs.g};
     document.getElementById("options").style.display = "none";
     loadsite("result")
-    fade("resa", "Dein Typ ist:", "in");
-    fade("resb", type, "in");
-    fade("resc", text, "in");
-    fade("resd", "<button id=restart> Neues Spiel starten! </button>" , "in");
+    document.getElementById("resb").innerHTML = type;
+    document.getElementById("resc").innerHTML = text;
+    fade("resa", "in");
+    fade("resb",  "in");
+    fade("resc", "in");
+    fade("resd", "in");
     document.getElementById("restart").addEventListener("click", function() {
         document.getElementById("options").style.display = "initial";
         restart()
@@ -494,7 +494,8 @@ function loadquestion(i) {
     else {
         let k = optnum[i]
         var queststring = knots[i];
-        fade("question", queststring, "in"); // FadeIn der neuen Frage
+        document.getElementById("question").innerHTML = queststring;
+        fade("question", "in"); // FadeIn der neuen Frage
         var elema = document.getElementById("opta");
         var elemb = document.getElementById("optb");
         var elemc = document.getElementById("optc");
@@ -705,4 +706,3 @@ string/fragen {frageid: int, fragetext: str, optnum: int, opttexts: array, redir
 */
 
 </script>
-
