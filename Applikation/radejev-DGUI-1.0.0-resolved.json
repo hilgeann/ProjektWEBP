@@ -127,12 +127,9 @@
         "operationId": "loadGame",
         "parameters": [
           {
-            "in": "body",
+            "in": "path",
             "name": "gamesid",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/gamesid"
-            }
+            "required": true
           }
         ],
         "responses": {
@@ -156,12 +153,9 @@
         "operationId": "updateGameProperty",
         "parameters": [
           {
-            "in": "body",
+            "in": "path",
             "name": "gamesid",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/gamesid"
-            }
+            "required": true
           }
         ],
         "responses": {
@@ -247,12 +241,9 @@
         "operationId": "getStat",
         "parameters": [
           {
-            "in": "body",
+            "in": "path",
             "name": "statid",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/statid"
-            }
+            "required": true
           }
         ],
         "responses": {
@@ -276,12 +267,9 @@
         "operationId": "updateStatProperty",
         "parameters": [
           {
-            "in": "body",
+            "in": "path",
             "name": "statid",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/statid"
-            }
+            "required": true
           }
         ],
         "responses": {
@@ -396,12 +384,9 @@
         "operationId": "getResultString",
         "parameters": [
           {
-            "in": "body",
+            "in": "path",
             "name": "resultid",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/resultid"
-            }
+            "required": true
           }
         ],
         "responses": {
@@ -516,12 +501,9 @@
         "operationId": "getInfoString",
         "parameters": [
           {
-            "in": "body",
+            "in": "path",
             "name": "frageid",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/frageid"
-            }
+            "required": true
           }
         ],
         "responses": {
@@ -589,7 +571,7 @@
           "$ref": "#/definitions/statid"
         },
         "statname": {
-          "type": "string",
+          "type": "integer",
           "example":
             "Wellensurfer"
         },
@@ -599,23 +581,38 @@
         },
         "att1": {
           "type":"array",
-          "example": "Geschlecht"
+          "example": "Geschlecht",
+          "items": {
+            "type": "integer"
+          }
         },
         "att2": {
           "type":"array",
-          "example": "Pandemietyp"
+          "example": "Pandemietyp",
+          "items": {
+            "type": "integer"
+          }
         },
         "att3": {
           "type":"array",
-          "example": "Meinung"
+          "example": "Meinung",
+          "items": {
+            "type": "integer"
+          }
         },
         "att4": {
           "type":"array",
-          "example": "Gestartete Spiele"
+          "example": "Gestartete Spiele",
+          "items": {
+            "type": "integer"
+          }
         },
         "att5": {
           "type":"array",
-          "example": "Beendete Spiele"
+          "example": "Beendete Spiele",
+          "items": {
+            "type": "integer"
+          }
         }
       }
     },
@@ -673,12 +670,18 @@
         },
         "opttexts":{
           "type":"array",
-          "example":"Ja"
+          "example":"Ja",
+          "items": {
+            "type": "string"
+          }
         },
         "redirections":{
           "type":"array",
           "example":{
-            "a":3, "b":5
+            "a":3, "b":5,
+            "items": {
+              "type": "integer"
+            }
           }
         }
       }
