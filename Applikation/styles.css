@@ -35,17 +35,17 @@ canvas {
     display: inline;
 }
 
-/* Row1 bis Row3 der Ergebnisanzeige */
+/* Ergebnisanzeige */
 
-.r1 {color: black;
+.resa {color: black;
     font-size: 1.5em;
 }
 
-.r2 {color: rgb(126, 79, 79);
+.resb {color: rgb(126, 79, 79);
     font-size: 2.5em;
 }
 
-.r3 {color: black;
+.resc {color: black;
 }
 
 /* Quizbuttons */
