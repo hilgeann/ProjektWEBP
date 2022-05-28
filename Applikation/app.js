@@ -487,6 +487,30 @@ async function fetcher(method, directory, data) {
         .then(result => {console.log("Fetcher6 successfull/Result loaded#" + result["resultid"]);loadresult(result);})
         .catch (error => {console.log ("error: " + error);})
     }
+    else if (method == 7) {
+        let response = await fetch ("https://343505-26.web.fhgr.ch/api/covid/statistik/1",{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
+        .then(response => response.json())
+        .then(data => {console.log ("Fetcher7 successfull/Scount has been PUT: ", data);})
+        .catch (error => {console.log ("error: " + error);});
+    }
+    else if (method == 8) {
+        let response = await fetch ("https://343505-26.web.fhgr.ch/api/covid/statistik/2",{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
+        .then(response => response.json())
+        .then(data => {console.log ("Fetcher8 successfull/Ecount has been PUT: ", data);})
+        .catch (error => {console.log ("error: " + error);});
+    }
+    else if (method == 9) {
+        let response = await fetch ("https://343505-26.web.fhgr.ch/api/covid/statistik/3",{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
+        .then(response => response.json())
+        .then(data => {console.log ("Fetcher9 successfull/Rcount has been PUT: ", data);})
+        .catch (error => {console.log ("error: " + error);});
+    }
+    else if (method == 10) {
+        let response = await fetch ("https://343505-26.web.fhgr.ch/api/covid/statistik/21",{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
+        .then(response => response.json())
+        .then(data => {console.log ("Fetcher10 successfull/Vorsichtige has been PUT: ", data);})
+        .catch (error => {console.log ("error: " + error);});
+    }
 }
 
 function gameinfo(i) {
