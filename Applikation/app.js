@@ -503,9 +503,15 @@ checkGame()
 /*
 TO-DO-Liste:
 - Statistik Fetch Befehle
-- 
-- 
-- 
-
-
+- Statistiken: 
+    #statid: 1 gestartete Spiele
+    #statid: 2 beendete Spiele
+    #statid: 3 laufende Spiele
+    #statid: 21-28 Pandemietypen
+- Visualisierung d3.js
+    #1 Verteilung der Typen 
+    #2 Zustimmungswert
+- Textcodierung Server (ae,oe,ue)
+- Abbruch-Button (-> localstorage entleeren + neues Spiel starten)
+- Online-User Anzeigen
 */
