@@ -1,4 +1,3 @@
-
 const size = 50;
 const corra = size*0.8; 
 const corrb = size*0.2;
@@ -110,36 +109,9 @@ function vac(a,b) {
     }
 }
 
-const coordinates = [
-    {a:2, b:1},
-    {a:3, b:1},
-    {a:6, b:2},
-    {a:2, b:2},
-    {a:4, b:2.5},
-    {a:7, b:3},
-    {a:1, b:3},
-    {a:4, b:4.5},
-    {a:1.5, b:4},
-    {a:6.5, b:4},
-    {a:2, b:5},
-    {a:2.5, b:6},
-    {a:6, b:5},
-    {a:5.5, b:6},
-    {a:0, b:1}, //Startpunkt hinzugefügt
-    {a:""},
-    {a:""},
-    {a:""},
-    {a:""},
-    {a:""},
-    {a:""},
-    {a:2, b:7.5},
-    {a:1, b:7.5},
-    {a:3, b:7.5},
-    {a:4, b:7.5},
-    {a:5, b:7.5},
-    {a:6, b:7.5},
-    {a:7, b:7.5}
-]
+const coordinates = [ {a:2, b:1},  {a:3, b:1},  {a:6, b:2},  {a:2, b:2},   {a:4, b:2.5}, {a:7, b:3},  {a:1, b:3}, {a:4, b:4.5}, 
+     {a:1.5, b:4},  {a:6.5, b:4},  {a:2, b:5},   {a:2.5, b:6},  {a:6, b:5},  {a:5.5, b:6},  {a:0, b:1}, //Nr 14: Startpunkt hinzugefügt
+    {a:""},  {a:""},  {a:""},  {a:""}, {a:""}, {a:""}, {a:2, b:7.5}, {a:1, b:7.5},  {a:3, b:7.5},  {a:4, b:7.5}, {a:5, b:7.5},  {a:6, b:7.5},  {a:7, b:7.5}]
 
 const linecolour = "grey";
 const linewidth = 7;
@@ -177,8 +149,6 @@ function maindots(a,b,type) {             //type 1: durchquerte dots; type 2: of
     else if (type == 2) { dot(a,b,20,"#d7966d"); dot(a,b,10,"#598ebb") }
     else if (type == 3) { dot(a,b,20,"#598ebb"); dot(a,b,10,"#d7966d") }
 }
-
-
 // Drawdown bewegt die Spielfigur auf die korrekte vertikale höhe und löst drawside aus
 
 function drawdown(p1,p2,i,j){
@@ -479,23 +449,23 @@ async function fetcher(method, directory, data) {
     if (method == 1) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
-        .then(result => {onsole.log("Fetcher1 successfull/Gamer recognized: ", result);reloadGame(result)})
+        .then(result => {console.log("Fetcher1 successfull/Gamer recognized: ", result);reloadGame(result)})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 2) { 
-        fetch (serverlink, {method:'POST',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
+        let response = await fetch (serverlink, {method:'POST',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
         .then(response => response.json())
         .then(data => {console.log("Fetcher2 successfull/Game has been POST: ", data);})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 3) {
-        fetch (serverlink,{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
+        let response = await fetch (serverlink,{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
         .then(response => response.json())
         .then(data => {console.log ("Fetcher3 successfull/Game has been PUT: ", data);})
         .catch (error => {console.log ("error: " + error);});
     }
     else if (method == 4) {
-        fetch ("https://343505-26.web.fhgr.ch/api/covid/games/scount", {method:'GET', headers: {'Content-Type': 'application/json'}})
+        let response = await fetch ("https://343505-26.web.fhgr.ch/api/covid/games/scount", {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
         .then(result => {console.log("Fetcher4 successfull/Gamescount loaded: ", result["trackrecord"]);createGame(result["trackrecord"])})
         .catch (error => {console.log ("error: " + error);})
@@ -503,15 +473,13 @@ async function fetcher(method, directory, data) {
     else if (method == 5) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
-        .then(result => {console.log("Fetcher5 successfull/Question loaded#" + result["frageid"]);loadquestion(result)
-        })
+        .then(result => {console.log("Fetcher5 successfull/Question loaded#" + result["frageid"]);loadquestion(result)})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 6) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
-        .then(result => {console.log("Fetcher6 successfull/Result loaded#" + result["resultid"]);loadresult(result);
-        })
+        .then(result => {console.log("Fetcher6 successfull/Result loaded#" + result["resultid"]);loadresult(result);})
         .catch (error => {console.log ("error: " + error);})
     }
 }
@@ -531,3 +499,23 @@ function gameinfo(i) {
 }
 
 checkGame()
+
+/*
+TO-DO-Liste:
+- RADE/(ANNA): Statistik Fetch Befehle
+- ANNA: Statistiken anlegen: 
+    #statid: 1 gestartete Spiele
+    #statid: 2 beendete Spiele
+    #statid: 3 laufende Spiele
+    #statid: 21-28 Pandemietypen
+- THERESA: Visualisierung d3.js
+    #1 Verteilung der Typen 
+    #2 Zustimmungswert
+- RADE: Abbruch-Button (-> localstorage entleeren + neues Spiel starten)
+- RADE: Online-User Anzeigen
+- Dokumentation?
+- KEINE PRIO:
+  #Textcodierung Server (ae,oe,ue)
+  #Fadein erste Frage glitch
+  #Kosmetik/CSS -> Darstellung
+*/
