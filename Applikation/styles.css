@@ -139,8 +139,6 @@ input:checked + .roundbutton:before  {
 button#restart {
     margin: 2rem 0 2rem 0;
     height: 3rem;
+    width: 10em;
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
