@@ -420,7 +420,7 @@ function restart() {
     checkGame()
 }
 
-function choice(i,x) {
+function choice(x) {
     let cg = currentgame;
     clearInterval(onspot);
     fade("options","out");
@@ -446,36 +446,36 @@ function loadquestion(data) {
         if (k == 2) {
             elema.innerHTML = data["opttexts"][0];
             elema.replaceWith(elema.cloneNode(true));
-            document.getElementById("opta").addEventListener("click", function() {choice(i,data["redirections"][0])},);
+            document.getElementById("opta").addEventListener("click", function() {choice(data["redirections"][0])},);
             elemb.innerHTML = data["opttexts"][1];
             elemb.replaceWith(elemb.cloneNode(true));
-            document.getElementById("optb").addEventListener("click", function() {choice(i,data["redirections"][1])},);
+            document.getElementById("optb").addEventListener("click", function() {choice(data["redirections"][1])},);
             document.getElementById("linec").style.display = "none";
             document.getElementById("lined").style.display = "none";}
         else if (k == 3) {
             elema.innerHTML = data["opttexts"][0];
             elema.replaceWith(elema.cloneNode(true));
-            document.getElementById("opta").addEventListener("click", function() {choice(i,data["redirections"][0])},);
+            document.getElementById("opta").addEventListener("click", function() {choice(data["redirections"][0])},);
             elemb.innerHTML = data["opttexts"][1];
             elemb.replaceWith(elemb.cloneNode(true));
-            document.getElementById("optb").addEventListener("click", function() {choice(i,data["redirections"][1])},);
+            document.getElementById("optb").addEventListener("click", function() {choice(data["redirections"][1])},);
             elemc.innerHTML = data["opttexts"][2];
             elemc.replaceWith(elemc.cloneNode(true));
-            document.getElementById("optc").addEventListener("click", function() {choice(i,data["redirections"][2])},);
+            document.getElementById("optc").addEventListener("click", function() {choice(data["redirections"][2])},);
             document.getElementById("lined").style.display = "none";}
         else if (k == 4) {
             elema.innerHTML =data["opttexts"][0];
             elema.replaceWith(elema.cloneNode(true));
-            document.getElementById("opta").addEventListener("click", function() {choice(i,data["redirections"][0])},);
+            document.getElementById("opta").addEventListener("click", function() {choice(data["redirections"][0])},);
             elemb.innerHTML = data["opttexts"][1];
             elemb.replaceWith(elemb.cloneNode(true));
-            document.getElementById("optb").addEventListener("click", function() {choice(i,data["redirections"][1])},);
+            document.getElementById("optb").addEventListener("click", function() {choice(data["redirections"][1])},);
             elemc.innerHTML = data["opttexts"][2];
             elemc.replaceWith(elemc.cloneNode(true));
-            document.getElementById("optc").addEventListener("click", function() {choice(i,data["redirections"][2])},);
+            document.getElementById("optc").addEventListener("click", function() {choice(data["redirections"][2])},);
             elemd.innerHTML = data["opttexts"][3];
             elemd.replaceWith(elemd.cloneNode(true));
-            document.getElementById("optd").addEventListener("click", function() {choice(i,data["redirections"][3])},);}
+            document.getElementById("optd").addEventListener("click", function() {choice(data["redirections"][3])},);}
     }
 }
 
@@ -565,14 +565,21 @@ function reloadGame(result) {
     initialise()
 }
 
-
-//fetcher methods info:
-//1: existierenden Spielstand laden | Beispiel: fetcher(1, "games/5", 0)
-//2: neues Spiel auf Server laden   | Beispiel: fetcher(2, "games", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
-//3: neuen Trackrecord an Server    | Beispiel: fetcher(3, "games/5", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
-//4: scount abfragen                | Beispiel: fetcher(4,0,0) 
-//5: frage laden fetcher            | Beispiel: fetcher(5,"fragen/1",0)
-
+/*
+Fetcher methods info:
+1: existierenden Spielstand laden
+   Beispiel: fetcher(1, "games/5", 0)
+2: neues Spiel auf Server laden 
+   Beispiel: fetcher(2, "games", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
+   Beispiel: fetcher(2, "games", data) // Array als Variabel Data
+3: neuen Trackrecord an Server
+   Beispiel: fetcher(3, "games/5", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
+4: scount abfragen
+   Beispiel: fetcher(4, 0, 0) 
+5: frage laden fetcher
+   Beispiel: fetcher(5, "fragen/1", 0)
+6: etc... 
+*/
 async function fetcher(method, directory, data) {
     var link = "https://343505-26.web.fhgr.ch/api/covid/";
     var serverlink = link.concat(directory.toString());
@@ -626,4 +633,3 @@ function gameinfo(i) {
 checkGame()
 
 </script>
-
