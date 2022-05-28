@@ -434,23 +434,24 @@ function reloadGame(result) {
 }
 
 /*
-Fetcher methods info:
+Fetcher methods Info:
 1: existierenden Spielstand laden
    Beispiel: fetcher(1, "games/5", 0)
 2: neues Spiel auf Server laden 
    Beispiel: fetcher(2, "games", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
    Beispiel: fetcher(2, "games", data) // Array als Variabel Data
-3: neuen Trackrecord an Server
-   Beispiel: fetcher(3, "games/5", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
+3: Eintrag aktualisieren (Game, Count)
+   Beispiel Game Aktualisieren: fetcher(3, "games/5", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
+   Beispiel Count Aktualisieren: fetcher(3, "stastik/1", {statid: '1', statname: 'scount', maincount: 155})
 4: scount abfragen
    Beispiel: fetcher(4, 0, 0) 
-  Beispiel NEU: fetcher(4, "statistik/1", 0) oder Beispiel NEU: fetcher(4, "statistik/25", 0) 
+   Beispiel NEU: fetcher(4, "statistik/1", 0) oder Beispiel NEU: fetcher(4, "statistik/25", 0) 
 5: Frage laden 
    Beispiel: fetcher(5, "fragen/1", 0)
 6: Resultat laden  
    Beispiel: fetcher(6, "results/21", 0)
-7: Statistik update
-   Beispiel: fetcher(7, "statistik/1", 0)
+7: Statistik starten
+   Beispiel: fetcher(7, "statistik", 0)
 */
 async function fetcher(method, directory, data) {
     var link = "https://343505-26.web.fhgr.ch/api/covid/";
@@ -470,7 +471,7 @@ async function fetcher(method, directory, data) {
     else if (method == 3) {
         let response = await fetch (serverlink,{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
         .then(response => response.json())
-        .then(data => {console.log ("Fetcher3 successfull/Game has been PUT: ", data);})
+        .then(data => {console.log ("Fetcher3 successfull/Game or Count has been PUT: ", data);})
         .catch (error => {console.log ("error: " + error);});
     }
     else if (method == 4) {
@@ -494,18 +495,9 @@ async function fetcher(method, directory, data) {
     else if (method == 7) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
-        .then(result => {console.log("Fetcher7 successfull/Stats updated: ", result["statid"]);/*updatestats(result)*/})
+        .then(result => {console.log("Fetcher7 successfull/Statistics downloaded: ", result);/*showstatistics(result)*/})
         .catch (error => {console.log ("error: " + error);})
     }
-}
-
-const startcount = 0;
-const endcount = 0;
-const onlinecount = 0;
-
-function updatestats (result) {
-    //lokale variable counts werden überschrieben
-    //
 }
 
 function gameinfo(i) {
@@ -524,22 +516,16 @@ function gameinfo(i) {
 
 //checkGame()
 
-fetcher(7,"statistik/1",0)
+fetcher(7,"statistik",0)
 
 /*
 TO-DO-Liste:
-- RADE/(ANNA): Statistik Fetch Befehle
-- ANNA: Statistiken anlegen: 
-    #statid: 1 gestartete Spiele
-    #statid: 2 beendete Spiele
-    #statid: 3 laufende Spiele
-    #statid: 21-28 Pandemietypen
+- RADE: loadresult-> typ stat abfragen+aktualisieren und abgeschlossene spiele aktualisieren / CreateGame: startcount aktualisieret
+- (RADE: Online-User Anzeigen?)
 - THERESA: Visualisierung d3.js
     #1 Verteilung der Typen 
     #2 Zustimmungswert
-- RADE: Abbruch-Button (-> localstorage entleeren + neues Spiel starten)
-- RADE: Online-User Anzeigen
-- Dokumentation?
+- ANNA: Dokumentation?
 - KEINE PRIO:
   #Textcodierung Server (ae,oe,ue)
   #Fadein erste Frage glitch
