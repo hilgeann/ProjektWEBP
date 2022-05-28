@@ -140,4 +140,7 @@ input:checked + .roundbutton:before  {
     margin: 2rem 0 2rem 0;
     height: 3rem;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
