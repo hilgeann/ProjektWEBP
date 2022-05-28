@@ -502,16 +502,20 @@ checkGame()
 
 /*
 TO-DO-Liste:
-- Statistik Fetch Befehle
-- Statistiken: 
+- RADE/(ANNA): Statistik Fetch Befehle
+- ANNA: Statistiken anlegen: 
     #statid: 1 gestartete Spiele
     #statid: 2 beendete Spiele
     #statid: 3 laufende Spiele
     #statid: 21-28 Pandemietypen
-- Visualisierung d3.js
+- THERESA: Visualisierung d3.js
     #1 Verteilung der Typen 
     #2 Zustimmungswert
-- Textcodierung Server (ae,oe,ue)
-- Abbruch-Button (-> localstorage entleeren + neues Spiel starten)
-- Online-User Anzeigen
+- RADE: Abbruch-Button (-> localstorage entleeren + neues Spiel starten)
+- RADE: Online-User Anzeigen
+- Dokumentation?
+- KEINE PRIO:
+  #Textcodierung Server (ae,oe,ue)
+  #Fadein erste Frage glitch
+  #Kosmetik/CSS -> Darstellung
 */
