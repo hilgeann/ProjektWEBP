@@ -142,9 +142,10 @@ div#restartbutton {
 
 button#restart {
     width: 10em;
-    margin: 3em 0 0 0;
+    margin: 0 0 0 0;
     position: fixed;
-    bottom: 0;
+    top: 2em;
+    right: 5em;
     background-color: #976dd7;
     transition: all 1s;
     cursor: pointer;

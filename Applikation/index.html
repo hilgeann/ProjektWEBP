@@ -14,12 +14,14 @@
             Abhängig von den gemachten Antworten können Sie bei einem der sieben Pandemietypen enden.
         </p> 
     </div>
+
     <div id="welcome"> 
         <h1>Willkommen bei der interaktiven Bestimmung deines Pandemietyps</h1>
         <p>Gib bitte zuerst bitte deinen Namen ein!</p>
         <input type="text" id="entername">
         <button onclick="validate()">Start</button>
     </div>
+
     <div id="game"> 
         <div class ="togglebox">
             <label class="toggle">
@@ -28,36 +30,39 @@
             </label>
             <label class="toggletext">Wähle deine Spielfigur!</label class="toggletext">
         </div class ="togglebox">    
-
         <div class="anim">
             <canvas width="400" height="400" id="back" style="background-color: #FFF0B5 ;position:absolute"></canvas>
             <canvas width="400" height="400" id="front" style="position:absolute"></canvas>
-        </div class="anim">
-
-        
-        <!-- Einblenden der möglichen Antwort-Buttons je nach Anzahl -->
-        <div id="options"> 
-            <h1 id="question"> </h1>
-            <p id=linea> <button> <opt id=opta> </opt> </button> </p> 
-            <p id=lineb> <button> <opt id=optb> </opt> </button> </p> 
-            <p id=linec> <button> <opt id=optc> </opt> </button> </p> 
-            <p id=lined> <button> <opt id=optd> </opt> </button> </p> 
-        </div>
+        </div class="anim"> 
     </div>
+
+    <!-- Einblenden der möglichen Antwort-Buttons je nach Anzahl -->
+    <div id="options"> 
+        <h1 id="question"> </h1>
+        <p id=linea> <button> <opt id=opta> </opt> </button> </p> 
+        <p id=lineb> <button> <opt id=optb> </opt> </button> </p> 
+        <p id=linec> <button> <opt id=optc> </opt> </button> </p> 
+        <p id=lined> <button> <opt id=optd> </opt> </button> </p> 
+    </div>
+
     <div id="result"> 
         <h1>Dein Resultat</h1>
          <p id=resa> Dein Typ ist: </p>
          <p id=resb>  </p> 
          <p id=resc>  </p> 
+         <button onclick='fetcher(7,"statistik",0)'>Statistik zeigen</button>
     </div>
+
     <div id=restartbutton> 
         </br>
         <button id=restart> Spiel neu starten! </button>   
     </div>
+
     <div id="stats"> 
         <h1>Willkommen bei den Umfragestatistiken</h1>
         <p id="statdata">...</p>
-    </div>   
+    </div>  
+
     <table>
         <tr>
             <td>UserID:</td>
@@ -83,7 +88,7 @@
 <script src="app.js"></script>
 
 <!-- Kleine Fusszeile, einfacheitshalber CSS integriert -->
-<p style="font-size: 0.8rem;position: fixed;bottom: 10;right:10"> erstellt von A. Hilgert / R. Jevdenic / T. Siefert</p>    
+<p style="font-size: 0.8rem;position: fixed;bottom:2em;right:2em"> erstellt von A. Hilgert / R. Jevdenic / T. Siefert</p>    
     
 </body>
 

@@ -111,9 +111,11 @@ function vac(a,b) {
 
 
 
-const coordinates = [ {a:2, b:1},  {a:3, b:1},  {a:6, b:2},  {a:2, b:2},   {a:4, b:2.5}, {a:7, b:3},  {a:1, b:3}, {a:4, b:4.5}, 
+const coordinates = [ 
+    {a:2, b:1},  {a:3, b:1},  {a:6, b:2},  {a:2, b:2},   {a:4, b:2.5}, {a:7, b:3},  {a:1, b:3}, {a:4, b:4.5}, 
      {a:1.5, b:4},  {a:6.5, b:4},  {a:2, b:5},   {a:2.5, b:6},  {a:6, b:5},  {a:5.5, b:6},  {a:0, b:1}, //Nr 14: Startpunkt hinzugefügt
-    {a:""},  {a:""},  {a:""},  {a:""}, {a:""}, {a:""}, {a:2, b:7.5}, {a:1, b:7.5},  {a:3, b:7.5},  {a:4, b:7.5}, {a:5, b:7.5},  {a:6, b:7.5},  {a:7, b:7.5}]
+    {a:""},  {a:""},  {a:""},  {a:""}, {a:""}, {a:""}, {a:2, b:7.5}, {a:1, b:7.5},  {a:3, b:7.5},  {a:4, b:7.5}, {a:5, b:7.5},  {a:6, b:7.5},  {a:7, b:7.5}
+]
 
 const linecolour = "grey";
 const linewidth = 7;
@@ -239,6 +241,20 @@ function loadlines(knots){
 //So habe ich die Funktionen getestet. Komischerweise funktioniert es aktuell nur wenn zuerst drawdown ausgeführt wird, 
 //warum weiss ich nicht (Spielt von der funktionalität her aber keine rolle aktuell)
 
+function gameinfo(i) {
+    eleminfo = document.getElementById("infobutton");
+    eleminfo.replaceWith(eleminfo.cloneNode(true));
+    if (i == "hide") {
+        fade("infotext","out")
+        document.getElementById("infobutton").innerHTML = "Spielinfo anzeigen";
+        document.getElementById("infobutton").addEventListener("click", function() {gameinfo("show")},)}
+    else if (i == "show") {
+        document.getElementById("infobutton").innerHTML = "Spielinfo ausblenden";
+        fade("infotext","in")
+        document.getElementById("infobutton").addEventListener("click", function() {gameinfo("hide")},)
+    }
+}
+
 function fade(stringid, type) {
     var getstr = document.getElementById(stringid);
     if (type == "in") {
@@ -294,10 +310,9 @@ function choice(x) {
     initialise();
 };
 
-
 function loadquestion(data) {
     reload(); // nach dem Klick auf eine Antwort, werden diese mit der Funktion reload wieder ausgeblendet, bis die neuen geladen wurden
-    fade("options","in"); 
+    document.getElementById("optb").style.display = "initial";
     var i = data["frageid"];
     if (i > 20) {loadresult(i)}
     else {
@@ -316,7 +331,8 @@ function loadquestion(data) {
             elemb.replaceWith(elemb.cloneNode(true));
             document.getElementById("optb").addEventListener("click", function() {choice(data["redirections"][1])},);
             document.getElementById("linec").style.display = "none";
-            document.getElementById("lined").style.display = "none";}
+            document.getElementById("lined").style.display = "none";
+            fade("options","in"); }
         else if (k == 3) {
             elema.innerHTML = data["opttexts"][0];
             elema.replaceWith(elema.cloneNode(true));
@@ -327,7 +343,8 @@ function loadquestion(data) {
             elemc.innerHTML = data["opttexts"][2];
             elemc.replaceWith(elemc.cloneNode(true));
             document.getElementById("optc").addEventListener("click", function() {choice(data["redirections"][2])},);
-            document.getElementById("lined").style.display = "none";}
+            document.getElementById("lined").style.display = "none";
+            fade("options","in"); }
         else if (k == 4) {
             elema.innerHTML =data["opttexts"][0];
             elema.replaceWith(elema.cloneNode(true));
@@ -340,7 +357,8 @@ function loadquestion(data) {
             document.getElementById("optc").addEventListener("click", function() {choice(data["redirections"][2])},);
             elemd.innerHTML = data["opttexts"][3];
             elemd.replaceWith(elemd.cloneNode(true));
-            document.getElementById("optd").addEventListener("click", function() {choice(data["redirections"][3])},);}
+            document.getElementById("optd").addEventListener("click", function() {choice(data["redirections"][3])},);
+            fade("options","in"); }
     }
 }
 
@@ -348,7 +366,7 @@ function initialise() {
     dots();
     var path = currentgame["trackrecord"];
     var count = (path.length); 
-    if (count == 1) { drawdown(0,1,0,0); fetcher(5,"fragen/1",0)}
+    if (count == 1) { drawdown(0,1,0,0)}
     else {
         var start = path[count-2]; var end = path[count-1];
         loadlines(path); 
@@ -381,6 +399,7 @@ function loadsite(site) {
     var getstats = document.getElementById("stats");
     var getresults = document.getElementById("result");
     var getrestart = document.getElementById("restartbutton");
+    var getopt = document.getElementById("options");
     if (site == "welcome") {
         getinfo.style.display = "initial";
         getgame.style.display = "none";
@@ -388,23 +407,25 @@ function loadsite(site) {
         getstats.style.display = "none";
         getresults.style.display = "none";
         getrestart.style.display = "none";
+        getopt.style.display = "none";
         document.getElementById("infotext").style.display = "none";
         fade("welcome","in")
         fade("info","in")
     }
     else if (site == "game") {
         getgame.style.display = "initial";
+        getopt.style.display = "none";
         getresults.style.display = "none"
         getwelcome.style.display = "none";
         getstats.style.display = "none";
         getresults.style.display = "none";
         getrestart.style.display = "initial";
-        document.getElementById("options").style.display = "none";
         fade("game","in")
     }
     else if (site == "stats") {
         getinfo.style.display = "none";
         getgame.style.display = "none";
+        getopt.style.display = "none";
         getwelcome.style.display = "none";
         getstats.style.display = "initial";
         getresults.style.display = "none";
@@ -413,6 +434,7 @@ function loadsite(site) {
     }
     else if (site == "result") {
         getgame.style.display = "initial";
+        getopt.style.display = "none";
         getwelcome.style.display = "none";
         getstats.style.display = "none";
         getresults.style.display = "initial";
@@ -440,7 +462,7 @@ function reloadGame(result) {
 }
 
 /*
-Fetcher methods Info:
+Fetcher Methods Info:
 1: existierenden Spielstand laden
    Beispiel: fetcher(1, "games/5", 0)
 2: neues Spiel auf Server laden 
@@ -460,6 +482,7 @@ Fetcher methods Info:
 8: Statistischen Count aktualisieren (Abfrage + überschreiben)
     Beispiel: fetcher(8, "statistik/21", 0)
 */
+
 async function fetcher(method, directory, data) {
     var link = "https://343505-26.web.fhgr.ch/api/covid/";
     var serverlink = link.concat(directory.toString());
@@ -514,23 +537,6 @@ async function fetcher(method, directory, data) {
     }
 }
 
-function gameinfo(i) {
-    eleminfo = document.getElementById("infobutton");
-    eleminfo.replaceWith(eleminfo.cloneNode(true));
-    if (i == "hide") {
-        fade("infotext","out")
-        document.getElementById("infobutton").innerHTML = "Spielinfo anzeigen";
-        document.getElementById("infobutton").addEventListener("click", function() {gameinfo("show")},)}
-    else if (i == "show") {
-        document.getElementById("infobutton").innerHTML = "Spielinfo ausblenden";
-        fade("infotext","in")
-        document.getElementById("infobutton").addEventListener("click", function() {gameinfo("hide")},)
-    }
-}
-
-//checkGame()
-
-fetcher(7,"statistik",0)
 function showstatistics(result) {
     var statdict = {}
     var dictstring = ""; //Löschen vor Abgabe, nur zum TEsten ob statistik richtig eingelesen wird
@@ -544,10 +550,13 @@ function showstatistics(result) {
     document.getElementById("statdata").innerHTML = dictstring;
 }
 
+checkGame()
+
+//fetcher(7,"statistik",0) // <- Mit dieser Funktion kommt man direkt auf die Statistik seite
+
 
 /*
 TO-DO-Liste:
-- CSS (Abbruchbutton) / Online-User Anzeigen?
 - THERESA: Visualisierung d3.js
     #1 Verteilung der Typen 
     #2 Zustimmungswert
