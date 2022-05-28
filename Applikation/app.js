@@ -265,6 +265,7 @@ function loadresult(result) {
     let i = result["resultid"];
     let type = result["resultname"];
     let text = result["resulttext"];
+    fetcher(8, ("statistik/"+i), 0);
     document.getElementById("options").style.display = "none";
     loadsite("result")
     document.getElementById("resb").innerHTML = type;
@@ -368,7 +369,7 @@ function validate() {
 function checkGame() {
     gameinfo("hide");
     var status = localStorage.getItem("gamesid");
-    if (status == null) {loadsite("welcome")}
+    if (status == null) {loadsite("welcome");fetcher(4, "statistik/1", 0) }
     else {loadsite("game"); fetcher(1, ("games/"+status), 0);}
 }
 
@@ -419,10 +420,10 @@ function createGame(count) {
     let name = document.getElementById("entername").value;
     let data = {"gamesid":currid, "username":name, "trackrecord":[1]};
     currentgame["gamesid"] = currid; currentgame["trackrecord"] = [1]; currentgame["username"] = name;
-    var cdata = {"username":"gcount","gamesid":"scount","trackrecord":currid};
+    //var cdata = {"username":"gcount","gamesid":"scount","trackrecord":currid};
     //localStorage.setItem("gamesid", currid);
     loadsite("game");
-    fetcher(2,"games",currentgame);fetcher(3, "games/scount", cdata); // <- muss überarbeitet werden
+    fetcher(2,"games",currentgame);fetcher(3, "statistik/1", {"statid":"1","statname":"scount","maincount":currid})
     initialise();
 }
 
@@ -443,15 +444,16 @@ Fetcher methods Info:
 3: Eintrag aktualisieren (Game, Count)
    Beispiel Game Aktualisieren: fetcher(3, "games/5", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
    Beispiel Count Aktualisieren: fetcher(3, "stastik/1", {statid: '1', statname: 'scount', maincount: 155})
-4: scount abfragen
-   Beispiel: fetcher(4, 0, 0) 
-   Beispiel NEU: fetcher(4, "statistik/1", 0) oder Beispiel NEU: fetcher(4, "statistik/25", 0) 
+4: scount abfragen + spiel starten
+   Beispiel NEU: fetcher(4, "statistik/1", 0) 
 5: Frage laden 
    Beispiel: fetcher(5, "fragen/1", 0)
 6: Resultat laden  
    Beispiel: fetcher(6, "results/21", 0)
 7: Statistik starten
    Beispiel: fetcher(7, "statistik", 0)
+8: Typecount aktualisieren
+    Beispiel: fetcher(8, "statistik/21", 0)
 */
 async function fetcher(method, directory, data) {
     var link = "https://343505-26.web.fhgr.ch/api/covid/";
@@ -477,7 +479,7 @@ async function fetcher(method, directory, data) {
     else if (method == 4) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
-        .then(result => {console.log("Fetcher4 successfull/Gamescount loaded: ", result["trackrecord"]);createGame(result["trackrecord"])})
+        .then(result => {console.log("Fetcher4 successfull/Gamescount loaded: ", result["maincount"]);createGame(result["maincount"])})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 5) {
@@ -498,7 +500,16 @@ async function fetcher(method, directory, data) {
         .then(result => {console.log("Fetcher7 successfull/Statistics downloaded: ", result);/*showstatistics(result)*/})
         .catch (error => {console.log ("error: " + error);})
     }
+    else if (method == 8) {
+        let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
+        .then(response => response.json())
+        .then(result => {console.log("Fetcher8 successfull/TypeCount loaded: ", result);
+        fetcher(3, ("statistik/"+result["statid"]), {statid: result["statid"], statname: result["statname"], maincount: (result["maincount"]+1)})
+    })
+        .catch (error => {console.log ("error: " + error);})
+    }
 }
+
 
 function gameinfo(i) {
     eleminfo = document.getElementById("infobutton");
@@ -514,9 +525,9 @@ function gameinfo(i) {
     }
 }
 
-//checkGame()
+checkGame()
 
-fetcher(7,"statistik",0)
+
 
 /*
 TO-DO-Liste:
