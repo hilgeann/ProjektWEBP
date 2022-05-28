@@ -129,8 +129,9 @@
           {
             "in": "path",
             "name": "gamesid",
-            "required": true
-          }
+            "required": true,
+            "type": "integer"
+            }
         ],
         "responses": {
           "200": {
@@ -155,7 +156,8 @@
           {
             "in": "path",
             "name": "gamesid",
-            "required": true
+            "required": true,
+            "type": "integer"
           }
         ],
         "responses": {
@@ -243,7 +245,8 @@
           {
             "in": "path",
             "name": "statid",
-            "required": true
+            "required": true,
+            "type": "integer"
           }
         ],
         "responses": {
@@ -269,7 +272,8 @@
           {
             "in": "path",
             "name": "statid",
-            "required": true
+            "required": true,
+            "type": "integer"
           }
         ],
         "responses": {
@@ -386,7 +390,8 @@
           {
             "in": "path",
             "name": "resultid",
-            "required": true
+            "required": true,
+            "type": "integer"
           }
         ],
         "responses": {
@@ -503,7 +508,8 @@
           {
             "in": "path",
             "name": "frageid",
-            "required": true
+            "required": true,
+            "type": "integer"
           }
         ],
         "responses": {
@@ -571,7 +577,7 @@
           "$ref": "#/definitions/statid"
         },
         "statname": {
-          "type": "integer",
+          "type": "string",
           "example":
             "Wellensurfer"
         },
