@@ -137,11 +137,11 @@ input:checked + .roundbutton:before  {
 /* Reloadbutton */
 
 div#restartbutton {
-    margin: 10em 0 0 0;
     position: static;
 }
 
 button#restart {
     width: 10em;
+    margin: 10em 0 0 0;
     position: static;
 }
