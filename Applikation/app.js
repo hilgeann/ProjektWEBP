@@ -1,6 +1,25 @@
+/* VERZEICHNIS
+TEIL 1: CANVAS VISUALISIERUNGEN
+TEIL 2: INTERAKTIVITÄT
+TEIL 3: GAMEPLAY
+TEIL 4: SERVERKOMMUNIKATION
+TEIL 5: DATENVISUALISIERUNG
+*/
+
+// ##### TEIL 1: CANVAS VISUALISIERUNGEN #####
+
+// Die Folgenden Variablen und Funktionen generieren Canvas-Animationen.
+
 const size = 50;
 const corra = size*0.8; 
 const corrb = size*0.2;
+const linecolour = "grey";
+const linewidth = 7;
+const coordinates = [ 
+    {a:2, b:1},  {a:3, b:1},  {a:6, b:2},  {a:2, b:2},   {a:4, b:2.5}, {a:7, b:3},  {a:1, b:3}, {a:4, b:4.5}, 
+     {a:1.5, b:4},  {a:6.5, b:4},  {a:2, b:5},   {a:2.5, b:6},  {a:6, b:5},  {a:5.5, b:6},  {a:0, b:1}, //Nr 14: Startpunkt hinzugefügt
+    {a:""},  {a:""},  {a:""},  {a:""}, {a:""}, {a:""}, {a:2, b:7.5}, {a:1, b:7.5},  {a:3, b:7.5},  {a:4, b:7.5}, {a:5, b:7.5},  {a:6, b:7.5},  {a:7, b:7.5}
+]
 
 function clear(layer) {
     var canvas = document.getElementById(layer)
@@ -109,16 +128,34 @@ function vac(a,b) {
     }
 }
 
+function dots() {  
+    let c = coordinates; let s = size;let a = (c[0].a)*s;let b = (c[0].b)*s; maindots(a,b,1);
+    for (let i = 1; i < 14; i++) {
+        let c = coordinates; let s = size;
+        let a = (c[i].a)*s;let b = (c[i].b)*s;
+        maindots(a,b,2);
+    }
+    for (let i = 21; i < 28; i++) {
+        let c = coordinates; let s = size;
+        let a = (c[i].a)*s;let b = (c[i].b)*s;
+        maindots(a,b,3);
+    }
+}
 
+function loadlines(knots){
+    var start = [0];
+    var knots = start.concat(knots);
+    for (let i = 0; i < (knots.length)-2; i++) {
+        let c = coordinates; let k = knots; let s = size; 
+        var a1 = (c[k[i]].a)*s; a2 = (c[k[i]].b)*s; b1 = (c[k[i+1]].a)*s; b2 = (c[k[i+1]].b)*s;
+        var a = a1; b = a2; c = a1; d = b2;        //start-/endpunkte vertikale linie
+        line(a,b,c,d);                             //vertikale linie
+        var a = a1; b = b2; c = b1; d = b2;        //start-/endpunkte horizontale linie
+        line(a,b,c,d);
+        maindots(c,d,1);
+    }
 
-const coordinates = [ 
-    {a:2, b:1},  {a:3, b:1},  {a:6, b:2},  {a:2, b:2},   {a:4, b:2.5}, {a:7, b:3},  {a:1, b:3}, {a:4, b:4.5}, 
-     {a:1.5, b:4},  {a:6.5, b:4},  {a:2, b:5},   {a:2.5, b:6},  {a:6, b:5},  {a:5.5, b:6},  {a:0, b:1}, //Nr 14: Startpunkt hinzugefügt
-    {a:""},  {a:""},  {a:""},  {a:""}, {a:""}, {a:""}, {a:2, b:7.5}, {a:1, b:7.5},  {a:3, b:7.5},  {a:4, b:7.5}, {a:5, b:7.5},  {a:6, b:7.5},  {a:7, b:7.5}
-]
-
-const linecolour = "grey";
-const linewidth = 7;
+}
 
 function dot(a,b,dotsize,colour) {
     var canvas = document.getElementById("back");
@@ -153,7 +190,9 @@ function maindots(a,b,type) {             //type 1: durchquerte dots; type 2: of
     else if (type == 2) { dot(a,b,20,"#d7966d"); dot(a,b,10,"#598ebb") }
     else if (type == 3) { dot(a,b,20,"#598ebb"); dot(a,b,10,"#d7966d") }
 }
-// Drawdown bewegt die Spielfigur auf die korrekte vertikale höhe und löst drawside aus
+
+//FUNKTION "DRAWDOWN()" UND "DRAWSIDE()": Drawdown zeihcnet vertikale Linie, drawside zeichnet horizontale Linie.
+//FOLGEN: DRAWSIDE() startet nach Ankunft Spielfigur im nächsten Punkt fetcher5 oder fetcher6 um Fragen resp. Resultate zu laden.
 
 function drawdown(p1,p2,i,j){
     let c = coordinates; let s = size;
@@ -171,7 +210,6 @@ function drawdown(p1,p2,i,j){
             drawdown(p1,p2,i,j)                    //nach 10 millisekunden wird drawdown mit aktualisierte i neu gestartet
         }, 10);}
 }
-
 
 function drawside(p1,p2,i,j){
     let c = coordinates; let s = size;
@@ -207,39 +245,7 @@ function drawside(p1,p2,i,j){
     }
 }
 
-function dots() {  
-    let c = coordinates; let s = size;let a = (c[0].a)*s;let b = (c[0].b)*s; maindots(a,b,1);
-    for (let i = 1; i < 14; i++) {
-        let c = coordinates; let s = size;
-        let a = (c[i].a)*s;let b = (c[i].b)*s;
-        maindots(a,b,2);
-    }
-    for (let i = 21; i < 28; i++) {
-        let c = coordinates; let s = size;
-        let a = (c[i].a)*s;let b = (c[i].b)*s;
-        maindots(a,b,3);
-    }
-}
-
-// Loadlines liest die bisherigen Punkte als Array ein und generiert eine Line die alle passierten Punkte auf einmal einblendet
-
-function loadlines(knots){
-    var start = [0];
-    var knots = start.concat(knots);
-    for (let i = 0; i < (knots.length)-2; i++) {
-        let c = coordinates; let k = knots; let s = size; 
-        var a1 = (c[k[i]].a)*s; a2 = (c[k[i]].b)*s; b1 = (c[k[i+1]].a)*s; b2 = (c[k[i+1]].b)*s;
-        var a = a1; b = a2; c = a1; d = b2;        //start-/endpunkte vertikale linie
-        line(a,b,c,d);                             //vertikale linie
-        var a = a1; b = b2; c = b1; d = b2;        //start-/endpunkte horizontale linie
-        line(a,b,c,d);
-        maindots(c,d,1);
-    }
-
-}
-
-//So habe ich die Funktionen getestet. Komischerweise funktioniert es aktuell nur wenn zuerst drawdown ausgeführt wird, 
-//warum weiss ich nicht (Spielt von der funktionalität her aber keine rolle aktuell)
+// ##### TEIL 2: INTERAKTIVITÄT #####
 
 function gameinfo(i) {
     eleminfo = document.getElementById("infobutton");
@@ -270,126 +276,6 @@ function fade(stringid, type) {
         setTimeout(function(){clearInterval(fader2)},1100)
         setTimeout(function(){getstr.style.display = "none"},1100)
     }
-}
-
-function reload() {
-    document.getElementById("linec").style.display = "initial";
-    document.getElementById("lined").style.display = "initial";
-}
-
-function loadresult(result) {
-    let i = result["resultid"];
-    let type = result["resultname"];
-    let text = result["resulttext"];
-    fetcher(8, ("statistik/"+i), 0);
-    fetcher(8, "statistik/2", 0);
-    document.getElementById("options").style.display = "none";
-    loadsite("result")
-    document.getElementById("resb").innerHTML = type;
-    document.getElementById("resc").innerHTML = text;
-    document.getElementById("restart").addEventListener("click", function() {
-        document.getElementById("options").style.display = "initial";
-        restart()
-    },); // der Button für den Neustart wird eingeblendet
-}
-
-function restart() {
-    localStorage.removeItem("gamesid");
-    clear("front"), clear("back");
-    clearInterval(onspot);
-    loadsite("welcome");
-    checkGame()
-}
-
-function choice(x) {
-    let cg = currentgame;
-    clearInterval(onspot);
-    fade("options","out");
-    cg["trackrecord"].push(x);
-    fetcher(3, ("games/"+cg["gamesid"]), cg);
-    initialise();
-};
-
-function loadquestion(data) {
-    reload(); // nach dem Klick auf eine Antwort, werden diese mit der Funktion reload wieder ausgeblendet, bis die neuen geladen wurden
-    document.getElementById("optb").style.display = "initial";
-    var i = data["frageid"];
-    if (i > 20) {loadresult(i)}
-    else {
-        let k = data["optnum"] 
-        var queststring = data["fragetext"] ;
-        document.getElementById("question").innerHTML = queststring;
-        var elema = document.getElementById("opta");
-        var elemb = document.getElementById("optb");
-        var elemc = document.getElementById("optc");
-        var elemd = document.getElementById("optd");
-        if (k == 2) {
-            elema.innerHTML = data["opttexts"][0];
-            elema.replaceWith(elema.cloneNode(true));
-            document.getElementById("opta").addEventListener("click", function() {choice(data["redirections"][0])},);
-            elemb.innerHTML = data["opttexts"][1];
-            elemb.replaceWith(elemb.cloneNode(true));
-            document.getElementById("optb").addEventListener("click", function() {choice(data["redirections"][1])},);
-            document.getElementById("linec").style.display = "none";
-            document.getElementById("lined").style.display = "none";
-            fade("options","in"); }
-        else if (k == 3) {
-            elema.innerHTML = data["opttexts"][0];
-            elema.replaceWith(elema.cloneNode(true));
-            document.getElementById("opta").addEventListener("click", function() {choice(data["redirections"][0])},);
-            elemb.innerHTML = data["opttexts"][1];
-            elemb.replaceWith(elemb.cloneNode(true));
-            document.getElementById("optb").addEventListener("click", function() {choice(data["redirections"][1])},);
-            elemc.innerHTML = data["opttexts"][2];
-            elemc.replaceWith(elemc.cloneNode(true));
-            document.getElementById("optc").addEventListener("click", function() {choice(data["redirections"][2])},);
-            document.getElementById("lined").style.display = "none";
-            fade("options","in"); }
-        else if (k == 4) {
-            elema.innerHTML =data["opttexts"][0];
-            elema.replaceWith(elema.cloneNode(true));
-            document.getElementById("opta").addEventListener("click", function() {choice(data["redirections"][0])},);
-            elemb.innerHTML = data["opttexts"][1];
-            elemb.replaceWith(elemb.cloneNode(true));
-            document.getElementById("optb").addEventListener("click", function() {choice(data["redirections"][1])},);
-            elemc.innerHTML = data["opttexts"][2];
-            elemc.replaceWith(elemc.cloneNode(true));
-            document.getElementById("optc").addEventListener("click", function() {choice(data["redirections"][2])},);
-            elemd.innerHTML = data["opttexts"][3];
-            elemd.replaceWith(elemd.cloneNode(true));
-            document.getElementById("optd").addEventListener("click", function() {choice(data["redirections"][3])},);
-            fade("options","in"); }
-    }
-}
-
-function initialise() {
-    dots();
-    var path = currentgame["trackrecord"];
-    var count = (path.length); 
-    if (count == 1) { drawdown(0,1,0,0)}
-    else {
-        var start = path[count-2]; var end = path[count-1];
-        loadlines(path); 
-        drawdown(start,end,0,0);
-    }
-    document.getElementById("userid").innerHTML = currentgame["gamesid"];
-    document.getElementById("username").innerHTML = currentgame["username"];
-    document.getElementById("trec").innerHTML = currentgame["trackrecord"];
-}
-
-const currentgame =  {"username":"","gamesid":"","trackrecord":""}
-
-function validate() {
-    let name = document.getElementById("entername").value;
-    if (name == "") {alert("Bitte Namen eingeben!")}
-    else {fetcher(4, "statistik/1", 0)}
-}
-
-function checkGame() {
-    gameinfo("hide");
-    var status = localStorage.getItem("gamesid");
-    if (status == null) {loadsite("welcome") }
-    else {loadsite("game"); fetcher(1, ("games/"+status), 0);}
 }
 
 function loadsite(site) {
@@ -443,16 +329,44 @@ function loadsite(site) {
     }
 }
 
+// ##### TEIL 3: GAMEPLAY #####
+const currentgame =  {"username":"","gamesid":"","trackrecord":""}
+
+//FUNKTION "VALIDATE()": Prüft ob das Namensfeld befüllt wurde.
+//FOLGEN: Sofern Name erfasst, mit fetcher() gameid abholen + neues Spiel starten.
+
+function validate() {
+    let name = document.getElementById("entername").value;
+    if (name == "") {alert("Bitte Namen eingeben!")}
+    else {fetcher(4, "statistik/1", 0)}
+}
+
+//FUNKTION "CHECKGAME()": Prüft ob im localstorage eine gameid hinterlegt wurde.
+//FOLGEN: Falls gameid vorhanden wird das Spiel vom Server geladen, sonst zur Namenserfassung auf Welcomeseite weitergeleitet.
+
+function checkGame() {
+    gameinfo("hide");
+    var status = localStorage.getItem("gamesid");
+    if (status == null) {loadsite("welcome") }
+    else {loadsite("game"); fetcher(1, ("games/"+status), 0);}
+}
+
+//FUNKTION "CREATEGAME()": Wird durch fetcher4 gestartet, speichert das Spiel in der lokalen Variabel (currentgame) + übermittelt via fetcher Spielstand + Spielstatistik.
+//FOLGEN: 2 FETCHES (Games&StatistiK) + Initalise() wird gestartet.
+
 function createGame(count) {
     let currid = parseInt(count)+1;
     let name = document.getElementById("entername").value;
     let data = {"gamesid":currid, "username":name, "trackrecord":[1]};
     currentgame["gamesid"] = currid; currentgame["trackrecord"] = [1]; currentgame["username"] = name;
-    //localStorage.setItem("gamesid", currid);
+    //localStorage.setItem("gamesid", currid);   // VOR ABGABE LÖSCHEN: das habe ich inaktiviert weil man sonst immer im selben spiel landet
     loadsite("game");
     fetcher(2,"games",currentgame);fetcher(3, "statistik/1", {"statid":"1","statname":"scount","maincount":currid})
     initialise();
 }
+
+//FUNKTION "RELOADGAME()": Von checkGame() aus wird via fetcher1 ein bestehendes Spiel vom Server geladen + reloadGame gestartet.
+//FOLGEN: initalise() wird gestartet.
 
 function reloadGame(result) {
     currentgame["gamesid"] = result["gamesid"]; 
@@ -461,24 +375,158 @@ function reloadGame(result) {
     initialise()
 }
 
-/*
-Fetcher Methods Info:
-1: existierenden Spielstand laden
+//FUNKTION "INITIALISE()": Zeichnet die Punkte und den bereits zurückgelegten Weg ein.
+//FOLGEN: Startet drawdown() und drawside()
+
+function initialise() {
+    dots();
+    var path = currentgame["trackrecord"];
+    var count = (path.length); 
+    if (count == 1) { drawdown(0,1,0,0)}
+    else {
+        var start = path[count-2]; var end = path[count-1];
+        loadlines(path); 
+        drawdown(start,end,0,0);
+    }
+    document.getElementById("userid").innerHTML = currentgame["gamesid"];
+    document.getElementById("username").innerHTML = currentgame["username"];
+    document.getElementById("trec").innerHTML = currentgame["trackrecord"];
+}
+
+//FUNKTION "LOADQUESTION()": Wird durch fetcher5 gestartet, zeigt die Frage + Antwortbuttons an, fügt Eventhandler ein.
+//FOLGEN: startet choice() bei klick.
+
+function loadquestion(data) {
+    reload(); // nach dem Klick auf eine Antwort, werden diese mit der Funktion reload wieder ausgeblendet, bis die neuen geladen wurden
+    document.getElementById("optb").style.display = "initial";
+    var i = data["frageid"];
+    if (i > 20) {loadresult(i)}
+    else {
+        let k = data["optnum"] 
+        var queststring = data["fragetext"] ;
+        document.getElementById("question").innerHTML = queststring;
+        var elema = document.getElementById("opta");
+        var elemb = document.getElementById("optb");
+        var elemc = document.getElementById("optc");
+        var elemd = document.getElementById("optd");
+        if (k == 2) {
+            elema.innerHTML = data["opttexts"][0];
+            elema.replaceWith(elema.cloneNode(true));
+            document.getElementById("opta").addEventListener("click", function() {choice(data["redirections"][0])},);
+            elemb.innerHTML = data["opttexts"][1];
+            elemb.replaceWith(elemb.cloneNode(true));
+            document.getElementById("optb").addEventListener("click", function() {choice(data["redirections"][1])},);
+            document.getElementById("linec").style.display = "none";
+            document.getElementById("lined").style.display = "none";
+            fade("options","in"); }
+        else if (k == 3) {
+            elema.innerHTML = data["opttexts"][0];
+            elema.replaceWith(elema.cloneNode(true));
+            document.getElementById("opta").addEventListener("click", function() {choice(data["redirections"][0])},);
+            elemb.innerHTML = data["opttexts"][1];
+            elemb.replaceWith(elemb.cloneNode(true));
+            document.getElementById("optb").addEventListener("click", function() {choice(data["redirections"][1])},);
+            elemc.innerHTML = data["opttexts"][2];
+            elemc.replaceWith(elemc.cloneNode(true));
+            document.getElementById("optc").addEventListener("click", function() {choice(data["redirections"][2])},);
+            document.getElementById("lined").style.display = "none";
+            fade("options","in"); }
+        else if (k == 4) {
+            elema.innerHTML =data["opttexts"][0];
+            elema.replaceWith(elema.cloneNode(true));
+            document.getElementById("opta").addEventListener("click", function() {choice(data["redirections"][0])},);
+            elemb.innerHTML = data["opttexts"][1];
+            elemb.replaceWith(elemb.cloneNode(true));
+            document.getElementById("optb").addEventListener("click", function() {choice(data["redirections"][1])},);
+            elemc.innerHTML = data["opttexts"][2];
+            elemc.replaceWith(elemc.cloneNode(true));
+            document.getElementById("optc").addEventListener("click", function() {choice(data["redirections"][2])},);
+            elemd.innerHTML = data["opttexts"][3];
+            elemd.replaceWith(elemd.cloneNode(true));
+            document.getElementById("optd").addEventListener("click", function() {choice(data["redirections"][3])},);
+            fade("options","in"); }
+    }
+}
+
+//FUNKTION "CHOICE()": Aktualisiert lokalen Spielverlauf currentgame + sendet ihn an server via fetcher3.
+//FOLGEN: startet initialise()
+
+function choice(x) {
+    let cg = currentgame;
+    clearInterval(onspot);
+    fade("options","out");
+    cg["trackrecord"].push(x);
+    fetcher(3, ("games/"+cg["gamesid"]), cg);
+    initialise();
+};
+
+//FUNKTION "RELOAD()": Setzt dritten + vierten Button zurück falls diese ausgeblendet wurden.
+
+function reload() {
+    document.getElementById("linec").style.display = "initial";
+    document.getElementById("lined").style.display = "initial";
+}
+
+//FUNKTION "LOADRESULT()": Lädt die Resultatseite, Aktualisiert die Statistiken mittels fetcher8.
+
+function loadresult(result) {
+    let i = result["resultid"];
+    let type = result["resultname"];
+    let text = result["resulttext"];
+    fetcher(8, ("statistik/"+i), 0);
+    fetcher(8, "statistik/2", 0);
+    document.getElementById("options").style.display = "none";
+    loadsite("result")
+    document.getElementById("resb").innerHTML = type;
+    document.getElementById("resc").innerHTML = text;
+    document.getElementById("restart").addEventListener("click", function() {
+        document.getElementById("options").style.display = "initial";
+        restart()
+    },); // der Button für den Neustart wird eingeblendet
+}
+
+//FUNKTION "RESTART()": löscht localStorage Spielstand, setzt alles zurück, lädt Welcome-Seite neu.
+
+function restart() {
+    localStorage.removeItem("gamesid");
+    clear("front"), clear("back");
+    clearInterval(onspot);
+    loadsite("welcome");
+    checkGame()
+}
+
+// ##### TEIL 4: SERVERKOMMUNIKATION #####
+
+/* FETCHER METHODS INFO:
+
+1: Existierenden Spielstand laden
    Beispiel: fetcher(1, "games/5", 0)
+   FOLGEN: startet reloadGame()
+
 2: neues Spiel auf Server laden 
    Beispiel: fetcher(2, "games", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
    Beispiel: fetcher(2, "games", data) // Array als Variabel Data
+
 3: Eintrag aktualisieren (Game, Count)
    Beispiel Game Aktualisieren: fetcher(3, "games/5", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
    Beispiel Count Aktualisieren: fetcher(3, "stastik/1", {statid: '1', statname: 'scount', maincount: 155})
+
 4: scount abfragen + spiel starten
-   Beispiel NEU: fetcher(4, "statistik/1", 0) 
+   Beispiel: fetcher(4, "statistik/1", 0) 
+   FOLGEN: startet createGame()
+
 5: Frage laden 
    Beispiel: fetcher(5, "fragen/1", 0)
+   FOLGEN: startet loadquestion()
+
 6: Resultat laden  
    Beispiel: fetcher(6, "results/21", 0)
+   FOLGEN: loadresult()
+
 7: Statistik starten
    Beispiel: fetcher(7, "statistik", 0)
+   FOLGEN: showstatistics()
+
 8: Statistischen Count aktualisieren (Abfrage + überschreiben)
     Beispiel: fetcher(8, "statistik/21", 0)
 */
@@ -537,6 +585,8 @@ async function fetcher(method, directory, data) {
     }
 }
 
+// ##### TEIL 5: DATENVISUALISIERUNG #####
+
 function showstatistics(result) {
     var statdict = {}
     var dictstring = ""; //Löschen vor Abgabe, nur zum TEsten ob statistik richtig eingelesen wird
@@ -550,10 +600,10 @@ function showstatistics(result) {
     document.getElementById("statdata").innerHTML = dictstring;
 }
 
+// ##### SPIELSTART #####
+
 checkGame()
-
-//fetcher(7,"statistik",0) // <- Mit dieser Funktion kommt man direkt auf die Statistik seite
-
+//fetcher(7,"statistik",0) // <- @THERESA: Mit dieser Funktion kommt man direkt auf die Statistik seite, einfach checkGame() deaktivieren.
 
 /*
 TO-DO-Liste:
