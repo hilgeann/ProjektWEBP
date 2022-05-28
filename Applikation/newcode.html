@@ -80,29 +80,6 @@
 </body>
 
 <script>
-
-// Array mit den Ergebnissen bzw. Pandemietypen.
-const results = {
-a: "Vorsichtige",
-b: "Wellensurfer",
-c: "Wiederwillige",
-d: "Superspreader",
-e: "Uninformierte",
-f: "Kritikerin",
-g: "Naturheilpraktikerin"
-}
-
-// Array mit den Beschreibungen der Pandemietypen.
-const resultstring = {
-    a: "Wow! Du nimmst es genau. <br> Du bist der Typ, der immer Vorsicht walten lässt und das Wohl anderer über das Eigene stellt. <br> Super!",
-    b: "Hut ab. <br> Obwohl du dir ein wenig Freiheiten gönnst und dein Leben möglichst normal weiter lebst, bist du vorsichtig, wenn es darauf ankommt. <br> Gut!",
-    c: "Du trägst die Massnahmen zwar mehrheitlich mit, obwohl du keine Lust mehr hast. <br> Motivier dich noch ein wenig, denn wir sind im Endspurt.",
-    d: "Vorsichtig ist anders, du kooperierst leider nicht. <br> Bitte halte dich an die geltenden Massnahmen, es zu deinem Wohl und zum Schutz deiner Mitmenschen!",
-    e: "Du hast wohl nicht viel mitbekommen. <br> Informiere dich doch unter www.bag.admin.ch über die aktuelle Situation.",
-    f: "Ups! Leider lebst du in einer anderen Realität, als die Mehrheit der Bevölkerung. <br> Wir empfehlen dir eine Social-Media-Diät.",
-    g: "Wir stellen fest, dass du die Massnahmen missachtest und eine Grundabneigung gegen Wissenschaft sowie Schulmedizin hast. <br> Bitte informiere dich künftig nur bei offiziellen Stellen und überdenke deine Überzeugungen."
-}
-
 const size = 50;
 const corra = size*0.8; 
 const corrb = size*0.2;
@@ -311,9 +288,9 @@ function drawside(p1,p2,i,j){
     var moveac = disac / j;                        //Abstand der Teilschritte damit bei verschiedenen Distanze gleichmässige Bewegung generiert wird
     if (a > c) {                                   // a grösser als c: nach links gehen
         if (i == j) { 
-            dot(a1,a2,10,linecolour); { 
-                fetcher(5,("fragen/"+p2),0)
-                onspot = setInterval(function () {vac(b1,b2)}, 100)}}  //onspot interval aktualisiert die spielfigur im stillstand
+            dot(a1,a2,10,linecolour); 
+            if (p2 < 20) {fetcher(5,("fragen/"+p2),0)} else {fetcher(6,("results/"+p2),0)};
+            { onspot = setInterval(function () {vac(b1,b2)}, 100)}}  //onspot interval aktualisiert die spielfigur im stillstand
         else {
             var i = i + 1;
             const myTimeout = setTimeout(function() {
@@ -324,9 +301,9 @@ function drawside(p1,p2,i,j){
     }
     else if (c > a) {                                 // c grösser als a: nach rechts gehen
         if (i == j) {
-            dot(a1,a2,10,linecolour); {
-                fetcher(5,("fragen/"+p2),0)
-                onspot = setInterval(function () {vac(b1,b2)}, 100)}}  //onspot interval aktualisiert die spielfigur im stillstand
+            dot(a1,a2,10,linecolour);
+            if (p2 < 20) {fetcher(5,("fragen/"+p2),0)} else {fetcher(6,("results/"+p2),0)};
+             { onspot = setInterval(function () {vac(b1,b2)}, 100)}}  //onspot interval aktualisiert die spielfigur im stillstand
         else {
             var i = i + 1;
             const myTimeout = setTimeout(function() {
@@ -393,15 +370,10 @@ function reload() {
     document.getElementById("lined").style.display = "initial";
 }
 
-function loadresult(i) {
-    let rs = resultstring; let re = results; 
-    if (i == 21) {var type = re.a; var text = rs.a}
-    else if (i == 22) {var type = re.b; var text = rs.b}
-    else if (i == 23) {var type = re.c; var text = rs.c}
-    else if (i == 24) {var type = re.d; var text = rs.d}
-    else if (i == 25) {var type = re.e; var text = rs.e}
-    else if (i == 26) {var type = re.f; var text = rs.f}
-    else if (i == 27) {var type = re.g; var text = rs.g};
+function loadresult(result) {
+    let i = result["resultid"];
+    let type = result["resultname"];
+    let text = result["resulttext"];
     document.getElementById("options").style.display = "none";
     loadsite("result")
     document.getElementById("resb").innerHTML = type;
@@ -542,7 +514,7 @@ function loadsite(site) {
         getwelcome.style.display = "none";
         getstats.style.display = "none";
         getresults.style.display = "initial";
-        fade("welcome","in")
+        fade("result","in")
     }
 }
 
@@ -576,9 +548,11 @@ Fetcher methods info:
    Beispiel: fetcher(3, "games/5", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
 4: scount abfragen
    Beispiel: fetcher(4, 0, 0) 
-5: frage laden fetcher
+5: Frage laden 
    Beispiel: fetcher(5, "fragen/1", 0)
-6: etc... 
+6: Resultat laden  
+   Beispiel: fetcher(6, "results/21", 0)
+7: etc... 
 */
 async function fetcher(method, directory, data) {
     var link = "https://343505-26.web.fhgr.ch/api/covid/";
@@ -586,31 +560,38 @@ async function fetcher(method, directory, data) {
     if (method == 1) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
-        .then(result => {reloadGame(result)})
+        .then(result => {onsole.log("Fetcher1 successfull/Gamer recognized: ", result);reloadGame(result)})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 2) { 
         fetch (serverlink, {method:'POST',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
         .then(response => response.json())
-        .then(data => {console.log ('Success:', data);})
+        .then(data => {console.log("Fetcher2 successfull/Game has been POST: ", data);})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 3) {
         fetch (serverlink,{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
         .then(response => response.json())
-        .then(data => {console.log ('Success:', data);})
+        .then(data => {console.log ("Fetcher3 successfull/Game has been PUT: ", data);})
         .catch (error => {console.log ("error: " + error);});
     }
     else if (method == 4) {
         fetch ("https://343505-26.web.fhgr.ch/api/covid/games/scount", {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
-        .then(result => {createGame(result["trackrecord"])})
+        .then(result => {console.log("Fetcher4 successfull/Gamescount loaded: ", result["trackrecord"]);createGame(result["trackrecord"])})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 5) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
-        .then(result => {console.log("Question successfully loaded: " + result["frageid"]);loadquestion(result)
+        .then(result => {console.log("Fetcher5 successfull/Question loaded#" + result["frageid"]);loadquestion(result)
+        })
+        .catch (error => {console.log ("error: " + error);})
+    }
+    else if (method == 6) {
+        let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
+        .then(response => response.json())
+        .then(result => {console.log("Fetcher6 successfull/Result loaded#" + result["resultid"]);loadresult(result);
         })
         .catch (error => {console.log ("error: " + error);})
     }
