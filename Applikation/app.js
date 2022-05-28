@@ -375,11 +375,13 @@ function loadsite(site) {
     var getwelcome = document.getElementById("welcome");
     var getstats = document.getElementById("stats");
     var getresults = document.getElementById("result");
+    var getrestart = document.getElementById("restartbutton");
     if (site == "welcome") {
         getgame.style.display = "none";
         getwelcome.style.display = "initial";
         getstats.style.display = "none";
         getresults.style.display = "none";
+        getrestart.style.display = "none";
         document.getElementById("infotext").style.display = "none";
         fade("welcome","in")
     }
@@ -389,6 +391,7 @@ function loadsite(site) {
         getwelcome.style.display = "none";
         getstats.style.display = "none";
         getresults.style.display = "none";
+        getrestart.style.display = "initial";
         fade("game","in")
     }
     else if (site == "stats") {
@@ -396,6 +399,7 @@ function loadsite(site) {
         getwelcome.style.display = "none";
         getstats.style.display = "initial";
         getresults.style.display = "none";
+        getrestart.style.display = "initial";
         fade("stats","in")
     }
     else if (site == "result") {
@@ -403,6 +407,7 @@ function loadsite(site) {
         getwelcome.style.display = "none";
         getstats.style.display = "none";
         getresults.style.display = "initial";
+        getrestart.style.display = "initial";
         fade("result","in")
     }
 }
