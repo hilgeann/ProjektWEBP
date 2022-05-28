@@ -109,6 +109,8 @@ function vac(a,b) {
     }
 }
 
+
+
 const coordinates = [ {a:2, b:1},  {a:3, b:1},  {a:6, b:2},  {a:2, b:2},   {a:4, b:2.5}, {a:7, b:3},  {a:1, b:3}, {a:4, b:4.5}, 
      {a:1.5, b:4},  {a:6.5, b:4},  {a:2, b:5},   {a:2.5, b:6},  {a:6, b:5},  {a:5.5, b:6},  {a:0, b:1}, //Nr 14: Startpunkt hinzugefügt
     {a:""},  {a:""},  {a:""},  {a:""}, {a:""}, {a:""}, {a:2, b:7.5}, {a:1, b:7.5},  {a:3, b:7.5},  {a:4, b:7.5}, {a:5, b:7.5},  {a:6, b:7.5},  {a:7, b:7.5}]
@@ -360,7 +362,7 @@ const currentgame =  {"username":"","gamesid":"","trackrecord":""}
 function validate() {
     let name = document.getElementById("entername").value;
     if (name == "") {alert("Bitte Namen eingeben!")}
-    else {fetcher(4,0,0)}
+    else {fetcher(4,"statistik/1",0)}
 }
 
 function checkGame() {
@@ -420,7 +422,7 @@ function createGame(count) {
     var cdata = {"username":"gcount","gamesid":"scount","trackrecord":currid};
     //localStorage.setItem("gamesid", currid);
     loadsite("game");
-    fetcher(2,"games",currentgame);fetcher(3, "games/scount", cdata);
+    fetcher(2,"games",currentgame);fetcher(3, "games/scount", cdata); // <- muss überarbeitet werden
     initialise();
 }
 
@@ -442,11 +444,13 @@ Fetcher methods info:
    Beispiel: fetcher(3, "games/5", {"username":"tester","gamesid":288,"trackrecord":[1,3,4]})
 4: scount abfragen
    Beispiel: fetcher(4, 0, 0) 
+  Beispiel NEU: fetcher(4, "statistik/1", 0) oder Beispiel NEU: fetcher(4, "statistik/25", 0) 
 5: Frage laden 
    Beispiel: fetcher(5, "fragen/1", 0)
 6: Resultat laden  
    Beispiel: fetcher(6, "results/21", 0)
-7: etc... 
+7: Statistik update
+   Beispiel: fetcher(7, "statistik/1", 0)
 */
 async function fetcher(method, directory, data) {
     var link = "https://343505-26.web.fhgr.ch/api/covid/";
@@ -470,7 +474,7 @@ async function fetcher(method, directory, data) {
         .catch (error => {console.log ("error: " + error);});
     }
     else if (method == 4) {
-        let response = await fetch ("https://343505-26.web.fhgr.ch/api/covid/games/scount", {method:'GET', headers: {'Content-Type': 'application/json'}})
+        let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
         .then(result => {console.log("Fetcher4 successfull/Gamescount loaded: ", result["trackrecord"]);createGame(result["trackrecord"])})
         .catch (error => {console.log ("error: " + error);})
@@ -488,29 +492,20 @@ async function fetcher(method, directory, data) {
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 7) {
-        let response = await fetch ("https://343505-26.web.fhgr.ch/api/covid/statistik/1",{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
+        let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
-        .then(data => {console.log ("Fetcher7 successfull/Scount has been PUT: ", data);})
-        .catch (error => {console.log ("error: " + error);});
+        .then(result => {console.log("Fetcher7 successfull/Stats updated: ", result["statid"]);/*updatestats(result)*/})
+        .catch (error => {console.log ("error: " + error);})
     }
-    else if (method == 8) {
-        let response = await fetch ("https://343505-26.web.fhgr.ch/api/covid/statistik/2",{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
-        .then(response => response.json())
-        .then(data => {console.log ("Fetcher8 successfull/Ecount has been PUT: ", data);})
-        .catch (error => {console.log ("error: " + error);});
-    }
-    else if (method == 9) {
-        let response = await fetch ("https://343505-26.web.fhgr.ch/api/covid/statistik/3",{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
-        .then(response => response.json())
-        .then(data => {console.log ("Fetcher9 successfull/Rcount has been PUT: ", data);})
-        .catch (error => {console.log ("error: " + error);});
-    }
-    else if (method == 10) {
-        let response = await fetch ("https://343505-26.web.fhgr.ch/api/covid/statistik/21",{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
-        .then(response => response.json())
-        .then(data => {console.log ("Fetcher10 successfull/Vorsichtige has been PUT: ", data);})
-        .catch (error => {console.log ("error: " + error);});
-    }
+}
+
+const startcount = 0;
+const endcount = 0;
+const onlinecount = 0;
+
+function updatestats (result) {
+    //lokale variable counts werden überschrieben
+    //
 }
 
 function gameinfo(i) {
@@ -527,7 +522,9 @@ function gameinfo(i) {
     }
 }
 
-checkGame()
+//checkGame()
+
+fetcher(7,"statistik/1",0)
 
 /*
 TO-DO-Liste:
