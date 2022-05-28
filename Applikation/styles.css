@@ -136,8 +136,21 @@ input:checked + .roundbutton:before  {
 
 /* Reloadbutton */
 
-button#restart {
-    margin: 2rem 6rem 2rem 6rem;
-    width: 10em;
+div#restartbutton {
     position: static;
 }
+
+button#restart {
+    width: 10em;
+    margin: 3em 0 0 0;
+    position: fixed;
+    bottom: 0;
+    background-color: #976dd7;
+    transition: all 1s;
+    cursor: pointer;
+    opacity:1;
+}
+
+button#restart:hover {
+	background-color: #3a5873;
+} 
