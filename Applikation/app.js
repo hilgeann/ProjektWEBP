@@ -266,6 +266,7 @@ function loadresult(result) {
     let type = result["resultname"];
     let text = result["resulttext"];
     fetcher(8, ("statistik/"+i), 0);
+    fetcher(8, "statistik/2", 0);
     document.getElementById("options").style.display = "none";
     loadsite("result")
     document.getElementById("resb").innerHTML = type;
@@ -363,13 +364,13 @@ const currentgame =  {"username":"","gamesid":"","trackrecord":""}
 function validate() {
     let name = document.getElementById("entername").value;
     if (name == "") {alert("Bitte Namen eingeben!")}
-    else {fetcher(4,"statistik/1",0)}
+    else {fetcher(4, "statistik/1", 0)}
 }
 
 function checkGame() {
     gameinfo("hide");
     var status = localStorage.getItem("gamesid");
-    if (status == null) {loadsite("welcome");fetcher(4, "statistik/1", 0) }
+    if (status == null) {loadsite("welcome") }
     else {loadsite("game"); fetcher(1, ("games/"+status), 0);}
 }
 
@@ -452,7 +453,7 @@ Fetcher methods Info:
    Beispiel: fetcher(6, "results/21", 0)
 7: Statistik starten
    Beispiel: fetcher(7, "statistik", 0)
-8: Typecount aktualisieren
+8: Statistischen Count aktualisieren (Abfrage + überschreiben)
     Beispiel: fetcher(8, "statistik/21", 0)
 */
 async function fetcher(method, directory, data) {
@@ -531,7 +532,7 @@ checkGame()
 
 /*
 TO-DO-Liste:
-- RADE: loadresult-> typ stat abfragen+aktualisieren und abgeschlossene spiele aktualisieren / CreateGame: startcount aktualisieret
+- RADE: Fadein erste Frage glitch
 - (RADE: Online-User Anzeigen?)
 - THERESA: Visualisierung d3.js
     #1 Verteilung der Typen 
@@ -539,6 +540,5 @@ TO-DO-Liste:
 - ANNA: Dokumentation?
 - KEINE PRIO:
   #Textcodierung Server (ae,oe,ue)
-  #Fadein erste Frage glitch
   #Kosmetik/CSS -> Darstellung
 */
