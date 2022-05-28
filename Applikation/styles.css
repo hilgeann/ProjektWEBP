@@ -136,7 +136,7 @@ input:checked + .roundbutton:before  {
 
 /* Reloadbutton */
 
-#restartbutton {
+button#restart {
     margin: 2rem 0 2rem 0;
     height: 3rem;
     position: relative;
