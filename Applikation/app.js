@@ -191,7 +191,7 @@ function maindots(a,b,type) {             //type 1: durchquerte dots; type 2: of
     else if (type == 3) { dot(a,b,20,"#598ebb"); dot(a,b,10,"#d7966d") }
 }
 
-//FUNKTION "DRAWDOWN()" UND "DRAWSIDE()": Drawdown zeihcnet vertikale Linie, drawside zeichnet horizontale Linie.
+//FUNKTION "DRAWDOWN()" UND "DRAWSIDE()": Drawdown zeichnet vertikale Linie, drawside zeichnet horizontale Linie.
 //FOLGEN: DRAWSIDE() startet nach Ankunft Spielfigur im nächsten Punkt fetcher5 oder fetcher6 um Fragen resp. Resultate zu laden.
 
 function drawdown(p1,p2,i,j){
@@ -246,6 +246,8 @@ function drawside(p1,p2,i,j){
 }
 
 // ##### TEIL 2: INTERAKTIVITÄT #####
+
+// Ein- und Ausblenden von Schaltflächen, laden der richtigen Ansicht
 
 function gameinfo(i) {
     eleminfo = document.getElementById("infobutton");
