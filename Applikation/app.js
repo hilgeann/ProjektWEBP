@@ -375,12 +375,14 @@ function checkGame() {
 }
 
 function loadsite(site) {
+    var getinfo = document.getElementById("info");
     var getgame = document.getElementById("game");
     var getwelcome = document.getElementById("welcome");
     var getstats = document.getElementById("stats");
     var getresults = document.getElementById("result");
     var getrestart = document.getElementById("restartbutton");
     if (site == "welcome") {
+        getinfo.style.display = "initial";
         getgame.style.display = "none";
         getwelcome.style.display = "initial";
         getstats.style.display = "none";
@@ -388,6 +390,7 @@ function loadsite(site) {
         getrestart.style.display = "none";
         document.getElementById("infotext").style.display = "none";
         fade("welcome","in")
+        fade("info","in")
     }
     else if (site == "game") {
         getgame.style.display = "initial";
@@ -396,9 +399,11 @@ function loadsite(site) {
         getstats.style.display = "none";
         getresults.style.display = "none";
         getrestart.style.display = "initial";
+        document.getElementById("options").style.display = "none";
         fade("game","in")
     }
     else if (site == "stats") {
+        getinfo.style.display = "none";
         getgame.style.display = "none";
         getwelcome.style.display = "none";
         getstats.style.display = "initial";
@@ -421,7 +426,6 @@ function createGame(count) {
     let name = document.getElementById("entername").value;
     let data = {"gamesid":currid, "username":name, "trackrecord":[1]};
     currentgame["gamesid"] = currid; currentgame["trackrecord"] = [1]; currentgame["username"] = name;
-    //var cdata = {"username":"gcount","gamesid":"scount","trackrecord":currid};
     //localStorage.setItem("gamesid", currid);
     loadsite("game");
     fetcher(2,"games",currentgame);fetcher(3, "statistik/1", {"statid":"1","statname":"scount","maincount":currid})
@@ -498,19 +502,17 @@ async function fetcher(method, directory, data) {
     else if (method == 7) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
-        .then(result => {console.log("Fetcher7 successfull/Statistics downloaded: ", result);/*showstatistics(result)*/})
+        .then(result => {console.log("Fetcher7 successfull/Statistics downloaded: ", result);showstatistics(result)})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 8) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
         .then(result => {console.log("Fetcher8 successfull/TypeCount loaded: ", result);
-        fetcher(3, ("statistik/"+result["statid"]), {statid: result["statid"], statname: result["statname"], maincount: (result["maincount"]+1)})
-    })
+        fetcher(3, ("statistik/"+result["statid"]), {statid: result["statid"], statname: result["statname"], maincount: (result["maincount"]+1)})})
         .catch (error => {console.log ("error: " + error);})
     }
 }
-
 
 function gameinfo(i) {
     eleminfo = document.getElementById("infobutton");
@@ -526,14 +528,26 @@ function gameinfo(i) {
     }
 }
 
-checkGame()
+//checkGame()
 
+fetcher(7,"statistik",0)
+function showstatistics(result) {
+    var statdict = {}
+    var dictstring = ""; //Löschen vor Abgabe, nur zum TEsten ob statistik richtig eingelesen wird
+    for (let i = 0; i < (result.length); i++) {
+        console.log(result[i]["statid"])
+        var substat = {statname: result[i]["statname"], maincount: result[i]["maincount"]}
+        statdict[result[i]["statid"]] = substat;
+        let string = ( substat["statname"] + ": "+ substat["maincount"]); var dictstring = dictstring + "</br>"+ string; //Löschen vor Abgabe siehe oben
+    }
+    loadsite("stats")
+    document.getElementById("statdata").innerHTML = dictstring;
+}
 
 
 /*
 TO-DO-Liste:
-- RADE: Fadein erste Frage glitch
-- (RADE: Online-User Anzeigen?)
+- CSS (Abbruchbutton) / Online-User Anzeigen?
 - THERESA: Visualisierung d3.js
     #1 Verteilung der Typen 
     #2 Zustimmungswert
