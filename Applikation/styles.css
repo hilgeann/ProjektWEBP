@@ -155,3 +155,16 @@ button#restart {
 button#restart:hover {
 	background-color: #3a5873;
 } 
+
+
+/*CSS für die Statistik*/
+.inside{
+font-size: 25px;
+font-weight: bold;
+fill: white;
+}
+
+.label{
+    font-size: 25px;
+    font-weight: bold;  
+} 

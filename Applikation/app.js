@@ -604,8 +604,8 @@ function showstatistics(result) {
 
 // ##### SPIELSTART #####
 
-checkGame()
-//fetcher(7,"statistik",0) // <- @THERESA: Mit dieser Funktion kommt man direkt auf die Statistik seite, einfach checkGame() deaktivieren.
+//checkGame()
+fetcher(7,"statistik",0) // <- @THERESA: Mit dieser Funktion kommt man direkt auf die Statistik seite, einfach checkGame() deaktivieren.
 
 /*
 TO-DO-Liste:
