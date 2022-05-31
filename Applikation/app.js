@@ -575,7 +575,7 @@ async function fetcher(method, directory, data) {
     else if (method == 7) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
-        .then(result => {console.log("Fetcher7 successfull/Statistics downloaded: ", result);showstatistics(result)})
+        .then(result => {console.log("Fetcher7 successfull/Statistics downloaded: ", result);visualization(result)})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 8) {
@@ -619,10 +619,81 @@ function showstatistics(result) {
     return statdict
 }
 
+
+function visualization(result) {
+    statdict = [];
+    for (let i = 0; i < (result.length);i++) {
+        if (result[i]["statid"] == "21" ) {statdict.push(result[i])}
+        else if (result[i]["statid"] == "22" ) {statdict.push(result[i])}
+        else if (result[i]["statid"] == "23" ) {statdict.push(result[i])}
+        else if (result[i]["statid"] == "24" ) {statdict.push(result[i])}
+        else if (result[i]["statid"] == "25" ) {statdict.push(result[i])}
+        else if (result[i]["statid"] == "26" ) {statdict.push(result[i])}
+        else if (result[i]["statid"] == "27" ) {statdict.push(result[i])}
+        else if (result[i]["statid"] == "28" ) {statdict.push(result[i])}
+        console.log(result[i])
+    }
+    //Die Grösse des Kuchendiagramms + Legende wird festgelegt,sowie die Farbe
+    var width = 750, height = 500;
+    var color = d3.scaleOrdinal(d3.schemeDark2);
+    //Ausklammern des div.
+    var svg = d3.select("#my_dataviz").append("svg")
+            .attr("width", width).attr("height", height)
+            .style("backround", "pink");
+
+    var data = d3.pie().sort(null).value(function(d){return d.maincount})(statdict);
+    var data = d3.pie().sort(null).value (function(d){return d.maincount})(statdict);
+    console.log(data)
+
+    //Die einzelnen "Scheiben" des Kuchendiagramms werden mit Radius und Winkel defniert
+    var segments = d3.arc()
+                .innerRadius(0)
+                .outerRadius(200)
+                .padAngle(.05)
+                .padRadius(50);
+
+    var sections = svg.append("g").attr("transform", "translate (250,250)")
+        .selectAll("path").data(data);
+
+    sections.enter().append("path").attr("d", segments).attr("fill",  //Die Daten für die grösse der Stücke werden von Maincount geholt
+    function(d){return color(d.data.maincount);}); 
+
+    //Die Scheiben werden mit den Bezeichnungen (in diesem Fall zahlen) beschriftet
+    var content = d3.select("g").selectAll("text").data(data);
+    content.enter().append("text").classed("inside", true).each(function(d){
+        var center = segments.centroid(d);
+        d3.select(this).attr("x", center[0]).attr("y", center[1])
+            .text(d.data.maincount);
+        
+    })
+
+    //Die Legende enthält nimmt die Pandemietypen und gibt sie in der passenden Farbe wieder aus
+    var legends = svg.append("g").attr("transform", "translate(500,100)")
+                .selectAll(".legends").data(data);
+
+    var ledgend = legends.enter().append("g").classed("ledgends", true).attr("transform",
+    function(_d,i){
+        return "translate (0," + ( i + 1) * 30 + ")";
+    } );
+
+    ledgend.append("rect").attr("width", 20).attr("height", 20).attr("fill", function(d){
+        return color(d.data.maincount);
+    } );
+
+    ledgend.append("text").text(function(d){
+        return d.data.statname;
+    })
+        .attr("fill", function(d){
+            return color(d.data.maincount);
+        })
+        .attr("x", 30)
+        .attr("y", 20);
+}
+
 // ##### SPIELSTART #####
 
-//checkGame()
-fetcher(7,"statistik",0) // <- @THERESA: Mit dieser Funktion kommt man direkt auf die Statistik seite, einfach checkGame() deaktivieren.
+checkGame()
+//fetcher(7,"statistik",0) // <- @THERESA: Mit dieser Funktion kommt man direkt auf die Statistik seite, einfach checkGame() deaktivieren.
 
 /*
 TO-DO-Liste:
