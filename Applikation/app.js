@@ -604,9 +604,9 @@ function showstatistics(result) {
 }
 */
 
-
+var statdict = []
 function showstatistics(result) {
-    var statdict = []
+    //var statdict = []
     var dictstring = ""; //Löschen vor Abgabe, nur zum Testen ob statistik richtig eingelesen wird
     for (let i = 0; i < (result.length); i++) {
         console.log(result[i]["statid"])
