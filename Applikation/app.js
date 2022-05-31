@@ -589,6 +589,7 @@ async function fetcher(method, directory, data) {
 
 // ##### TEIL 5: DATENVISUALISIERUNG #####
 
+/* Löschen sofern die untenstehende Funktion besser geht
 function showstatistics(result) {
     var statdict = {}
     var dictstring = ""; //Löschen vor Abgabe, nur zum TEsten ob statistik richtig eingelesen wird
@@ -600,6 +601,22 @@ function showstatistics(result) {
     }
     loadsite("stats")
     document.getElementById("statdata").innerHTML = dictstring;
+}
+*/
+
+
+function showstatistics(result) {
+    var statdict = []
+    var dictstring = ""; //Löschen vor Abgabe, nur zum Testen ob statistik richtig eingelesen wird
+    for (let i = 0; i < (result.length); i++) {
+        console.log(result[i]["statid"])
+        var substat = {statname: result[i]["statname"], maincount: result[i]["maincount"]}
+        statdict.push(substat)
+        let string = ( substat["statname"] + ": "+ substat["maincount"]); var dictstring = dictstring + "</br>"+ string; //Löschen vor Abgabe siehe oben
+    }
+    loadsite("stats")
+    document.getElementById("statdata").innerHTML = dictstring;
+    return statdict
 }
 
 // ##### SPIELSTART #####
