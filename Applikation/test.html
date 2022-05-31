@@ -48,86 +48,18 @@
 
 
 
-    //Legt mit POST ein neus Game an. 
-function new_game () {
-    var data = {username: "Ines", gamesid: "010", trackrecord: [1,2,7,8]};
-    fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,
-        {method:'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }, 
-        body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-        console.log ('Success:', data);
-        })
-        .catch (error => {
-        console.log ("error: " + error);
-        });
-}
-
-//Holt mit GET alle Games
-function getData (data) {
+    function appendData (data) {
     console.log (data);
     document.querySelector ("div").innerHTML = JSON.stringify(data);
     }
-    fetch ("https://343505-26.web.fhgr.ch/api/covid/games" ,
-        {method:'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }, 
-        //body: JSON.stringify(data)
-        })
-        .then (response => {
-        return response.json();
-        })
-        .then (data => {
-        getData (data);
-        })
-        .catch (error => {
-        console.log ("error: " + error);
-    }); 
-
-
-
-//Aktualisierung des Trackrecords eines Games
-function update_trackrecord (data) {
-var data = {username: "Ben", gamesid: "009", trackrecord: [1,2,3,4,6]};
-    fetch ("https://343505-26.web.fhgr.ch/api/covid/games/009" ,
-        {method:'PUT',
-        headers: {
-        'Content-Type': 'application/json'
-        }, 
-        body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-        console.log ('Success:', data);
-        })
-        .catch (error => {
-        console.log ("error: " + error);
-        });
-}
-
-new_game()
-
-/*
-// Handling Server Error 500 - funktioniert noch nicht
-function handlingServerError (response) {
-    fetch("https://343505-26.web.fhgr.ch/api/covid")
-    .then (response => {
-    if (response.status === 500) {
-        handlingServerError (response)
-        throw new Error ('Hat nicht funktioniert - retry');
-    }         
+    fetch ("https://343505-26.web.fhgr.ch/api/covid/games/001",{method:'GET'}).then (function (response) {
     return response.json();
-    })
-    .then(data => {
-    console.log ('Success:', data);
-    })
-    .catch (error => {
+    }).then (function (data) {
+    appendData (data);
+    }).catch (function (error) {
     console.log ("error: " + error);
+<<<<<<< HEAD
+=======
     });                   
 }
 */
@@ -256,30 +188,12 @@ function update_trackrecord(){
     })
     .catch (function (error) {
     console.log ("error: " + error);
+>>>>>>> f847d780b952c084c109123bead0d9d02a42cc0c
     });
 
-}
-}
 
+///////
 
-const games = [
-    {userid:"001", username:"Martha", trackrecord:[1,2]},
-    {userid:"002", username:"Theodor", trackrecord:[1,3,7]},
-    {userid:"003", username:"Damiana", trackrecord:[1,3,4,8]},
-    {userid:"004", username:"Noah", trackrecord:[]},
-    {userid:"005", username:"Jo", trackrecord:[1]}
-]
-
-var game = games[2];
-
-function initialise(game) {
-    var path = game["trackrecord"]; var count = (path.length); var start = path[count-2]; var end = path[count-1];
-    if (count == 0) {drawdown(14,0,0,0)}
-    else if (count == 1) {loadlines(path); drawdown(0,end,0,0)}
-    else {loadlines(path); drawdown(start,end,0,0)}
-}
-
-initialise(game)
 
 
     /*var c = document.getElementById("myCanvas");
