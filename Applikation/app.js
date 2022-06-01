@@ -361,7 +361,7 @@ function createGame(count) {
     let name = document.getElementById("entername").value;
     let data = {"gamesid":currid, "username":name, "trackrecord":[1]};
     currentgame["gamesid"] = currid; currentgame["trackrecord"] = [1]; currentgame["username"] = name;
-    //localStorage.setItem("gamesid", currid);   // VOR ABGABE LÖSCHEN: das habe ich inaktiviert weil man sonst immer im selben spiel landet
+    localStorage.setItem("gamesid", currid);   // VOR ABGABE LÖSCHEN: das habe ich inaktiviert weil man sonst immer im selben spiel landet
     loadsite("game");
     fetcher(2,"games",currentgame);fetcher(3, "statistik/1", {"statid":"1","statname":"scount","maincount":currid})
     initialise();
@@ -534,53 +534,55 @@ function restart() {
 */
 
 async function fetcher(method, directory, data) {
+    var atext = "Server Error! Bitte Seite neu laden."
+    var etext = "Server Error";
     var link = "https://343505-26.web.fhgr.ch/api/covid/";
     var serverlink = link.concat(directory.toString());
     if (method == 1) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
-        .then(response => response.json())
+        .then(response => {if (!response.ok) {alert(atext);throw new Error(etext)} return response.json()} )
         .then(result => {console.log("Fetcher1 successfull/Gamer recognized: ", result);reloadGame(result)})
         .catch (error => {console.log ("error: " + error); if (error.code == "500"){fetcher(1,directory,0)} })
     }
     else if (method == 2) { 
         let response = await fetch (serverlink, {method:'POST',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
-        .then(response => response.json())
+        .then(response => {if (!response.ok) {alert(atext);throw new Error(etext)} return response.json()} )
         .then(data => {console.log("Fetcher2 successfull/Game has been POST: ", data);})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 3) {
         let response = await fetch (serverlink,{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
-        .then(response => response.json())
+        .then(response => {if (!response.ok) {alert(atext);throw new Error(etext)} return response.json()} )
         .then(data => {console.log ("Fetcher3 successfull/Game or Count has been PUT: ", data);})
         .catch (error => {console.log ("error: " + error); if (error.code == "500"){fetcher(3,directory,data)} });
     }
     else if (method == 4) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
-        .then(response => response.json())
+        .then(response => {if (!response.ok) {alert(atext);throw new Error(etext)} return response.json()} )
         .then(result => {console.log("Fetcher4 successfull/Gamescount loaded: ", result["maincount"]);createGame(result["maincount"])})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 5) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
-        .then(response => response.json())
+        .then(response => {if (!response.ok) {alert(atext);throw new Error(etext)} return response.json()} )
         .then(result => {console.log("Fetcher5 successfull/Question loaded#" + result["frageid"]);loadquestion(result)})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 6) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
-        .then(response => response.json())
+        .then(response => {if (!response.ok) {alert(atext);throw new Error(etext)} return response.json()} )
         .then(result => {console.log("Fetcher6 successfull/Result loaded#" + result["resultid"]);loadresult(result);})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 7) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
-        .then(response => response.json())
+        .then(response => {if (!response.ok) {alert(atext);throw new Error(etext)} return response.json()} )
         .then(result => {console.log("Fetcher7 successfull/Statistics downloaded: ", result);visualization(result)})
         .catch (error => {console.log ("error: " + error);})
     }
     else if (method == 8) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
-        .then(response => response.json())
+        .then(response => {if (!response.ok) {alert(atext);throw new Error(etext)} return response.json()} )
         .then(result => {console.log("Fetcher8 successfull/TypeCount loaded: ", result);
         fetcher(3, ("statistik/"+result["statid"]), {statid: result["statid"], statname: result["statname"], maincount: (result["maincount"]+1)})})
         .catch (error => {console.log ("error: " + error);})
@@ -657,18 +659,18 @@ function visualization(result) {
 async function send(){
     let response = await fetch ("https://343505-26.web.fhgr.ch/api/covid/statistik/1", {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => {
-            if (!response.ok) {alert("Server Error! Bitte Seite neu laden.");throw new Error('Hat nicht funktioniert')};
-            console.log("Send Erfolgreich!")
+            if (!response.ok) {alert("Server Error! Bitte Seite neu laden.");throw new Error("Server Error")};
+            return response.json()
         })
         .then(result => {console.log(result)})
         .catch (error => {console.log ("error: " + error) })
 }
 
-send()
+//send()
 
 // ##### SPIELSTART #####
 
-//checkGame()
+checkGame()
 //fetcher(7,"statistik",0) // <- @THERESA: Mit dieser Funktion kommt man direkt auf die Statistik seite, einfach checkGame() deaktivieren.
 
 /*
