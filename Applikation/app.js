@@ -708,6 +708,7 @@ TO-DO-Liste:
     #1 Verteilung der Typen 
     #2 Zustimmungswert
 - ANNA: Dokumentation?
+- Code Schöner machen: Punktnotationen, Pfeilfunktionen
 - KEINE PRIO:
   #Textcodierung Server (ae,oe,ue)
   #Kosmetik/CSS -> Darstellung
