@@ -654,9 +654,21 @@ function visualization(result) {
         .attr("y", 20);
 }
 
+async function send(){
+    let response = await fetch ("https://343505-26.web.fhgr.ch/api/covid/statistik/1", {method:'GET', headers: {'Content-Type': 'application/json'}})
+        .then(response => {
+            if (!response.ok) {alert("Server Error! Bitte Seite neu laden.");throw new Error('Hat nicht funktioniert')};
+            console.log("Send Erfolgreich!")
+        })
+        .then(result => {console.log(result)})
+        .catch (error => {console.log ("error: " + error) })
+}
+
+send()
+
 // ##### SPIELSTART #####
 
-checkGame()
+//checkGame()
 //fetcher(7,"statistik",0) // <- @THERESA: Mit dieser Funktion kommt man direkt auf die Statistik seite, einfach checkGame() deaktivieren.
 
 /*
