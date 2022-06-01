@@ -621,25 +621,13 @@ function showstatistics(result) {
 
 
 function visualization(result) {
+    loadsite("stats")
     statdict = [];
-    for (let i = 0; i < (result.length);i++) {
-        if (result[i]["statid"] == "21" ) {statdict.push(result[i])}
-        else if (result[i]["statid"] == "22" ) {statdict.push(result[i])}
-        else if (result[i]["statid"] == "23" ) {statdict.push(result[i])}
-        else if (result[i]["statid"] == "24" ) {statdict.push(result[i])}
-        else if (result[i]["statid"] == "25" ) {statdict.push(result[i])}
-        else if (result[i]["statid"] == "26" ) {statdict.push(result[i])}
-        else if (result[i]["statid"] == "27" ) {statdict.push(result[i])}
-        else if (result[i]["statid"] == "28" ) {statdict.push(result[i])}
-        console.log(result[i])
-    }
-    /* etwas schlänkere variante der else/if-geschichte hier obendran
     for (let i = 0; i < (result.length);i++) {
         for (let j = 21; j < 29;j++) {
             if (result[i]["statid"] == j) {statdict.push(result[i])}
             }
     }
-    */
     //Die Grösse des Kuchendiagramms + Legende wird festgelegt,sowie die Farbe
     var width = 750, height = 500;
     var color = d3.scaleOrdinal(d3.schemeDark2);
