@@ -540,7 +540,7 @@ async function fetcher(method, directory, data) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
         .then(response => response.json())
         .then(result => {console.log("Fetcher1 successfull/Gamer recognized: ", result);reloadGame(result)})
-        .catch (error => {console.log ("error: " + error); /*if (error.code == "500"){fetcher(1,directory,0} */  })
+        .catch (error => {console.log ("error: " + error); if (error.code == "500"){fetcher(1,directory,0)} })
     }
     else if (method == 2) { 
         let response = await fetch (serverlink, {method:'POST',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
@@ -552,7 +552,7 @@ async function fetcher(method, directory, data) {
         let response = await fetch (serverlink,{method:'PUT',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})
         .then(response => response.json())
         .then(data => {console.log ("Fetcher3 successfull/Game or Count has been PUT: ", data);})
-        .catch (error => {console.log ("error: " + error);});
+        .catch (error => {console.log ("error: " + error); if (error.code == "500"){fetcher(3,directory,data)} });
     }
     else if (method == 4) {
         let response = await fetch (serverlink, {method:'GET', headers: {'Content-Type': 'application/json'}})
