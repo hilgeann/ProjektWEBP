@@ -534,7 +534,7 @@ function restart() {
 */
 
 async function fetcher(method, directory, data) {
-    var atext = "Server Error! Bitte Seite neu laden."
+    var atext = "Server Error! Bitte Seite neu laden.";
     var etext = "Server Error";
     var link = "https://343505-26.web.fhgr.ch/api/covid/";
     var serverlink = link.concat(directory.toString());
@@ -655,18 +655,6 @@ function visualization(result) {
         .attr("x", 30)
         .attr("y", 20);
 }
-
-async function send(){
-    let response = await fetch ("https://343505-26.web.fhgr.ch/api/covid/statistik/1", {method:'GET', headers: {'Content-Type': 'application/json'}})
-        .then(response => {
-            if (!response.ok) {alert("Server Error! Bitte Seite neu laden.");throw new Error("Server Error")};
-            return response.json()
-        })
-        .then(result => {console.log(result)})
-        .catch (error => {console.log ("error: " + error) })
-}
-
-//send()
 
 // ##### SPIELSTART #####
 
