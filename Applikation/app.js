@@ -590,6 +590,7 @@ async function fetcher(method, directory, data) {
 }
 
 // ##### TEIL 5: DATENVISUALISIERUNG #####
+//Quelle des d3.code: https://www.youtube.com/watch?v=L5GXOdt2uOc (Part I und II)
 
 function visualization(result) {
     loadsite("stats")
@@ -599,13 +600,12 @@ function visualization(result) {
             if (result[i]["statid"] == j) {statdict.push(result[i])}
             }
     }
-    //Die Grösse des Kuchendiagramms + Legende wird festgelegt,sowie die Farbe
+    //Die Grösse des Kuchendiagramms + Farbe + Legende wird festgelegt
     var width = 750, height = 500;
     var color = d3.scaleOrdinal(d3.schemeDark2);
     //Ausklammern des div.
     var svg = d3.select("#my_dataviz").append("svg")
-            .attr("width", width).attr("height", height)
-            .style("backround", "pink");
+            .attr("width", width).attr("height", height);
 
     var data = d3.pie().sort(null).value(function(d){return d.maincount})(statdict);
     var data = d3.pie().sort(null).value (function(d){return d.maincount})(statdict);
@@ -621,7 +621,7 @@ function visualization(result) {
     var sections = svg.append("g").attr("transform", "translate (250,250)")
         .selectAll("path").data(data);
 
-    sections.enter().append("path").attr("d", segments).attr("fill",  //Die Daten für die grösse der Stücke werden von Maincount geholt
+    sections.enter().append("path").attr("d", segments).attr("fill",  //Die Daten für die Grösse der Stücke werden von Maincount geholt
     function(d){return color(d.data.maincount);}); 
 
     //Die Scheiben werden mit den Bezeichnungen (in diesem Fall zahlen) beschriftet
@@ -658,14 +658,13 @@ function visualization(result) {
 
 // ##### SPIELSTART #####
 
-checkGame()
-//fetcher(7,"statistik",0) // <- @THERESA: Mit dieser Funktion kommt man direkt auf die Statistik seite, einfach checkGame() deaktivieren.
+//checkGame()
+fetcher(7,"statistik",0) // <- @THERESA: Mit dieser Funktion kommt man direkt auf die Statistik seite, einfach checkGame() deaktivieren.
 
 /*
 TO-DO-Liste:
 - THERESA: Visualisierung d3.js
     #1 Verteilung der Typen 
-    #2 Zustimmungswert
 - ANNA: Dokumentation?
 - Code Schöner machen: Punktnotationen, Pfeilfunktionen
 - KEINE PRIO:
