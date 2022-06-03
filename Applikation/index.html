@@ -4,10 +4,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css"> <!-- Einbinden des CSS-Stylsheets -->
     <!-- Load d3.js -->
-<script src="https://d3js.org/d3.v5.min.js"></script>
-
-<!-- Color scale -->
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- Farben für d3 -->
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 </head>
 <body>
     <div id=info> 
@@ -66,7 +65,7 @@
     <div id="stats"> 
         <h1>Willkommen bei den Umfragestatistiken</h1>
         <p id="statdata">Was kam bei anderen Leuten raus...?</p>
-        <div id="my_dataviz"></div>
+        <div id="piechart"></div>
     </div>  
 
     <table>
@@ -92,7 +91,6 @@
 
 <!-- Einbinden JavaScript -->
 <script src="app.js"></script>
-<!--  <script src="d3piechart.js"></script>  -->
 
 <!-- Kleine Fusszeile, einfacheitshalber CSS integriert -->
 <p style="font-size: 0.8rem;position: fixed;bottom:2em;right:2em"> erstellt von A. Hilgert / R. Jevdenic / T. Siefert</p>    
