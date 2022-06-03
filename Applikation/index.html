@@ -69,26 +69,32 @@
         <div id="my_dataviz"></div>
     </div>  
 
-    <table>
-        <tr>
-            <td>UserID:</td>
-            <td id="userid">
-                Unbekannt
+    <div id="admindata">
+        <button id="adminbutton1" onclick="admindata(1)">Admin</button>
+        <button id="adminbutton2" onclick="admindata(2)">Log Out</button>
+        <input type="text" id="adminpw">
+        <table id="atable">
+            <tr>
+                <td>UserID:</td>
+                <td id="userid">
+                    Unbekannt
+                </td>
+            </tr>
+            <tr>
+                <td>UserName</td>
+                <td id="username">
+                    Unbekannt
             </td>
-        </tr>
-        <tr>
-          <td>UserName</td>
-            <td id="username">
-                Unbekannt
-            </td>
-         </tr>
-         <tr>
-           <td>Trackrecord:</td>
-            <td id="trec">
-                Unbekannt
-            </td>
-         </tr>
-      </table>
+            </tr>
+            <tr>
+            <td>Trackrecord:</td>
+                <td id="trec">
+                    Unbekannt
+                </td>
+            </tr>
+        </table>
+    </div>
+      
 
 <!-- Einbinden JavaScript -->
 <script src="app.js"></script>

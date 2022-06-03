@@ -169,3 +169,40 @@ fill: white;
     font-size: 25px;
     font-weight: bold;  
 } 
+
+/*Adminbutton*/
+
+div#admindata {
+    position: fixed;
+    bottom: 2em;
+    left: 5em;
+
+}
+
+button#adminbutton1 {
+    width: 5em;
+    height: 1.8em;
+    margin: 0 0 0 0;
+    padding: 2px;
+    background-color: #5a9777;
+    font-size: 0.8em;
+    transition: all 1s;
+    cursor: pointer;
+    opacity:1;
+}
+
+button#adminbutton2 {
+    width: 5em;
+    height: 1.8em;
+    margin: 0 0 0 0;
+    padding: 2px;
+    background-color: #5a9777;
+    font-size: 0.8em;
+    transition: all 1s;
+    cursor: pointer;
+    opacity:1;
+}
+
+input#adminpw {
+    width: 7em;
+}

@@ -297,6 +297,8 @@ function loadsite(site) {
         getrestart.style.display = "none";
         getopt.style.display = "none";
         document.getElementById("infotext").style.display = "none";
+        document.getElementById("atable").style.display = "none";
+        document.getElementById("adminbutton2").style.display = "none";
         fade("welcome","in")
         fade("info","in")
     }
@@ -657,6 +659,27 @@ function visualization(result) {
 }
 
 // ##### SPIELSTART #####
+
+function admindata(type) {
+    if (type == 1) {
+        let name = document.getElementById("adminpw").value;
+        if (name == "passwort") {
+            document.getElementById("atable").style.display = "initial";
+            document.getElementById("adminbutton1").style.display = "none";
+            document.getElementById("adminbutton2").style.display = "initial";
+            document.getElementById("adminpw").style.display = "none";
+            document.getElementById("adminpw").value = '';
+        }
+        
+    }
+    else {
+        document.getElementById("atable").style.display = "none";
+        document.getElementById("adminbutton1").style.display = "initial";
+        document.getElementById("adminbutton2").style.display = "none";
+        document.getElementById("adminpw").style.display = "initial";
+    }
+    
+}
 
 checkGame()
 //fetcher(7,"statistik",0) // <- @THERESA: Mit dieser Funktion kommt man direkt auf die Statistik seite, einfach checkGame() deaktivieren.
