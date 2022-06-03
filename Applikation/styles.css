@@ -168,7 +168,7 @@ fill: white;
 .label{
     font-size: 25px;
     font-weight: bold;  
-} 
+}
 
 /*Adminbutton*/
 
@@ -176,7 +176,6 @@ div#admindata {
     position: fixed;
     bottom: 2em;
     left: 5em;
-
 }
 
 button#adminbutton1 {
@@ -204,6 +203,5 @@ button#adminbutton2 {
 }
 
 input#adminpw {
-    widt
-    h: 7em;
-}
+    width: 7em;
+} 
