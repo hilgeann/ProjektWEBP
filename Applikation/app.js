@@ -268,13 +268,13 @@ function fade(stringid, type) {
     if (type == "in") {
         getstr.style.display = "initial";
         getstr.style.opacity = 0; var value1 = 0.1
-        const fader1 = setInterval(function() {getstr.style.opacity = value1; value1 = value1 + 0.1}, 100)
+        const fader1 = setInterval(function() {getstr.style.opacity = value1; value1 = value1 + 0.1}, 70)
         setTimeout(function(){clearInterval(fader1)},1100)
         }
     else if (type == "out") {        
         getstr.style.opacity = 1;
         var value2 = 1
-        const fader2 = setInterval(function() {getstr.style.opacity = value2;value2 = value2 - 0.1}, 100)
+        const fader2 = setInterval(function() {getstr.style.opacity = value2;value2 = value2 - 0.1}, 70)
         setTimeout(function(){clearInterval(fader2)},1100)
         setTimeout(function(){getstr.style.display = "none"},1100)
     }
@@ -658,8 +658,8 @@ function visualization(result) {
 
 // ##### SPIELSTART #####
 
-//checkGame()
-fetcher(7,"statistik",0) // <- @THERESA: Mit dieser Funktion kommt man direkt auf die Statistik seite, einfach checkGame() deaktivieren.
+checkGame()
+//fetcher(7,"statistik",0) // <- @THERESA: Mit dieser Funktion kommt man direkt auf die Statistik seite, einfach checkGame() deaktivieren.
 
 /*
 TO-DO-Liste:
