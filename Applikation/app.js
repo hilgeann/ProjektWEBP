@@ -670,6 +670,7 @@ function admindata(type) {
             document.getElementById("adminpw").style.display = "none";
             document.getElementById("adminpw").value = '';
         }
+        else {alert("Passwort falsch.")}
         
     }
     else {
