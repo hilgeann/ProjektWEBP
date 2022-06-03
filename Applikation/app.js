@@ -606,7 +606,7 @@ function visualization(result) {
     var width = 750, height = 500;
     var color = d3.scaleOrdinal(d3.schemeDark2);
     //Ausklammern des div.
-    var svg = d3.select("#my_dataviz").append("svg")
+    var svg = d3.select("#piechart").append("svg")
             .attr("width", width).attr("height", height);
 
     var data = d3.pie().sort(null).value(function(d){return d.maincount})(statdict);
