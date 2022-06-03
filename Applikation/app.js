@@ -363,7 +363,7 @@ function createGame(count) {
     let name = document.getElementById("entername").value;
     let data = {"gamesid":currid, "username":name, "trackrecord":[1]};
     currentgame["gamesid"] = currid; currentgame["trackrecord"] = [1]; currentgame["username"] = name;
-    localStorage.setItem("gamesid", currid);   // VOR ABGABE LÖSCHEN: das habe ich inaktiviert weil man sonst immer im selben spiel landet
+    localStorage.setItem("gamesid", currid);
     loadsite("game");
     fetcher(2,"games",currentgame);fetcher(3, "statistik/1", {"statid":"1","statname":"scount","maincount":currid})
     initialise();
@@ -626,7 +626,7 @@ function visualization(result) {
     sections.enter().append("path").attr("d", segments).attr("fill",  //Die Daten für die Grösse der Stücke werden von Maincount geholt
     function(d){return color(d.data.maincount);}); 
 
-    //Die Scheiben werden mit den Bezeichnungen (in diesem Fall zahlen) beschriftet
+    //Die "Scheiben" werden mit den Bezeichnungen (in diesem Fall zahlen) beschriftet und gruppiert
     var content = d3.select("g").selectAll("text").data(data);
     content.enter().append("text").classed("inside", true).each(function(d){
         var center = segments.centroid(d);
@@ -635,7 +635,6 @@ function visualization(result) {
         
     })
 
-    //Die Legende enthält nimmt die Pandemietypen und gibt sie in der passenden Farbe wieder aus
     var legends = svg.append("g").attr("transform", "translate(500,100)")
                 .selectAll(".legends").data(data);
 
@@ -683,15 +682,4 @@ function admindata(type) {
 }
 
 checkGame()
-//fetcher(7,"statistik",0) // <- @THERESA: Mit dieser Funktion kommt man direkt auf die Statistik seite, einfach checkGame() deaktivieren.
 
-/*
-TO-DO-Liste:
-- THERESA: Visualisierung d3.js
-    #1 Verteilung der Typen 
-- ANNA: Dokumentation?
-- Code Schöner machen: Punktnotationen, Pfeilfunktionen
-- KEINE PRIO:
-  #Textcodierung Server (ae,oe,ue)
-  #Kosmetik/CSS -> Darstellung
-*/
